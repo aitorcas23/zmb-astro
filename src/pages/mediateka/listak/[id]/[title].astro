@@ -6,7 +6,6 @@ import { notFoundResponse } from "@utils/httpResponses";
 import { getMediaListById } from "@utils/apiCalls/mediaLists";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import MediaCard from "@components/MediaCard.astro";
-import Title from "@components/Title.astro";
 import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
 
 changeLanguage("eu");
@@ -40,7 +39,9 @@ for (const locale in i18next.languages) {
 ---
 
 <ContentLayout title={t("media:lists.title")} translatedUrls={locales}>
-	<Title extraClass={"mb-16"}>{list.title}</Title>
+	<h1 class="mb-16 text-center text-4xl font-extrabold uppercase text-gray-900 lg:text-5xl">
+		{list.title}
+	</h1>
 	<div class="flex flex-wrap justify-center gap-4">
 		{
 			list.media &&

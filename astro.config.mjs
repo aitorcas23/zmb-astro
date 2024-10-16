@@ -18,10 +18,4 @@ export default defineConfig({
 	],
 	output: "server",
 	adapter: vercel(),
-
-	i18nextServer: {
-		backend: {
-			loadPath: "./public/locales/{{lng}}/{{ns}}.json",
-		},
-	},
 });

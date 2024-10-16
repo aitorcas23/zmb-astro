@@ -1,4 +1,6 @@
-import type { Prettify } from "@types/Prettify";
+type Prettify<T> = {
+	[K in keyof T]: T[K];
+} & {};
 
 export function notProvidedError(prop: string) {
 	console.error(`"${prop}" was not provided`);

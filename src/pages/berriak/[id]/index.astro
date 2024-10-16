@@ -16,7 +16,7 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const news = await getNewsById(id, i18next.language);
+const news = await getNewsById(intId, i18next.language, 0);
 if (!news) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();

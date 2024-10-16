@@ -10,7 +10,6 @@ import {
 	type MediaList,
 } from "@utils/apiCalls/mediaLists";
 import ContentLayout from "@layouts/ContentLayout.astro";
-import Title from "@components/Title.astro";
 import { getAlt, getImage } from "@utils/mediaProcessors";
 import YouTubeVideo from "@components/YouTubeVideo.astro";
 import MediaCard from "@components/MediaCard.astro";
@@ -56,9 +55,14 @@ for (const locale in i18next.languages) {
 ---
 
 <ContentLayout title={entry.title} translatedUrls={locales}>
-	<Title extraClass={{ "mb-16": !entry.description }}>
+	<h1
+		class:list={[
+			"text-center text-4xl font-extrabold uppercase text-gray-900 lg:text-5xl",
+			{ "mb-16": !entry.description },
+		]}
+	>
 		{entry.title}
-	</Title>
+	</h1>
 	{
 		entry.description && (
 			<div class="mb-16 mt-8">
