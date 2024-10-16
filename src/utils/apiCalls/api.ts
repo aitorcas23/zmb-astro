@@ -80,7 +80,7 @@ async function getCollectionAll(
 			.then((res) => res.json())
 			.catch(() => undefined);
 
-		if (response) collections.push(...response.docs);
+		if (response && response.docs) collections.push(...response.docs);
 		page++;
 	} while (response && response.hasNextPage);
 
