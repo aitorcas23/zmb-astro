@@ -23,4 +23,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# part of the build output
 .vercel
+
+# translations
+src/pages/es
