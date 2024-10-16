@@ -1,0 +1,19 @@
+---
+interface Props {
+	href?: string;
+	extraClass?: string;
+}
+
+const { href, extraClass } = Astro.props;
+---
+
+<a
+	class:list={[
+		"relative rounded-lg bg-white shadow-2xl",
+		{ "ease-out-out transition-transform duration-200 hover:scale-105": href !== undefined },
+		extraClass,
+	]}
+	href={href}
+>
+	<slot />
+</a>

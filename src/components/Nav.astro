@@ -1,0 +1,125 @@
+---
+import { t } from "i18next";
+import { localizePath } from "astro-i18next";
+import LanguageSelector from "./LanguageSelector.astro";
+import LinkDropdown from "./LinkDropdown.astro";
+// import Home from "../reusable/icons/Home.astro";
+import DrawerHamburger from "./DrawerHamburger.astro";
+import Drawer from "./Drawer.astro";
+
+interface Props {
+	translatedUrls?: { [key: string]: string };
+	lang?: string;
+}
+const { translatedUrls, lang } = Astro.props;
+
+interface Link {
+	text: string;
+	href: string;
+}
+
+interface Dropdown {
+	text: string;
+	links: Link[];
+	id: string;
+}
+
+type NavElements = Array<Link | Dropdown>;
+
+const navElements: NavElements = [
+	{
+		text: t("ui:nav.home", { lng: lang }),
+		href: localizePath("/", lang),
+	},
+	{
+		text: t("ui:nav.ourBand.label", { lng: lang }),
+		id: "ourBand",
+		links: [
+			{
+				text: t("ui:nav.ourBand.history", { lng: lang }),
+				href: localizePath("/gure-banda/historia", lang),
+			},
+			{
+				text: t("ui:nav.ourBand.members", { lng: lang }),
+				href: localizePath("/gure-banda/partaideak", lang),
+			},
+		],
+	},
+	{
+		text: t("ui:nav.news"),
+		href: localizePath("/berriak", lang),
+	},
+	{
+		text: t("ui:nav.season", { lng: lang }),
+		href: localizePath("/denboraldiak", lang),
+	},
+	{
+		text: t("ui:nav.media", { lng: lang }),
+		href: localizePath("/mediateka", lang),
+	},
+];
+---
+
+<nav>
+	<div
+		class="sticky top-0 z-10 flex items-center justify-between bg-white bg-opacity-95 px-4 py-0 shadow-xl sm:px-10"
+	>
+		<div class="flex-shrink-0">
+			<a href={localizePath("/", lang)}>
+				<img
+					src="/images/Logo_small_MusikaBanda_black.png"
+					alt="Logo zornotzako musica banda"
+					class="h-20"
+				/>
+			</a>
+		</div>
+
+		<div class="hidden items-center gap-4 text-base font-semibold lg:flex">
+			{
+				navElements.map((elem) => {
+					if ("links" in elem) {
+						const dropdown = elem as Dropdown;
+						return (
+							<LinkDropdown
+								label={dropdown.text}
+								links={dropdown.links}
+								id={dropdown.id}
+								extraClass="transition-colors ease-out duration-150"
+								hover
+							/>
+						);
+					} else {
+						const link = elem as Link;
+						return (
+							<a
+								href={link.href}
+								class="block border-0 p-2 text-gray-900 transition-colors duration-150 ease-out hover:bg-transparent hover:text-zmb"
+							>
+								{link.text}
+							</a>
+						);
+					}
+				})
+			}
+
+			<LanguageSelector
+				translatedUrls={translatedUrls}
+				lang={lang}
+				extraClass="transition-colors ease-out duration-150"
+			/>
+		</div>
+		<div class="lg:hidden">
+			<DrawerHamburger id="nav-drawer" position="right" />
+		</div>
+	</div>
+	<Drawer id="nav-drawer" navElements={[navElements]} position="right">
+		<li>
+			<LanguageSelector
+				translatedUrls={translatedUrls}
+				lang={lang}
+				extraClass="transition-colors ease-out duration-150"
+				acordeon
+			/>
+		</li>
+	</Drawer>
+</nav>

@@ -1,0 +1,43 @@
+---
+import i18next, { t, changeLanguage } from "i18next";
+import { localizePath } from "astro-i18next";
+import { getSeasons } from "@utils/apiCalls/seasons";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import Title from "@components/Title.astro";
+import CardEffect from "@components/CardEffect.astro";
+import BookMark from "@components/BookMark.astro";
+import Zmb from "@components/icons/Zmb.astro";
+import SeasonDisplay from "@components/SeasonDisplay.astro";
+import { getAlt, getImage } from "@utils/mediaProcessors";
+
+changeLanguage("eu");
+
+const seasons = await getSeasons(i18next.language);
+---
+
+<ContentLayout title={t("seasons:title")}>
+	<Title extraClass={"mb-16"}>{t("seasons:title")}</Title>
+	<div class="mt-16 flex flex-col gap-4 md:gap-12">
+		{
+			seasons.map((season, i) => (
+				<CardEffect
+					href={`${localizePath(Astro.url.pathname)}/${season.id}/${season.slug}`}
+					extraClass="relative"
+				>
+					<BookMark color="fill-zmb" extraClass="md:w-[5%] md:right-[3%]">
+						<Zmb />
+					</BookMark>
+					<SeasonDisplay
+						title={season.title}
+						image={getImage("m", season.image)}
+						alt={getAlt(season.image)}
+						imagePos={i % 2 === 1 ? "right" : "left"}
+					>
+						<h4 class="mb-4 lg:text-lg">({season.years})</h4>
+						<p>{season.description}</p>
+					</SeasonDisplay>
+				</CardEffect>
+			))
+		}
+	</div>
+</ContentLayout>

@@ -1,0 +1,44 @@
+---
+import { localizePath } from "astro-i18next";
+import i18next, { t, changeLanguage } from "i18next";
+import { getMediaLists } from "@utils/apiCalls/mediaLists";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import Title from "@components/Title.astro";
+import MediaCard from "@components/MediaCard.astro";
+import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
+import HrLink from "@components/HrLink.astro";
+
+changeLanguage("eu");
+
+const lists = await getMediaLists(i18next.language, 2);
+---
+
+<ContentLayout title={t("media:lists.title")}>
+	<Title>{t("media:lists.title")}</Title>
+	{
+		lists.map((list) => (
+			<>
+				<h2 class="mb-8 mt-16 text-center text-3xl font-bold lg:text-4xl">{list.title}</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{list.media &&
+						list.media.map((entry) => {
+							if (typeof entry !== "number") {
+								return (
+									<MediaCard
+										title={entry.title}
+										description={entry.description ?? undefined}
+										image={getMediaEntryThumbnail("s", entry)}
+										alt={getMediaEntryAlt(entry)}
+										link={`${localizePath("/mediateka/edukia")}/${entry.id}/${entry.slug}`}
+									/>
+								);
+							}
+						})}
+				</div>
+				<HrLink href={`${localizePath("mediateka/listak")}/${list.id}/${list.slug}`}>
+					{t("media:lists.seeContent")}
+				</HrLink>
+			</>
+		))
+	}
+</ContentLayout>

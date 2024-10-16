@@ -1,0 +1,14 @@
+---
+interface Props {
+	href: string;
+	extraClass?: string | { [key: string]: any };
+}
+
+const { href, extraClass } = Astro.props;
+---
+
+<p class="mb-6 mt-5 text-center underline decoration-2">
+	<a class:list={["link text-2xl uppercase md:text-3xl md:font-semibold", extraClass]} href={href}>
+		<slot />
+	</a>
+</p>

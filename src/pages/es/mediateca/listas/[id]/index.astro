@@ -1,0 +1,26 @@
+---
+import i18next, { changeLanguage } from "i18next";
+import { localizePath } from "astro-i18next";
+import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import { getMediaListById } from "@utils/apiCalls/mediaLists";
+
+changeLanguage("es");
+
+const { id } = Astro.params;
+if (id === undefined) {
+	notProvidedError("id");
+	return notFoundResponse();
+}
+const intId = parseInt(id);
+if (isNaN(intId)) {
+	notANumberError("id");
+	return notFoundResponse();
+}
+const list = await getMediaListById(intId, i18next.language, 0);
+if (!list) {
+	notFoundError("season", { prop: "id", value: id });
+	return notFoundResponse();
+}
+return Astro.redirect(`${localizePath("/mediateka/listak")}/${id}/${list.slug}`, 301);
+---

@@ -1,0 +1,21 @@
+---
+interface Props {
+	id: string;
+	title: string;
+	width?: string;
+}
+
+const { id, title, width } = Astro.props;
+const widthClass = width ?? "w-full";
+---
+
+<div class:list={[widthClass, "aspect-video"]}>
+	<iframe
+		width="100%"
+		height="100%"
+		src={`https://www.youtube.com/embed/${id}`}
+		frameborder="0"
+		title={title}
+		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+		allowfullscreen></iframe>
+</div>

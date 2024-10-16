@@ -1,0 +1,25 @@
+---
+import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import i18next, { changeLanguage } from "i18next";
+import { getNewsById } from "@utils/apiCalls/news";
+
+changeLanguage("es");
+
+const { id } = Astro.params;
+if (id === undefined) {
+	notProvidedError("id");
+	return notFoundResponse();
+}
+const intId = parseInt(id);
+if (isNaN(intId)) {
+	notANumberError("id");
+	return notFoundResponse();
+}
+const news = await getNewsById(id, i18next.language);
+if (!news) {
+	notFoundError("season", { prop: "id", value: id });
+	return notFoundResponse();
+}
+return Astro.redirect(`${localizePath("berriak")}/${id}/${news.slug}`, 301);
+---

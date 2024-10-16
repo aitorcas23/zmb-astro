@@ -1,0 +1,26 @@
+---
+import CardEffect from "./CardEffect.astro";
+
+interface Props {
+	name: string;
+	text: string;
+	image?: string;
+	alt?: string;
+}
+
+const { name, text, image, alt } = Astro.props;
+---
+
+<CardEffect extraClass="max-w-[16rem]">
+	<img
+		class="aspect-square rounded-full object-cover p-8"
+		src={image ?? "/images/Logo_medium_MusikaBanda_black.png"}
+		alt={alt || name}
+	/>
+	<div class="px-4 pb-4 text-center">
+		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">
+			{name}
+		</h5>
+		<p class="line-clamp-3">{text}</p>
+	</div>
+</CardEffect>

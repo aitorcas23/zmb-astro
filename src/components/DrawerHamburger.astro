@@ -1,0 +1,37 @@
+---
+interface Props {
+	id: string;
+	position: "left" | "right";
+	class?: string;
+}
+const { id, position, class: extraClass } = Astro.props;
+---
+
+<button
+	class:list={[
+		"aspect-square rounded-lg px-5 py-2.5 text-gray-900 transition-colors duration-150 ease-out hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-blue-300",
+		extraClass,
+	]}
+	type="button"
+	data-drawer-target={id}
+	data-drawer-show={id}
+	data-drawer-backdrop="true"
+	aria-controls={id}
+	data-drawer-placement={position}
+>
+	<span class="sr-only">Open main menu</span>
+	<svg
+		class="h-5 w-5"
+		aria-hidden="true"
+		xmlns="http://www.w3.org/2000/svg"
+		fill="none"
+		viewBox="0 0 17 14"
+	>
+		<path
+			stroke="currentColor"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			stroke-width="2"
+			d="M1 1h15M1 7h15M1 13h15"></path>
+	</svg>
+</button>

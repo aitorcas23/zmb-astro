@@ -1,0 +1,47 @@
+---
+import BookMark from "./BookMark.astro";
+import CardEffect from "./CardEffect.astro";
+import News from "./icons/News.astro";
+import i18next from "i18next";
+
+interface Props {
+	title: string;
+	description?: string;
+	date: Date;
+	image?: string;
+	alt?: string;
+	link: string;
+}
+
+const { title, description, date, image, alt, link } = Astro.props;
+---
+
+<CardEffect href={link} extraClass="max-w-sm flex flex-col">
+	<BookMark color="fill-blue-800">
+		<News />
+	</BookMark>
+	<figure>
+		<img
+			src={image || "/images/Logo_medium_MusikaBanda_black.png"}
+			alt={alt || title}
+			class="aspect-video rounded-t-lg object-cover"
+		/>
+	</figure>
+	<div class="flex flex-grow flex-col p-4">
+		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">
+			{title}
+		</h5>
+		<div class="flex h-full flex-grow flex-col justify-between">
+			<p class="mb-0 line-clamp-3">{description}</p>
+			<small class="text-end">
+				{
+					date.toLocaleDateString(i18next.language, {
+						year: "numeric",
+						month: "2-digit",
+						day: "2-digit",
+					})
+				}
+			</small>
+		</div>
+	</div>
+</CardEffect>

@@ -1,0 +1,12 @@
+{
+	"title": "Nuestra banda",
+	"members": {
+		"title": "Miembros",
+		"musicians": "Músicos de la banda"
+	},
+	"history": {
+		"title": "Historia de la banda",
+		"read": "Leer historia de la banda",
+		"notAvailable": "Esta página todavía no está disponible"
+	}
+}

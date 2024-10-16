@@ -1,0 +1,23 @@
+---
+interface Props {
+	color: string;
+	extraClass?: string;
+}
+
+const { color, extraClass } = Astro.props;
+---
+
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 14 20"
+	class:list={["absolute right-[10%] top-0 block w-[15%] drop-shadow-lg", extraClass]}
+>
+	<g class={color}>
+		<path d="M7.00001 15.3L14 20V-7.62939e-06H7.62939e-06V19.9924L7.00001 15.3Z"> </path>
+	</g>
+	<svg>
+		<g class="fill-white" transform="scale(0.4) translate(7.5 7.5)">
+			<slot />
+		</g>
+	</svg>
+</svg>

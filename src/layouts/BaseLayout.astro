@@ -1,0 +1,32 @@
+---
+import "@styles/app.css";
+import Nav from "@components/Nav.astro";
+import Footer from "@components/Footer.astro";
+import i18next from "i18next";
+
+interface Props {
+	title: string;
+	translatedUrls?: { [key: string]: string };
+	lang?: string;
+}
+
+const { title, translatedUrls, lang } = Astro.props;
+---
+
+<html lang={lang || i18next.language} class="light">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="bg-zmb-base text-gray-900">
+		<Nav translatedUrls={translatedUrls} lang={lang} />
+		<slot />
+		<Footer lang={lang} />
+		<script>
+			import "flowbite";
+		</script>
+	</body>
+</html>

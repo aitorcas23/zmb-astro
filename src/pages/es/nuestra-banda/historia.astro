@@ -1,0 +1,19 @@
+---
+import i18next, { t, changeLanguage } from "i18next";
+import { getBandHistory } from "@utils/apiCalls/history";
+import ContentLayout from "@layouts/ContentLayout.astro";
+
+changeLanguage("es");
+
+const bandHistory = await getBandHistory(i18next.language);
+---
+
+<ContentLayout title={t("ourBand:history.title")}>
+	{
+		bandHistory && bandHistory.content_html ? (
+			<span set:html={bandHistory.content_html} />
+		) : (
+			<h2 class="text-center text-4xl font-bold">{t("ourBand:history.notAvailable")}</h2>
+		)
+	}
+</ContentLayout>

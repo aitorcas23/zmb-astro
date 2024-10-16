@@ -1,0 +1,31 @@
+---
+import { localizePath } from "astro-i18next";
+import i18next, { t, changeLanguage } from "i18next";
+import { getNews } from "@utils/apiCalls/news";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import Title from "@components/Title.astro";
+import NewsCard from "@components/NewsCard.astro";
+import { getAlt, getImage } from "@utils/mediaProcessors";
+
+changeLanguage("eu");
+
+const news = await getNews(i18next.language);
+---
+
+<ContentLayout title={t("news:title")}>
+	<Title>{t("news:title")}</Title>
+	<div class="mt-16 flex flex-wrap justify-center gap-4">
+		{
+			news.map((n) => (
+				<NewsCard
+					title={n.title}
+					description={n.description ?? undefined}
+					date={new Date(n.createdAt)}
+					image={getImage("m", n.image)}
+					alt={getAlt(n.image)}
+					link={`${localizePath("berriak")}/${n.id}/${n.slug}`}
+				/>
+			))
+		}
+	</div>
+</ContentLayout>

@@ -1,0 +1,66 @@
+---
+import { localizePath } from "astro-i18next";
+import i18next, { changeLanguage } from "i18next";
+import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import { getSeasonById } from "@utils/apiCalls/seasons";
+import { getConcertById } from "@utils/apiCalls/concerts";
+
+changeLanguage("es");
+
+const { title, id, concertId } = Astro.params;
+if (title === undefined || id === undefined || concertId === undefined) {
+	if (!title) {
+		notProvidedError("title");
+	}
+	if (!id) {
+		notProvidedError("id");
+	}
+	if (!concertId) {
+		notProvidedError("concertId");
+	}
+	return notFoundResponse();
+}
+const intId = parseInt(id);
+if (isNaN(intId)) {
+	notANumberError("id");
+	return notFoundResponse();
+}
+const season = await getSeasonById(intId, i18next.language, 0);
+if (!season) {
+	notFoundError("season", { prop: "id", value: id });
+	return notFoundResponse();
+}
+if (season.slug !== title) {
+	notFoundError("season", { prop: "id", value: id }, { prop: "title", value: title });
+	return notFoundResponse();
+}
+const intConcertId = parseInt(concertId);
+if (isNaN(intConcertId)) {
+	notANumberError("concertId");
+	return notFoundResponse();
+}
+if (!season.concerts || !season.concerts.includes(intConcertId)) {
+	notFoundError(
+		"concert",
+		{ prop: "id", value: id },
+		{ prop: "title", value: title },
+		{ prop: "concertId", value: concertId },
+	);
+	return notFoundResponse();
+}
+const concert = await getConcertById(intConcertId, i18next.language, 0);
+if (!concert) {
+	notFoundError(
+		"concert",
+		{ prop: "id", value: id },
+		{ prop: "title", value: title },
+		{ prop: "concertId", value: concertId },
+	);
+	return notFoundResponse();
+}
+return Astro.redirect(
+	`${localizePath("denboraldiak")}/${id}/${season.slug}/${concertId}/${concert.slug}`,
+	301,
+);
+---

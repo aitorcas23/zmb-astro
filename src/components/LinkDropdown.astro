@@ -1,0 +1,59 @@
+---
+export type Link = {
+	text: string;
+	href?: string;
+};
+
+type Props = {
+	label: string;
+	id: string;
+	links: Array<Link>;
+	hover?: boolean;
+	extraClass?: string;
+	width?: string;
+};
+const { label, links, hover, id, extraClass, width = "w-36" } = Astro.props;
+---
+
+<div class="relative">
+	<button
+		id={id + "Button"}
+		data-dropdown-toggle={id}
+		data-dropdown-trigger={hover ? "hover" : "click"}
+		data-dropdown-delay="0"
+		data-dropdown-offset-distance="0"
+		class:list={[
+			"block border-0 p-2 text-gray-900 hover:bg-transparent hover:text-zmb",
+			extraClass,
+		]}
+		type="button">{label}</button
+	>
+	<!-- Dropdown menu -->
+	<div id={id} class="z-10 hidden p-4">
+		<div
+			class:list={[
+				"divide-y divide-gray-100 rounded-lg bg-white shadow-[0_2px_25px_-5px_rgba(0,0,0,0.3)]",
+				width,
+			]}
+		>
+			<ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
+				{
+					links.map((link) => (
+						<li>
+							{link.href ? (
+								<a
+									href={link.href}
+									class="block px-4 py-2 transition-colors duration-150 ease-out hover:bg-gray-300"
+								>
+									{link.text}
+								</a>
+							) : (
+								<a class="block px-4 py-2 text-gray-300">{link.text}</a>
+							)}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</div>

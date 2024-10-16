@@ -1,0 +1,145 @@
+---
+import i18next, { changeLanguage, t } from "i18next";
+import { localizePath } from "astro-i18next";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import { getNews } from "@utils/apiCalls/news";
+import { getNextConcerts } from "@utils/apiCalls/concerts";
+import { getMediaEntries } from "@utils/apiCalls/mediaEntries";
+import Carousel from "@components/Carousel.svelte";
+import NewsCard from "@components/NewsCard.astro";
+import HrLink from "@components/HrLink.astro";
+import ConcertCard from "@components/ConcertCard.astro";
+import { getImage, getAlt } from "@utils/mediaProcessors";
+import { getMediaEntryThumbnail, getMediaEntryAlt } from "@utils/mediaEntryProcessors";
+import { getSeasonByConcertId, type Season } from "@utils/apiCalls/seasons";
+import MediaCard from "@components/MediaCard.astro";
+
+changeLanguage("eu");
+
+let slides: {
+	title: string;
+	image: string;
+	alt: string;
+	link: string;
+	linkText: string;
+	description?: string;
+}[] = [];
+// Concerts
+const concerts = await getNextConcerts(i18next.language, 3);
+let concertSeasonRelation: {
+	[id: number]: Season | null;
+} = {};
+for (const concert of concerts) {
+	const season = await getSeasonByConcertId(i18next.language, concert.id);
+	concertSeasonRelation = { ...concertSeasonRelation, [concert.id]: season };
+}
+if (concerts.length > 0) {
+	const nextConcert = concerts[0];
+	slides.push({
+		title: nextConcert.title,
+		image: getImage("m", nextConcert.image) ?? "/images/Logo_large_MusikaBanda_black.png",
+		alt: getAlt(nextConcert.image) ?? nextConcert.title,
+		link: `${localizePath("denboraldiak")}/${concertSeasonRelation[nextConcert.id]?.id}/${concertSeasonRelation[nextConcert.id]?.slug}/${nextConcert.id}/${nextConcert.slug}`,
+		linkText: t("home:carrousel.more"),
+		description: nextConcert.description ?? undefined,
+	});
+}
+// News
+const news = await getNews(i18next.language, 3);
+if (news.length > 0) {
+	const firstNews = news[0];
+	slides.push({
+		title: firstNews.title,
+		image: getImage("m", firstNews.image) ?? "/images/Logo_large_MusikaBanda_black.png",
+		alt: getAlt(firstNews.image) ?? firstNews.title,
+		link: `${localizePath("/berriak")}/${firstNews.id}/${firstNews.slug}`,
+		linkText: t("home:carrousel.read"),
+		description: firstNews.description ?? undefined,
+	});
+}
+// Mediateca
+const mediaEntries = await getMediaEntries(i18next.language, 3);
+if (mediaEntries.length > 0) {
+	const firstEntry = mediaEntries[0];
+	slides.push({
+		title: firstEntry.title,
+		image: getMediaEntryThumbnail("m", firstEntry) ?? "/images/Logo_large_MusikaBanda_black.png",
+		alt: getMediaEntryAlt(firstEntry),
+		link: `${localizePath("mediateka/edukia")}/${firstEntry.id}/${firstEntry.slug}`,
+		linkText: t("home:carrousel.see"),
+		description: firstEntry.description ?? undefined,
+	});
+}
+---
+
+<ContentLayout title={t("home:title")}>
+	{slides.length > 0 && <Carousel slides={slides} client:load />}
+
+	{
+		// Concerts
+		concerts.length > 0 && (
+			<>
+				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">{t("home:concerts")}</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{concerts.map((concert) => (
+						<ConcertCard
+							title={concert.title}
+							description={concert.description ?? undefined}
+							date={concert.date ? new Date(concert.date) : undefined}
+							image={getImage("s", concert.image)}
+							alt={getAlt(concert.image) ?? concert.title}
+							link={`${localizePath("denboraldiak")}/${concertSeasonRelation[concert.id]?.id}/${
+								concertSeasonRelation[concert.id]?.slug
+							}/${concert.id}/${concert.slug}`}
+							small
+						/>
+					))}
+				</div>
+				<HrLink href={localizePath("/denboraldiak")} />
+			</>
+		)
+	}
+
+	{
+		// News
+		news.length > 0 && (
+			<>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">{t("home:news")}</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{news.map((n) => (
+						<NewsCard
+							title={n.title}
+							description={n.description ?? undefined}
+							date={new Date(n.createdAt)}
+							image={getImage("s", n.image)}
+							alt={getAlt(n.image)}
+							link={`${localizePath("berriak")}/${n.id}/${n.slug}`}
+						/>
+					))}
+				</div>
+				<HrLink href={localizePath("/berriak")} />
+			</>
+		)
+	}
+
+	{
+		// Mediateca
+		mediaEntries.length > 0 && (
+			<>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">{t("home:media")}</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{mediaEntries.map((m) => (
+						<MediaCard
+							title={m.title}
+							description={m.description ?? undefined}
+							image={getMediaEntryThumbnail("s", m)}
+							alt={getMediaEntryAlt(m)}
+							link={`${localizePath("mediateka/edukia")}/${m.id}/${m.slug}`}
+						/>
+					))}
+				</div>
+				<HrLink href={localizePath("/mediateka")} />
+			</>
+		)
+	}
+</ContentLayout>

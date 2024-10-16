@@ -1,0 +1,20 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+	title: string;
+	translatedUrls?: { [key: string]: string };
+	lang?: string;
+}
+
+const { title, translatedUrls, lang } = Astro.props;
+---
+
+<BaseLayout title={title} translatedUrls={translatedUrls} lang={lang}>
+	<main class="container mx-auto min-h-screen">
+		<slot name="no-padding" />
+		<div class="p-5">
+			<slot />
+		</div>
+	</main>
+</BaseLayout>

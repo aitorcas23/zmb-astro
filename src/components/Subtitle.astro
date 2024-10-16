@@ -1,0 +1,9 @@
+---
+interface Props {
+	extraClass?: string | { [key: string]: any };
+}
+
+const { extraClass } = Astro.props;
+---
+
+<h3 class:list={["mb-4 text-center text-2xl", extraClass]}><slot /></h3>

@@ -1,0 +1,61 @@
+---
+import i18next, { t, changeLanguage } from "i18next";
+import { localizePath } from "astro-i18next";
+import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import { getMediaListById } from "@utils/apiCalls/mediaLists";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import MediaCard from "@components/MediaCard.astro";
+import Title from "@components/Title.astro";
+import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
+
+changeLanguage("es");
+
+const { id, title } = Astro.params;
+if (id === undefined || title === undefined) {
+	if (id === undefined) notProvidedError("id");
+	if (title === undefined) notProvidedError("title");
+	return notFoundResponse();
+}
+const intId = parseInt(id);
+if (isNaN(intId)) {
+	notANumberError("id");
+	return notFoundResponse();
+}
+const list = await getMediaListById(intId, i18next.language, 2);
+if (!list || list.slug !== title) {
+	notFoundError("season", { prop: "id", value: id }, { prop: "title", value: title });
+	return notFoundResponse();
+}
+let locales: {
+	[key: string]: string;
+} = {};
+for (const locale in i18next.languages) {
+	if (locale === i18next.language) continue;
+	const translatedList = await getMediaListById(intId, locale, 0);
+	if (translatedList) {
+		locales[locale] = `${localizePath("mediateka/edukia/")}/${id}/${translatedList.slug}`;
+	}
+}
+---
+
+<ContentLayout title={t("media:lists.title")} translatedUrls={locales}>
+	<Title extraClass={"mb-16"}>{list.title}</Title>
+	<div class="flex flex-wrap justify-center gap-4">
+		{
+			list.media &&
+				list.media.map(
+					(entry) =>
+						typeof entry !== "number" && (
+							<MediaCard
+								title={entry.title}
+								description={entry.description ?? undefined}
+								image={getMediaEntryThumbnail("s", entry)}
+								alt={getMediaEntryAlt(entry)}
+								link={`${localizePath("/mediateka/edukia")}/${entry.id}/${entry.slug}`}
+							/>
+						),
+				)
+		}
+	</div>
+</ContentLayout>

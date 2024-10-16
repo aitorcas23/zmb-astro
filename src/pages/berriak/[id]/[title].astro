@@ -1,0 +1,58 @@
+---
+import { localizePath } from "astro-i18next";
+import i18next, { changeLanguage } from "i18next";
+import { getNewsById } from "@utils/apiCalls/news";
+import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import Title from "@components/Title.astro";
+import Subtitle from "@components/Subtitle.astro";
+import { getAlt, getImage } from "@utils/mediaProcessors";
+
+changeLanguage("eu");
+
+const { id, title } = Astro.params;
+if (id === undefined || title === undefined) {
+	if (id === undefined) notProvidedError("id");
+	if (title === undefined) notProvidedError("title");
+	return notFoundResponse();
+}
+const intId = parseInt(id);
+if (isNaN(intId)) {
+	notANumberError("id");
+	return notFoundResponse();
+}
+const news = await getNewsById(intId, i18next.language, 1);
+if (!news) {
+	notFoundError("season", { prop: "id", value: id });
+	return notFoundResponse();
+}
+let locales: {
+	[key: string]: string;
+} = {};
+for (const locale in i18next.languages) {
+	if (locale === i18next.language) continue;
+	const translatedNews = await getNewsById(intId, locale, 0);
+	if (translatedNews) {
+		locales[locale] = `${localizePath("berriak")}/${id}/${translatedNews.slug}`;
+	}
+}
+---
+
+<ContentLayout title={news.title ?? "NoTitle"} translatedUrls={locales}>
+	<Title>{news.title}</Title>
+	{news.author && <Subtitle>{news.author}</Subtitle>}
+	{
+		news.image && (
+			<img class="mx-auto mt-8" src={getImage("l", news.image)} alt={getAlt(news.image)} />
+		)
+	}
+	{
+		news.content && (
+			<span
+				class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+				set:html={news.content_html}
+			/>
+		)
+	}
+</ContentLayout>

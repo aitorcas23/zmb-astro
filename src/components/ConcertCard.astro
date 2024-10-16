@@ -1,0 +1,53 @@
+---
+import BookMark from "./BookMark.astro";
+import CardEffect from "./CardEffect.astro";
+import Music from "./icons/Music.astro";
+import i18next from "i18next";
+
+interface Props {
+	title: string;
+	date?: Date;
+	description?: string;
+	image?: string;
+	alt?: string;
+	link: string;
+	past?: boolean;
+	small?: boolean;
+}
+
+const { title, date, description, image, alt, link, past, small } = Astro.props;
+const opacity = past ? "opacity-50" : "opacity-100";
+const width = small ? "max-w-sm" : "max-w-lg";
+---
+
+<CardEffect href={link} extraClass={`${width} ${opacity}`}>
+	<BookMark color="fill-zmb">
+		<Music />
+	</BookMark>
+	<img
+		src={image || "/images/Logo_large_MusikaBanda_black.png"}
+		alt={alt || title}
+		class="aspect-video rounded-t-lg object-cover"
+	/>
+	<div class="p-4">
+		<h5 class:list={["font-bold text-gray-900", { "text-xl": small }, { "text-2xl": !small }]}>
+			{title}
+		</h5>
+		{
+			date && (
+				<p class:list={[{ "text-base": small }, { "text-lg": !small }, { "text-red-400": past }]}>
+					{date.toLocaleString(i18next.language, {
+						year: "numeric",
+						month: "2-digit",
+						day: "2-digit",
+						hour: "2-digit",
+						minute: "2-digit",
+						timeZone: "Europe/Madrid",
+					})}
+				</p>
+			)
+		}
+
+		<p class="mt-2 line-clamp-3">{description}</p>
+	</div>
+</CardEffect>

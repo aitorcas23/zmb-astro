@@ -1,0 +1,9 @@
+{
+	"title": "Denboraldiak",
+	"concerts": {
+		"index": "Kontzertuak",
+		"buyTickets": "Sarrerak erosi",
+		"program": "Egitaraua",
+		"extras": "Kontzertu honetan parte hartzen duten estrak:"
+	}
+}
