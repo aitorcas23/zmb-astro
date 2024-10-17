@@ -4,8 +4,8 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "bunx astro-i18next generate && bun run pretty && astro dev",
-		"start": "astro dev",
-		"build": "astro check && astro build",
+		"start": "npx astro-i18next generate && astro dev",
+		"build": "npx astro-i18next generate && astro check && astro build",
 		"preview": "astro preview",
 		"astro": "astro",
 		"pretty": "prettier --write \"./**/*.{js,ts,json,astro}\""
