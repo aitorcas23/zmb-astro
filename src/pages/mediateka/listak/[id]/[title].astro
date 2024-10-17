@@ -29,11 +29,11 @@ if (!list || list.slug !== title) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale in i18next.languages) {
+for (const locale of i18next.languages) {
 	if (locale === i18next.language) continue;
 	const translatedList = await getMediaListById(intId, locale, 0);
 	if (translatedList) {
-		locales[locale] = `${localizePath("mediateka/edukia/")}/${id}/${translatedList.slug}`;
+		locales[locale] = `${localizePath("mediateka/edukia/", locale)}/${id}/${translatedList.slug}`;
 	}
 }
 ---

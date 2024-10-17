@@ -39,11 +39,11 @@ if (season.slug !== title) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale in i18next.languages) {
+for (const locale of i18next.languages) {
 	if (locale === i18next.language) continue;
 	const translatedSeason = await getSeasonById(intId, locale, 0);
 	if (translatedSeason) {
-		locales[locale] = `${localizePath("denboraldiak")}/${id}/${translatedSeason.slug}`;
+		locales[locale] = `${localizePath("denboraldiak", locale)}/${id}/${translatedSeason.slug}`;
 	}
 }
 ---

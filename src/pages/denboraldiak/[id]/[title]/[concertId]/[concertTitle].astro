@@ -2,6 +2,7 @@
 import i18next, { t, changeLanguage } from "i18next";
 import { localizePath } from "astro-i18next";
 import { notANumberError, notFoundError, notProvidedError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
 import { getSeasonById } from "@utils/apiCalls/seasons";
 import { getConcertById } from "@utils/apiCalls/concerts";
 import ContentLayout from "@layouts/ContentLayout.astro";
@@ -84,13 +85,13 @@ if (concert.slug !== concertTitle) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale in i18next.languages) {
+for (const locale of i18next.languages) {
 	if (locale === i18next.language) continue;
 	const translatedSeason = await getSeasonById(intId, locale, 0);
 	const translatedConcert = await getConcertById(intConcertId, locale, 0);
 	if (translatedSeason && translatedConcert) {
 		locales[locale] =
-			`${localizePath("denboraldiak")}/${id}/${translatedSeason.slug}/${concertId}/${translatedConcert.slug}`;
+			`${localizePath("denboraldiak", locale)}/${id}/${translatedSeason.slug}/${concertId}/${translatedConcert.slug}`;
 	}
 }
 let concertDateString: string | undefined;

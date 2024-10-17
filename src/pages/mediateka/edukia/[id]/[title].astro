@@ -45,11 +45,11 @@ for (const list of lists) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale in i18next.languages) {
+for (const locale of i18next.languages) {
 	if (locale === i18next.language) continue;
 	const translatedEntry = await getMediaEntryById(intId, locale, 0);
 	if (translatedEntry) {
-		locales[locale] = `${localizePath("mediateka/edukia/")}/${id}/${translatedEntry.slug}`;
+		locales[locale] = `${localizePath("mediateka/edukia/", locale)}/${id}/${translatedEntry.slug}`;
 	}
 }
 ---

@@ -29,11 +29,11 @@ if (!news) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale in i18next.languages) {
+for (const locale of i18next.languages) {
 	if (locale === i18next.language) continue;
 	const translatedNews = await getNewsById(intId, locale, 0);
 	if (translatedNews) {
-		locales[locale] = `${localizePath("berriak")}/${id}/${translatedNews.slug}`;
+		locales[locale] = `${localizePath("berriak", locale)}/${id}/${translatedNews.slug}`;
 	}
 }
 ---
