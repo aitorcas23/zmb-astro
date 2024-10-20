@@ -61,7 +61,14 @@ for (const locale of i18next.languages) {
 				/>
 			)
 		}
-		{season.description}
+		{
+			season.content_html && (
+				<span
+					class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+					set:html={season.content_html}
+				/>
+			)
+		}
 	</div>
 	{
 		season.concerts && season.concerts.length > 0 && (
