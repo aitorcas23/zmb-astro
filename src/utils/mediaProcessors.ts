@@ -8,7 +8,7 @@ export function getImage(
 	const sizes = collection.sizes;
 	if (!sizes) return undefined;
 	const url = sizes[size]?.url;
-	return url ?? undefined;
+	return url ? `${import.meta.env.PAYLOAD_URL}/${url}` : undefined;
 }
 
 export function getAlt(collection: number | Media | null | undefined) {
