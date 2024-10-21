@@ -4,7 +4,7 @@ interface Props {
 		author?: string | null;
 		arranger?: string | null;
 		title?: string | null;
-		description?: string | null;
+		content_html?: string | null;
 		[key: string]: any;
 	};
 }
@@ -26,4 +26,11 @@ const { piece } = Astro.props;
 		</p>
 	)
 }
-{piece.description && <div class="mt-8">{piece.description}</div>}
+{
+	piece.content_html && (
+		<div
+			class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+			set:html={piece.content_html}
+		/>
+	)
+}
