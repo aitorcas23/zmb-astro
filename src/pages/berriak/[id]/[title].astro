@@ -45,7 +45,13 @@ for (const locale of i18next.languages) {
 	{news.author && <Subtitle>{news.author}</Subtitle>}
 	{
 		news.image && (
-			<img class="mx-auto mt-8" src={getImage("l", news.image)} alt={getAlt(news.image)} />
+			<img
+				class="mx-auto mt-8"
+				src={getImage("l", news.image)}
+				alt={getAlt(news.image)}
+				loading="lazy"
+				decoding="async"
+			/>
 		)
 	}
 	{

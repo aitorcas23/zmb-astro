@@ -25,6 +25,8 @@ const { title, description, date, image, alt, link } = Astro.props;
 			src={image || "/images/Logo_medium_MusikaBanda_black.png"}
 			alt={alt || title}
 			class="aspect-video rounded-t-lg object-cover"
+			loading="lazy"
+			decoding="async"
 		/>
 	</figure>
 	<div class="flex flex-grow flex-col p-4">

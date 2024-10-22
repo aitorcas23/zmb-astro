@@ -24,6 +24,8 @@ const { image, alt, title, imagePos } = Astro.props;
 			]}
 			src={image ?? "/images/Logo_medium_MusikaBanda_black.png"}
 			alt={alt}
+			loading="lazy"
+			decoding="async"
 		/>
 	</div>
 	<div class:list={["flex-grow basis-0 md:my-auto", { "md:text-right": imagePos === "right" }]}>

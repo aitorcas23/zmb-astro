@@ -16,6 +16,8 @@ const { name, text, image, alt } = Astro.props;
 		class="aspect-square rounded-full object-cover p-8"
 		src={image ?? "/images/Logo_medium_MusikaBanda_black.png"}
 		alt={alt || name}
+		loading="lazy"
+		decoding="async"
 	/>
 	<div class="px-4 pb-4 text-center">
 		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">

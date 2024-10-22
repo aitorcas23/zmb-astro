@@ -28,6 +28,8 @@ const width = small ? "max-w-sm" : "max-w-lg";
 		src={image || "/images/Logo_large_MusikaBanda_black.png"}
 		alt={alt || title}
 		class="aspect-video rounded-t-lg object-cover"
+		loading="lazy"
+		decoding="async"
 	/>
 	<div class="p-4">
 		<h5 class:list={["font-bold text-gray-900", { "text-xl": small }, { "text-2xl": !small }]}>

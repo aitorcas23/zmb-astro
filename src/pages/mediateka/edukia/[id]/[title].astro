@@ -73,7 +73,12 @@ for (const locale of i18next.languages) {
 	<div class="mb-12">
 		{
 			entry.mediaType == "Image" ? (
-				<img src={getImage("l", entry.mediaUpload)} alt={getAlt(entry.mediaUpload)} />
+				<img
+					src={getImage("l", entry.mediaUpload)}
+					alt={getAlt(entry.mediaUpload)}
+					loading="lazy"
+					decoding="async"
+				/>
 			) : entry.mediaType == "YouTube" && entry.youtubeID ? (
 				<YouTubeVideo id={entry.youtubeID} title={entry.title} />
 			) : (

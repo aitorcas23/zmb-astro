@@ -56,6 +56,8 @@
 							alt={slide.alt}
 							class="aspect-video h-full w-full select-none object-cover object-center md:aspect-[21/9]"
 							draggable="false"
+							loading="lazy"
+							decoding="async"
 						/>
 					</div>
 				</Carousel.Item>

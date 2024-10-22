@@ -58,6 +58,8 @@ for (const locale of i18next.languages) {
 					class="mx-auto flex-shrink flex-grow basis-0 md:w-1/2"
 					src={getImage("l", season.image)}
 					alt={getAlt(season.image)}
+					loading="lazy"
+					decoding="async"
 				/>
 			)
 		}
