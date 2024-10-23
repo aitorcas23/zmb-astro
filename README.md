@@ -1,54 +1,36 @@
-# Astro Starter Kit: Basics
+# Web Zornotzako Musika Banda
+[zornotzakomusikabanda.eus](https://zornotzakomusikabanda.eus)
 
-```sh
-npm create astro@latest -- --template basics
-```
+Este proyecto es la página web para Zonrnotzako Musika Banda.
+El proyecto se puede dividir en tres secciones principales: el frontend, el cms y el backend.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Frontend
+El frontend de la página de la banda se encuentra en este repositorio de GitHub.
+El frontend está desarrollado con el framework web de JavaScript **Astro**.
+Astro es un framework enfocado en el desarrollo de páginas web enfocadas en contenido.
+Astro no es un framework reactivo, pero cuenta con la posibilidad de utilizar componentes de otros frameworks como React, Vue o Svelte entre otros.
+Se utiliza **TypeScript** en vez de JavaScript para tener el proyecto tipado y así prevenir posibles errores causados por la flexibilidad y ambigüedad de JavaScript.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Para los estilos se utiliza la librería **Tailwindcss** con componentes de **Flowbite**.
+En el caso del carrusel de la página de inicio se utiliza un componente de **Svelte** utilizando un componente de **shadcn-svelte**.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+Este frontend está alojado en **Vercel**.
 
-## 🚀 Project Structure
+## CMS
+Un CMS, o "Content Management System" es un software que permite crear y gestionar contenido de una forma sencilla sin necesidad de conocimientos técnicos.
+En este proyecto se utiliza un "Headless CMS", es decir, un CMS separado del apartado visual.
+Para acceder a la información, el CMS expone un endpoint REST.
+De esta manera hay total libertad a la hora de desarrollar el apartado visual de la página web, utilizando Astro para ese fin.
 
-Inside of your Astro project, you'll see the following folders and files:
+El CMS utilizado en el proyecto se llama **Payload CMS**.
+En Payload CMS se utiliza JavaScript o, en el caso de este proyecto, TypeScript, para crear las colecciones del contenido.
+Después, desde la página de administrador de la Zornotzako Musika Banda se puede añadir el contenido pudiendo ver los cambios en la página al momento.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Esta aplicación CMS se aloja en **Koyeb**.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Backend
+Para el backend se utiliza una herramienta BaaS o "Backend as a Service", con el fin de facilitar el desarrollo del mismo.
+La herramienta utilizada se llama **Supabase**, que ofrece servicios backend de los cuales se utilizan la base de datos **PostgreSQL**, el almacenamiento de archivos estilo S3 y la autenticación de usuarios.
+Estos servicios se utilizan desde el CMS para guardar el contenido de la página y gestionar los usuarios que tienen acceso a esta.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Estos tres servicios se alojan en el propio servicio de alojamiento de Supabase.
