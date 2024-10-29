@@ -33,7 +33,7 @@
 							class="absolute left-4 top-4 max-w-[75%] bg-black/30 p-2 pb-3 sm:p-4 sm:pb-5 lg:p-6 lg:pb-7 xl:p-8 xl:pb-9"
 						>
 							<h2
-								class="text-2xl font-semibold uppercase text-white sm:text-3xl md:text-4xl md:font-bold"
+								class="text-2xl font-semibold uppercase text-white sm:text-3xl md:text-4xl md:font-bold leading-7"
 							>
 								{slide.title}
 							</h2>
