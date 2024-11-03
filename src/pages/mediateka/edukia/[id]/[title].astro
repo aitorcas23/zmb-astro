@@ -56,21 +56,18 @@ for (const locale of i18next.languages) {
 
 <ContentLayout title={entry.title} translatedUrls={locales}>
 	<h1
-		class:list={[
-			"text-center text-4xl font-extrabold uppercase text-gray-900 lg:text-5xl",
-			{ "mb-16": !entry.description },
-		]}
+		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
 	>
 		{entry.title}
 	</h1>
 	{
 		entry.description && (
-			<div class="mb-16 mt-8">
+			<div class="mt-4">
 				<p class="text-center">{entry.description}</p>
 			</div>
 		)
 	}
-	<div class="mb-12">
+	<div class="my-12">
 		{
 			entry.mediaType == "Image" ? (
 				<img

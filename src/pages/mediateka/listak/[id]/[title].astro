@@ -33,16 +33,18 @@ for (const locale of i18next.languages) {
 	if (locale === i18next.language) continue;
 	const translatedList = await getMediaListById(intId, locale, 0);
 	if (translatedList) {
-		locales[locale] = `${localizePath("mediateka/edukia/", locale)}/${id}/${translatedList.slug}`;
+		locales[locale] = `${localizePath("mediateka/listak/", locale)}/${id}/${translatedList.slug}`;
 	}
 }
 ---
 
 <ContentLayout title={t("media:lists.title")} translatedUrls={locales}>
-	<h1 class="mb-16 text-center text-4xl font-extrabold uppercase text-gray-900 lg:text-5xl">
+	<h1
+		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
+	>
 		{list.title}
 	</h1>
-	<div class="flex flex-wrap justify-center gap-4">
+	<div class="mt-16 flex flex-wrap justify-center gap-4">
 		{
 			list.media &&
 				list.media.map(
