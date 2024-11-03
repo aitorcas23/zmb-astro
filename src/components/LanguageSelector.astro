@@ -35,15 +35,22 @@ const firstLang = links[0];
 ---
 
 {
-acordeon ? (
-
-		<a class="hover:text-zmb hover:underline p-2 transition-colors duration-150 ease-out" href={firstLang.href}>
+	acordeon ? (
+		<a
+			class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
+			href={firstLang.href}
+		>
 			{i18next.language.toUpperCase()}
 		</a>
-) : (
-		<div class="inline-block h-9 min-h-[1em] w-0.5 self-center bg-gray-900/25 dark:bg-white/10"></div>
-		<a class="hover:text-zmb hover:underline p-2 transition-colors duration-150 ease-out" href={firstLang.href}>
-			{i18next.language.toUpperCase()}
-		</a>
+	) : (
+		<>
+			<div class="inline-block h-9 min-h-[1em] w-0.5 self-center bg-gray-900/25 dark:bg-white/10" />
+			<a
+				class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
+				href={firstLang.href}
+			>
+				{i18next.language.toUpperCase()}
+			</a>
+		</>
 	)
 }
