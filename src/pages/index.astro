@@ -73,7 +73,13 @@ if (mediaEntries.length > 0) {
 ---
 
 <ContentLayout title={t("home:title")}>
-	{slides.length > 0 && <Carousel slides={slides} client:load />}
+	{
+		slides.length > 0 && (
+			<div slot="no-padding">
+				<Carousel slides={slides} client:load />
+			</div>
+		)
+	}
 
 	{
 		// Concerts

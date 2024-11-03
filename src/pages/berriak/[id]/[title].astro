@@ -39,14 +39,16 @@ for (const locale of i18next.languages) {
 ---
 
 <ContentLayout title={news.title ?? "NoTitle"} translatedUrls={locales}>
-	<h1 class="text-center text-4xl font-extrabold uppercase text-gray-900 lg:text-5xl">
+	<h1
+		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
+	>
 		{news.title}
 	</h1>
 	{news.author && <Subtitle>{news.author}</Subtitle>}
 	{
 		news.image && (
 			<img
-				class="mx-auto mt-8"
+				class="mx-auto my-8"
 				src={getImage("l", news.image)}
 				alt={getAlt(news.image)}
 				loading="lazy"
