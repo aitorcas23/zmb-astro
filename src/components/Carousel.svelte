@@ -30,7 +30,7 @@
 				<Carousel.Item>
 					<div class="relative">
 						<div
-							class="absolute left-2 top-2 sm:left-4 sm:top-4 max-w-[75%] bg-black/30 p-2 pb-3 sm:p-4 sm:pb-5 lg:p-6 lg:pb-7 xl:p-8 xl:pb-9"
+							class="absolute left-2 top-2 sm:left-4 sm:top-4 max-w-[75%] bg-black/50 p-2 pb-3 sm:p-4 sm:pb-5 lg:p-6 lg:pb-7 xl:p-8 xl:pb-9"
 						>
 							<h2
 								class="text-2xl font-semibold uppercase text-white sm:text-3xl md:text-4xl md:font-bold leading-7"
@@ -38,7 +38,7 @@
 								{slide.title}
 							</h2>
 							{#if slide.description}
-								<p class="text-xs text-gray-200 sm:text-sm md:text-base xl:text-xl">
+								<p class="text-xs text-gray-200 sm:text-sm md:text-base xl:text-xl line-clamp-2">
 									{slide.description}
 								</p>
 							{/if}

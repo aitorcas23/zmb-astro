@@ -18,10 +18,10 @@ const lists = await getMediaLists(i18next.language, 2);
 	{
 		lists.map((list) => (
 			<>
-				<h2 class="mb-8 mt-16 text-center text-3xl font-bold lg:text-4xl">{list.title}</h2>
+				<h2 class="my-8 text-center text-3xl font-bold lg:text-4xl">{list.title}</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{list.media &&
-						list.media.map((entry) => {
+						list.media.splice(0, 3).map((entry) => {
 							if (typeof entry !== "number") {
 								return (
 									<MediaCard
