@@ -12,6 +12,7 @@ import ConcertCard from "@components/ConcertCard.astro";
 
 changeLanguage("eu");
 
+// URL validation
 const { title, id } = Astro.params;
 if (title === undefined || id === undefined) {
 	if (!title) {
@@ -27,7 +28,7 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const season = await getSeasonById(intId, i18next.language, 1);
+const season = await getSeasonById(intId, i18next.language, 2);
 if (!season) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();

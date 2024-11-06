@@ -16,18 +16,17 @@ interface Props {
 }
 
 const { title, date, description, image, alt, link, past, small } = Astro.props;
-const opacity = past ? "opacity-50" : "opacity-100";
 const width = small ? "max-w-sm" : "max-w-lg";
 ---
 
-<CardEffect href={link} extraClass={`${width} ${opacity}`}>
+<CardEffect href={link} extraClass={width}>
 	<BookMark color="fill-zmb">
 		<Music />
 	</BookMark>
 	<img
 		src={image || "/images/Logo_large_MusikaBanda_black.png"}
 		alt={alt || title}
-		class="aspect-video rounded-t-lg object-cover"
+		class="aspect-video w-full rounded-t-lg object-cover"
 		loading="lazy"
 		decoding="async"
 	/>
@@ -37,7 +36,7 @@ const width = small ? "max-w-sm" : "max-w-lg";
 		</h5>
 		{
 			date && (
-				<p class:list={[{ "text-base": small }, { "text-lg": !small }, { "text-red-400": past }]}>
+				<p class:list={[{ "text-base": small }, { "text-lg": !small }, { "text-red-700": past }]}>
 					{date.toLocaleString(i18next.language, {
 						year: "numeric",
 						month: "2-digit",
