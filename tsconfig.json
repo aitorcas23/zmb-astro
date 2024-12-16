@@ -9,6 +9,7 @@
 			"@styles/*": ["src/styles/*"],
 			"@types/*": ["src/types/*"],
 			"@/*": ["src/*"]
-		}
+		},
+		"lib": ["ES2015", "DOM"]
 	}
 }
