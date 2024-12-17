@@ -9,6 +9,13 @@ import svelte from "@astrojs/svelte";
 
 // https://astro.build/config
 export default defineConfig({
+	i18n: {
+		locales: ["eu", "es"],
+		defaultLocale: "eu",
+		routing: {
+			prefixDefaultLocale: false,
+		},
+	},
 	integrations: [
 		tailwind({
 			applyBaseStyles: false,
