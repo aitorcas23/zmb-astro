@@ -1,0 +1,10 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"homeTitle": "Zornotzako Musika Banda",
+	"homeCarrouselRead": "Irakurri",
+	"homeCarrouselMore": "Informazio Gehiago",
+	"homeCarrouselSee": "Edukia ikusi",
+	"homeConcerts": "Hurrengo kontzertuak",
+	"homeNews": "Azken berriak",
+	"homeMedia": "Azken multimedia edukia"
+}

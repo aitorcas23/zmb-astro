@@ -7,6 +7,8 @@ import vercel from "@astrojs/vercel/serverless";
 
 import svelte from "@astrojs/svelte";
 
+import paraglide from "@inlang/paraglide-astro";
+
 // https://astro.build/config
 export default defineConfig({
 	i18n: {
@@ -22,6 +24,10 @@ export default defineConfig({
 		}),
 		astroI18next(),
 		svelte(),
+		paraglide({
+			project: "./project.inlang",
+			outdir: "./src/paraglide",
+		}),
 	],
 	output: "server",
 	adapter: vercel(),
