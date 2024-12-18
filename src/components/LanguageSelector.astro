@@ -1,32 +1,25 @@
 ---
-import i18next, { t } from "i18next";
-import { localizePath } from "astro-i18next";
 import { notNull } from "@utils/filters";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime.js";
 
 interface Props {
-	translatedUrls?: { [key: string]: string };
+	translatedUrls: { [key: string]: string };
 	lang?: string;
 	extraClass?: string;
 	acordeon?: boolean;
 }
 
 const { translatedUrls, lang: mainLang, extraClass, acordeon } = Astro.props;
-const links = i18next.languages
+console.log(availableLanguageTags);
+const links = availableLanguageTags
 	.map((lang) => {
-		const isCurrentLanguage = lang == (mainLang || i18next.language);
+		const isCurrentLanguage = lang == (mainLang || languageTag());
 		if (!isCurrentLanguage) {
 			const linkText = lang.toUpperCase();
-			if (translatedUrls) {
-				return {
-					text: linkText,
-					href: translatedUrls[lang],
-				};
-			} else {
-				return {
-					text: linkText,
-					href: localizePath(Astro.url.pathname, lang),
-				};
-			}
+			return {
+				text: linkText,
+				href: translatedUrls[lang],
+			};
 		}
 	})
 	.filter(notNull);
@@ -40,7 +33,7 @@ const firstLang = links[0];
 			class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
 			href={firstLang.href}
 		>
-			{i18next.language.toUpperCase()}
+			{languageTag().toUpperCase()}
 		</a>
 	) : (
 		<>
@@ -49,7 +42,7 @@ const firstLang = links[0];
 				class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
 				href={firstLang.href}
 			>
-				{i18next.language.toUpperCase()}
+				{languageTag().toUpperCase()}
 			</a>
 		</>
 	)

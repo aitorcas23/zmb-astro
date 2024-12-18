@@ -6,5 +6,18 @@
 	"homeCarrouselSee": "Ver contenido",
 	"homeConcerts": "Próximos conciertos",
 	"homeNews": "Últimas noticias",
-	"homeMedia": "Últimos contenidos multimedia"
+	"homeMedia": "Últimos contenidos multimedia",
+
+	"uiNavHome": "Inicio",
+	"uiNavOurbandLabel": "Nuestra banda",
+	"uiNavOurbandHistory": "Historia",
+	"uiNavOurbandMembers": "Miembros",
+	"uiNavNews": "Noticias",
+	"uiNavSeason": "Temporadas",
+	"uiNavLanguage": "Idioma",
+	"uiNavMedia": "Mediateca",
+	"uiHrlinkMore": "Ver más...",
+	"ui404notFound": "La página no se ha encontrado",
+	"ui404title": "No encontrado",
+	"ui404backhome": "Volver al inicio"
 }

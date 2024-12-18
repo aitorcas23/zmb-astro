@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
-import astroI18next from "astro-i18next";
 
 import vercel from "@astrojs/vercel/serverless";
 
@@ -22,7 +21,6 @@ export default defineConfig({
 		tailwind({
 			applyBaseStyles: false,
 		}),
-		astroI18next(),
 		svelte(),
 		paraglide({
 			project: "./project.inlang",

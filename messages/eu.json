@@ -6,5 +6,18 @@
 	"homeCarrouselSee": "Edukia ikusi",
 	"homeConcerts": "Hurrengo kontzertuak",
 	"homeNews": "Azken berriak",
-	"homeMedia": "Azken multimedia edukia"
+	"homeMedia": "Azken multimedia edukia",
+
+	"uiNavHome": "Hasiera",
+	"uiNavOurbandLabel": "Gure banda",
+	"uiNavOurbandHistory": "Historia",
+	"uiNavOurbandMembers": "Partaideak",
+	"uiNavNews": "Berriak",
+	"uiNavSeason": "Denboraldiak",
+	"uiNavLanguage": "Hizkuntza",
+	"uiNavMedia": "Mediateka",
+	"uiHrlinkMore": "Ikusi gehiago...",
+	"ui404notFound": "Orria ez da aurkitu",
+	"ui404title": "Ez aurkitua",
+	"ui404backhome": "Hazierara itzuli"
 }

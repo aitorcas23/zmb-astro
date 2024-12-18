@@ -2,18 +2,18 @@
 import "@styles/app.css";
 import Nav from "@components/Nav.astro";
 import Footer from "@components/Footer.astro";
-import i18next from "i18next";
+import { languageTag } from "@paraglide/runtime.js";
 
 interface Props {
 	title: string;
-	translatedUrls?: { [key: string]: string };
+	translatedUrls: { [key: string]: string };
 	lang?: string;
 }
 
 const { title, translatedUrls, lang } = Astro.props;
 ---
 
-<html lang={lang || i18next.language} class="light">
+<html lang={lang || languageTag()} class="light">
 	<head>
 		<meta charset="utf-8" />
 		<link

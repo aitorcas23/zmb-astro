@@ -1,9 +1,7 @@
 ---
-import { localizePath } from "astro-i18next";
 import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
 import { notFoundResponse } from "@utils/httpResponses";
 import { getSeasonById } from "@utils/apiCalls/seasons";
-import i18next, { t, changeLanguage } from "i18next";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import Title from "@components/Title.astro";
 import Subtitle from "@components/Subtitle.astro";

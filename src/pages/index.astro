@@ -1,5 +1,5 @@
 ---
-import * as m from "../paraglide/messages.js";
+import * as m from "@paraglide/messages.js";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import { getNews } from "@utils/apiCalls/news";
 import { getNextConcerts } from "@utils/apiCalls/concerts";
@@ -13,7 +13,8 @@ import { getMediaEntryThumbnail, getMediaEntryAlt } from "@utils/mediaEntryProce
 import { getSeasonByConcertId, type Season } from "@utils/apiCalls/seasons";
 import MediaCard from "@components/MediaCard.astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { languageTag } from "@/paraglide/runtime";
+import { languageTag, availableLanguageTags } from "@paraglide/runtime.js";
+import { localizePathname } from "@/linking";
 
 let slides: {
 	title: string;
@@ -24,12 +25,12 @@ let slides: {
 	description?: string;
 }[] = [];
 // Concerts
-const concerts = await getNextConcerts(Astro.currentLocale || "eu", 3);
+const concerts = await getNextConcerts(languageTag() || "eu", 3);
 let concertSeasonRelation: {
 	[id: number]: Season | null;
 } = {};
 for (const concert of concerts) {
-	const season = await getSeasonByConcertId(Astro.currentLocale || "eu", concert.id);
+	const season = await getSeasonByConcertId(languageTag() || "eu", concert.id);
 	concertSeasonRelation = { ...concertSeasonRelation, [concert.id]: season };
 }
 if (concerts.length > 0) {
@@ -38,40 +39,47 @@ if (concerts.length > 0) {
 		title: nextConcert.title,
 		image: getImage("m", nextConcert.image) ?? "/images/Logo_large_MusikaBanda_black.png",
 		alt: getAlt(nextConcert.image) ?? nextConcert.title,
-		link: `${getRelativeLocaleUrl(Astro.currentLocale || "eu", "denboraldiak")}/${concertSeasonRelation[nextConcert.id]?.id}/${concertSeasonRelation[nextConcert.id]?.slug}/${nextConcert.id}/${nextConcert.slug}`,
+		link: `${getRelativeLocaleUrl(languageTag() || "eu", "denboraldiak")}/${concertSeasonRelation[nextConcert.id]?.id}/${concertSeasonRelation[nextConcert.id]?.slug}/${nextConcert.id}/${nextConcert.slug}`,
 		linkText: m.homeCarrouselMore(),
 		description: nextConcert.description ?? undefined,
 	});
 }
 // News
-const news = await getNews(Astro.currentLocale || "eu", 3);
+const news = await getNews(languageTag() || "eu", 3);
 if (news.length > 0) {
 	const firstNews = news[0];
 	slides.push({
 		title: firstNews.title,
 		image: getImage("m", firstNews.image) ?? "/images/Logo_large_MusikaBanda_black.png",
 		alt: getAlt(firstNews.image) ?? firstNews.title,
-		link: `${getRelativeLocaleUrl(Astro.currentLocale || "eu", "/berriak")}/${firstNews.id}/${firstNews.slug}`,
+		link: `${getRelativeLocaleUrl(languageTag() || "eu", "/berriak")}/${firstNews.id}/${firstNews.slug}`,
 		linkText: m.homeCarrouselRead(),
 		description: firstNews.description ?? undefined,
 	});
 }
 // Mediateca
-const mediaEntries = await getMediaEntries(Astro.currentLocale || "eu", 3);
+const mediaEntries = await getMediaEntries(languageTag() || "eu", 3);
 if (mediaEntries.length > 0) {
 	const firstEntry = mediaEntries[0];
 	slides.push({
 		title: firstEntry.title,
 		image: getMediaEntryThumbnail("m", firstEntry) ?? "/images/Logo_large_MusikaBanda_black.png",
 		alt: getMediaEntryAlt(firstEntry),
-		link: `${getRelativeLocaleUrl(Astro.currentLocale || "eu", "mediateka/edukia")}/${firstEntry.id}/${firstEntry.slug}`,
+		link: `${getRelativeLocaleUrl(languageTag() || "eu", "mediateka/edukia")}/${firstEntry.id}/${firstEntry.slug}`,
 		linkText: m.homeCarrouselSee(),
 		description: firstEntry.description ?? undefined,
 	});
 }
+// Translations
+let translatedUrls: { [locale: string]: string } = {};
+console.log(availableLanguageTags);
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/", locale);
+}
 ---
 
-<ContentLayout title={m.homeTitle()}>
+<ContentLayout title={m.homeTitle()} {translatedUrls}>
 	{
 		slides.length > 0 && (
 			<div slot="no-padding">

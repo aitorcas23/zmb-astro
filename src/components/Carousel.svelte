@@ -11,7 +11,11 @@
 		description?: string;
 	}
 
-	export let slides: Slide[];
+	interface Props {
+		slides: Slide[];
+	}
+
+	let { slides }: Props = $props();
 </script>
 
 <div class="pt-8 sm:p-8">
