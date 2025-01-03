@@ -1,14 +1,13 @@
 ---
-import i18next, { t, changeLanguage } from "i18next";
-import { localizePath } from "astro-i18next";
 import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
 import { notFoundResponse } from "@utils/httpResponses";
 import { getMediaListById } from "@utils/apiCalls/mediaLists";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import MediaCard from "@components/MediaCard.astro";
 import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
-
-changeLanguage("eu");
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
 
 const { id, title } = Astro.params;
 if (id === undefined || title === undefined) {
@@ -21,7 +20,7 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const list = await getMediaListById(intId, i18next.language, 2);
+const list = await getMediaListById(intId, languageTag(), 2);
 if (!list || list.slug !== title) {
 	notFoundError("season", { prop: "id", value: id }, { prop: "title", value: title });
 	return notFoundResponse();
@@ -29,16 +28,17 @@ if (!list || list.slug !== title) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale of i18next.languages) {
-	if (locale === i18next.language) continue;
+for (const locale of availableLanguageTags) {
+	if (locale === languageTag()) continue;
 	const translatedList = await getMediaListById(intId, locale, 0);
 	if (translatedList) {
-		locales[locale] = `${localizePath("mediateka/listak/", locale)}/${id}/${translatedList.slug}`;
+		locales[locale] =
+			`${localizePathname("/mediateka/listak/", locale)}/${id}/${translatedList.slug}`;
 	}
 }
 ---
 
-<ContentLayout title={t("media:lists.title")} translatedUrls={locales}>
+<ContentLayout title={m.media_lists_title()} translatedUrls={locales}>
 	<h1
 		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
 	>
@@ -55,7 +55,7 @@ for (const locale of i18next.languages) {
 								description={entry.description ?? undefined}
 								image={getMediaEntryThumbnail("s", entry)}
 								alt={getMediaEntryAlt(entry)}
-								link={`${localizePath("/mediateka/edukia")}/${entry.id}/${entry.slug}`}
+								link={`${localizePathname("/mediateka/edukia", languageTag())}/${entry.id}/${entry.slug}`}
 							/>
 						),
 				)

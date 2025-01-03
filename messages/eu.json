@@ -1,0 +1,53 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+
+	"home_title": "Zornotzako Musika Banda",
+	"home_carrousel_read": "Irakurri",
+	"home_carrousel_more": "Informazio Gehiago",
+	"home_carrousel_see": "Edukia ikusi",
+	"home_concerts": "Hurrengo kontzertuak",
+	"home_news": "Azken berriak",
+	"home_media": "Azken multimedia edukia",
+
+	"media_title": "Mediateka",
+	"media_contentLink": "Azken erantsiak",
+	"media_content_title": "Mediateka edukia",
+	"media_content_more": "{lista} listako gehiago",
+	"media_lists_title": "Mediateka listak",
+	"media_lists_seeContent": "Ikusi listaren edukiak...",
+
+	"musicians_title": "Musikariak",
+
+	"news_title": "Berriak",
+
+	"ourBand_title": "Gura banda",
+	"ourBand_members_title": "Partaideak",
+	"ourBand_members_musicians": "Bandako musikariak",
+	"ourBand_history_title": "Bandaren historia",
+	"ourBand_history_read": "Bandaren historia irakurri",
+	"ourBand_history_notAvailable": "Orrialde hau ez dago eskuragarri oraindik",
+
+	"pieces_title": "Musika obrak",
+
+	"seasons_title": "Denboraldiak",
+	"seasons_concerts_index": "Kontzerkuak",
+	"seasons_concerts_buyTickets": "Sarrerak erosi",
+	"seasons_concerts_program": "Egiraraua",
+	"seasons_concerts_extras": "Kontzertu honetan parte hartzen dutan estrak:",
+
+	"ui_nav_home": "Hasiera",
+	"ui_nav_ourBand_label": "Gure banda",
+	"ui_nav_ourBand_history": "Historia",
+	"ui_nav_ourBand_members": "Partaideak",
+	"ui_nav_news": "Berriak",
+	"ui_nav_season": "Denboraldiak",
+	"ui_nav_language": "Hizkuntza",
+	"ui_nav_media": "Mediateka",
+	"ui_hrlink_more": "Ikusi gehiago...",
+	"ui_404_notFound": "Orria ez da aurkitu",
+	"ui_404_title": "Ez aurkitua",
+	"ui_404_backHome": "Hazierara itzuli",
+
+	"berriak": "berriak",
+	"denboraldiak": "denboraldiak"
+}

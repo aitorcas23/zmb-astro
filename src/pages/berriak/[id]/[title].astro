@@ -1,14 +1,12 @@
 ---
-import { localizePath } from "astro-i18next";
-import i18next, { changeLanguage } from "i18next";
-import { getNewsById } from "@utils/apiCalls/news";
-import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
-import { notFoundResponse } from "@utils/httpResponses";
-import ContentLayout from "@layouts/ContentLayout.astro";
 import Subtitle from "@components/Subtitle.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { getNewsById } from "@utils/apiCalls/news";
+import { notANumberError, notFoundError, notProvidedError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import { localizePathname } from "@utils/linking";
 import { getAlt, getImage } from "@utils/mediaProcessors";
-
-changeLanguage("eu");
 
 const { id, title } = Astro.params;
 if (id === undefined || title === undefined) {
@@ -21,24 +19,22 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const news = await getNewsById(intId, i18next.language, 1);
+const news = await getNewsById(intId, languageTag(), 1);
 if (!news) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();
 }
-let locales: {
-	[key: string]: string;
-} = {};
-for (const locale of i18next.languages) {
-	if (locale === i18next.language) continue;
+let translatedUrls: { [key: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale === languageTag()) continue;
 	const translatedNews = await getNewsById(intId, locale, 0);
 	if (translatedNews) {
-		locales[locale] = `${localizePath("berriak", locale)}/${id}/${translatedNews.slug}`;
+		translatedUrls[locale] = `${localizePathname("/berriak", locale)}/${id}/${translatedNews.slug}`;
 	}
 }
 ---
 
-<ContentLayout title={news.title ?? "NoTitle"} translatedUrls={locales}>
+<ContentLayout title={news.title ?? "NoTitle"} {translatedUrls}>
 	<h1
 		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
 	>

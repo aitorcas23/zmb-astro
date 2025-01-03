@@ -8,6 +8,7 @@
 			"@utils/*": ["src/utils/*"],
 			"@styles/*": ["src/styles/*"],
 			"@types/*": ["src/types/*"],
+			"@paraglide/*": ["src/paraglide/*"],
 			"@/*": ["src/*"]
 		},
 		"lib": ["ES2015", "DOM"]

@@ -1,20 +1,25 @@
 ---
-import { localizePath } from "astro-i18next";
-import i18next, { t, changeLanguage } from "i18next";
 import { getMediaLists } from "@utils/apiCalls/mediaLists";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import Title from "@components/Title.astro";
 import MediaCard from "@components/MediaCard.astro";
 import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
 import HrLink from "@components/HrLink.astro";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
 
-changeLanguage("eu");
+const lists = await getMediaLists(languageTag(), 2);
 
-const lists = await getMediaLists(i18next.language, 2);
+let translatedUrls: { [locale: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/", locale);
+}
 ---
 
-<ContentLayout title={t("media:lists.title")}>
-	<Title>{t("media:lists.title")}</Title>
+<ContentLayout title={m.media_lists_title()} {translatedUrls}>
+	<Title>{m.media_lists_title()}</Title>
 	{
 		lists.map((list) => (
 			<>
@@ -29,14 +34,16 @@ const lists = await getMediaLists(i18next.language, 2);
 										description={entry.description ?? undefined}
 										image={getMediaEntryThumbnail("s", entry)}
 										alt={getMediaEntryAlt(entry)}
-										link={`${localizePath("/mediateka/edukia")}/${entry.id}/${entry.slug}`}
+										link={`${localizePathname("/mediateka/edukia", languageTag())}/${entry.id}/${entry.slug}`}
 									/>
 								);
 							}
 						})}
 				</div>
-				<HrLink href={`${localizePath("mediateka/listak")}/${list.id}/${list.slug}`}>
-					{t("media:lists.seeContent")}
+				<HrLink
+					href={`${localizePathname("/mediateka/listak", languageTag())}/${list.id}/${list.slug}`}
+				>
+					{m.media_lists_seeContent()}
 				</HrLink>
 			</>
 		))

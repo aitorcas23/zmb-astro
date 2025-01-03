@@ -1,6 +1,4 @@
 ---
-import i18next, { t, changeLanguage } from "i18next";
-import { localizePath } from "astro-i18next";
 import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
 import { notFoundResponse } from "@utils/httpResponses";
 import { getMediaEntryById } from "@utils/apiCalls/mediaEntries";
@@ -15,8 +13,9 @@ import YouTubeVideo from "@components/YouTubeVideo.astro";
 import MediaCard from "@components/MediaCard.astro";
 import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
 import HrLink from "@components/HrLink.astro";
-
-changeLanguage("eu");
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
 
 const { id, title } = Astro.params;
 if (id === undefined || title === undefined) {
@@ -29,15 +28,15 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const entry = await getMediaEntryById(intId, i18next.language, 1);
+const entry = await getMediaEntryById(intId, languageTag(), 1);
 if (!entry || entry.slug !== title) {
 	notFoundError("season", { prop: "id", value: id }, { prop: "title", value: title });
 	return notFoundResponse();
 }
-const lists = await getMediaListsByEntryId(intId, i18next.language, 3);
+const lists = await getMediaListsByEntryId(intId, languageTag(), 3);
 let listsEntries: MediaList[] = [];
 for (const list of lists) {
-	const listEntries = await getMediaListById(list.id, i18next.language, 1);
+	const listEntries = await getMediaListById(list.id, languageTag(), 1);
 	if (listEntries) {
 		listsEntries.push(listEntries);
 	}
@@ -45,11 +44,12 @@ for (const list of lists) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale of i18next.languages) {
-	if (locale === i18next.language) continue;
+for (const locale of availableLanguageTags) {
+	if (locale === languageTag()) continue;
 	const translatedEntry = await getMediaEntryById(intId, locale, 0);
 	if (translatedEntry) {
-		locales[locale] = `${localizePath("mediateka/edukia/", locale)}/${id}/${translatedEntry.slug}`;
+		locales[locale] =
+			`${localizePathname("/mediateka/edukia/", locale)}/${id}/${translatedEntry.slug}`;
 	}
 }
 ---
@@ -87,7 +87,7 @@ for (const locale of i18next.languages) {
 		listsEntries.map((list) => (
 			<>
 				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">
-					{`${t("media:content.moreBefore")}"${list.title}"${t("media:content.moreAfter")}`}
+					{m.media_content_more(list.title)}
 				</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{list.media &&
@@ -102,13 +102,15 @@ for (const locale of i18next.languages) {
 											description={entry.description ?? undefined}
 											image={getMediaEntryThumbnail("s", entry)}
 											alt={getMediaEntryAlt(entry)}
-											link={`${localizePath("/mediateka/edukia")}/${entry.id}/${entry.slug}`}
+											link={`${localizePathname("/mediateka/edukia", languageTag())}/${entry.id}/${entry.slug}`}
 										/>
 									),
 							)}
 				</div>
-				<HrLink href={`${localizePath("mediateka/listak")}/${list.id}/${list.slug}`}>
-					{t("media:lists.seeContent")}
+				<HrLink
+					href={`${localizePathname("/mediateka/listak", languageTag())}/${list.id}/${list.slug}`}
+				>
+					{m.media_lists_seeContent()}
 				</HrLink>
 			</>
 		))

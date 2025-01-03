@@ -1,8 +1,8 @@
 ---
+import { languageTag } from "@paraglide/runtime";
 import BookMark from "./BookMark.astro";
 import CardEffect from "./CardEffect.astro";
 import News from "./icons/News.astro";
-import i18next from "i18next";
 
 interface Props {
 	title: string;
@@ -37,7 +37,7 @@ const { title, description, date, image, alt, link } = Astro.props;
 			<p class="mb-0 line-clamp-3">{description}</p>
 			<small class="text-end">
 				{
-					date.toLocaleDateString(i18next.language, {
+					date.toLocaleDateString(languageTag(), {
 						year: "numeric",
 						month: "2-digit",
 						day: "2-digit",

@@ -1,18 +1,23 @@
 ---
-import i18next, { t, changeLanguage } from "i18next";
-import { getMusicians } from "@utils/apiCalls/musicians";
-import ContentLayout from "@layouts/ContentLayout.astro";
-import Title from "@components/Title.astro";
 import MusicianCard from "@components/MusicianCard.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { getMusicians } from "@utils/apiCalls/musicians";
+import { localizePathname } from "@utils/linking";
 import { getAlt, getImage } from "@utils/mediaProcessors";
+const musicians = await getMusicians(languageTag());
 
-changeLanguage("eu");
-
-const musicians = await getMusicians(i18next.language);
+let translatedUrls: { [locale: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/gure-banda/partaideak", locale);
+}
 ---
 
-<ContentLayout title={t("ourBand:members.title")}>
-	<Title>{t("ourBand:members.musicians")}</Title>
+<ContentLayout title={m.ourBand_members_title()} {translatedUrls}>
+	<Title>{m.ourBand_members_musicians()}</Title>
 	<div class="mt-16 flex flex-wrap justify-center gap-4">
 		{
 			musicians.length > 0 &&

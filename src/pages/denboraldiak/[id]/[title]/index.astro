@@ -1,16 +1,15 @@
 ---
-import { localizePath } from "astro-i18next";
-import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
-import { notFoundResponse } from "@utils/httpResponses";
-import { getSeasonById } from "@utils/apiCalls/seasons";
-import i18next, { t, changeLanguage } from "i18next";
-import ContentLayout from "@layouts/ContentLayout.astro";
-import Title from "@components/Title.astro";
-import Subtitle from "@components/Subtitle.astro";
-import { getAlt, getImage } from "@utils/mediaProcessors";
 import ConcertCard from "@components/ConcertCard.astro";
-
-changeLanguage("eu");
+import Subtitle from "@components/Subtitle.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { getSeasonById } from "@utils/apiCalls/seasons";
+import { notANumberError, notFoundError, notProvidedError } from "@utils/errorLogs";
+import { notFoundResponse } from "@utils/httpResponses";
+import { localizePathname } from "@utils/linking";
+import { getAlt, getImage } from "@utils/mediaProcessors";
 
 // URL validation
 const { title, id } = Astro.params;
@@ -28,7 +27,7 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const season = await getSeasonById(intId, i18next.language, 2);
+const season = await getSeasonById(intId, languageTag(), 2);
 if (!season) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();
@@ -40,11 +39,11 @@ if (season.slug !== title) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale of i18next.languages) {
-	if (locale === i18next.language) continue;
+for (const locale of availableLanguageTags) {
+	if (locale === languageTag()) continue;
 	const translatedSeason = await getSeasonById(intId, locale, 0);
 	if (translatedSeason) {
-		locales[locale] = `${localizePath("denboraldiak", locale)}/${id}/${translatedSeason.slug}`;
+		locales[locale] = `${localizePathname("/denboraldiak", locale)}/${id}/${translatedSeason.slug}`;
 	}
 }
 ---
@@ -80,7 +79,7 @@ for (const locale of i18next.languages) {
 		season.concerts && season.concerts.length > 0 && (
 			<>
 				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
-					{t("seasons:concerts.index")}
+					{m.seasons_concerts_index()}
 				</h2>
 				<div class="mt-8 flex flex-wrap justify-center gap-4">
 					{season.concerts.map((concert) => {
@@ -92,7 +91,7 @@ for (const locale of i18next.languages) {
 								description={concert.description ?? undefined}
 								image={getImage("s", concert.image)}
 								alt={getAlt(concert.image) ?? concert.title}
-								link={`${localizePath("denboraldiak")}/${season.id}/${season.slug}/${concert.id}/${concert.slug}`}
+								link={`${localizePathname("/denboraldiak", languageTag())}/${season.id}/${season.slug}/${concert.id}/${concert.slug}`}
 								past={concert.date ? new Date(concert.date) < new Date() : undefined}
 							/>
 						);
