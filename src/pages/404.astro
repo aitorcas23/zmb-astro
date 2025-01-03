@@ -9,7 +9,7 @@ const lang = langIsEs ? "es" : "eu";
 let locales = {};
 ---
 
-<ContentLayout title={m.ui_404_title()} translatedUrls={locales} lang={lang}>
+<ContentLayout title={m.ui_404_title()} translatedUrls={locales}>
 	<h1 class="mb-4 pt-8 text-center text-[100px] font-bold">404</h1>
 	<h2 class="text-center text-5xl">{m.ui_404_notFound()}</h2>
 	<Link href={localizePathname("/", lang)}>{m.ui_404_backHome()}</Link>
