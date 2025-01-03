@@ -2,8 +2,8 @@
 import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
 import { notFoundResponse } from "@utils/httpResponses";
 import { getMediaListById } from "@utils/apiCalls/mediaLists";
-
-changeLanguage("eu");
+import { languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
 
 const { id } = Astro.params;
 if (id === undefined) {
@@ -15,10 +15,13 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const list = await getMediaListById(intId, i18next.language, 0);
+const list = await getMediaListById(intId, languageTag(), 0);
 if (!list) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();
 }
-return Astro.redirect(`${localizePath("/mediateka/listak")}/${id}/${list.slug}`, 301);
+return Astro.redirect(
+	`${localizePathname("/mediateka/listak", languageTag())}/${id}/${list.slug}`,
+	301,
+);
 ---
