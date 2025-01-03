@@ -3,8 +3,8 @@ import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLo
 import { notFoundResponse } from "@utils/httpResponses";
 import { getSeasonById } from "@utils/apiCalls/seasons";
 import { getConcertById } from "@utils/apiCalls/concerts";
-
-changeLanguage("eu");
+import { languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
 
 const { title, id, concertId } = Astro.params;
 if (title === undefined || id === undefined || concertId === undefined) {
@@ -24,7 +24,7 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const season = await getSeasonById(intId, i18next.language, 0);
+const season = await getSeasonById(intId, languageTag(), 0);
 if (!season) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();
@@ -47,7 +47,7 @@ if (!season.concerts || !season.concerts.includes(intConcertId)) {
 	);
 	return notFoundResponse();
 }
-const concert = await getConcertById(intConcertId, i18next.language, 0);
+const concert = await getConcertById(intConcertId, languageTag(), 0);
 if (!concert) {
 	notFoundError(
 		"concert",
@@ -58,7 +58,7 @@ if (!concert) {
 	return notFoundResponse();
 }
 return Astro.redirect(
-	`${localizePath("denboraldiak")}/${id}/${season.slug}/${concertId}/${concert.slug}`,
+	`${localizePathname("/denboraldiak", languageTag())}/${id}/${season.slug}/${concertId}/${concert.slug}`,
 	301,
 );
 ---

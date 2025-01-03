@@ -2,8 +2,8 @@
 import { notProvidedError, notANumberError, notFoundError } from "@utils/errorLogs";
 import { notFoundResponse } from "@utils/httpResponses";
 import { getNewsById } from "@utils/apiCalls/news";
-
-changeLanguage("eu");
+import { languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
 
 const { id } = Astro.params;
 if (id === undefined) {
@@ -15,10 +15,10 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const news = await getNewsById(intId, i18next.language, 0);
+const news = await getNewsById(intId, languageTag(), 0);
 if (!news) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();
 }
-return Astro.redirect(`${localizePath("berriak")}/${id}/${news.slug}`, 301);
+return Astro.redirect(`${localizePathname("/berriak", languageTag())}/${id}/${news.slug}`, 301);
 ---
