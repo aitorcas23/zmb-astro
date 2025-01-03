@@ -1,16 +1,16 @@
 ---
+import { localizePathname } from "@utils/linking";
 import Link from "../components/Link.astro";
 import ContentLayout from "../layouts/ContentLayout.astro";
-
-changeLanguage("eu");
+import * as m from "@paraglide/messages";
 
 const langIsEs = Astro.url.pathname.split("/")[1] === "es";
 const lang = langIsEs ? "es" : "eu";
 let locales = {};
 ---
 
-<ContentLayout title={t("ui:404.title", { lng: lang })} translatedUrls={locales} lang={lang}>
+<ContentLayout title={m.ui_404_title()} translatedUrls={locales} lang={lang}>
 	<h1 class="mb-4 pt-8 text-center text-[100px] font-bold">404</h1>
-	<h2 class="text-center text-5xl">{t("ui:404.notFound", { lng: lang })}</h2>
-	<Link href={localizePath("/", lang)}>{t("ui:404.backHome", { lng: lang })}</Link>
+	<h2 class="text-center text-5xl">{m.ui_404_notFound()}</h2>
+	<Link href={localizePathname("/", lang)}>{m.ui_404_backHome()}</Link>
 </ContentLayout>

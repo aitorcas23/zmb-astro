@@ -1,4 +1,4 @@
-import type { AvailableLanguageTag } from "./paraglide/runtime.js";
+import type { AvailableLanguageTag } from "@paraglide/runtime.js";
 
 type AbsolutePathname = `/${string}`;
 
@@ -25,15 +25,15 @@ const pathnames: Record<AbsolutePathname, Record<AvailableLanguageTag, AbsoluteP
 	},
 	"/mediateka": {
 		eu: "/mediateka",
-		es: "/es/mediateka",
+		es: "/es/mediateca",
 	},
 	"/mediateka/edukia": {
 		eu: "/mediateka/edukia",
-		es: "/es/mediateka/contenido",
+		es: "/es/mediateca/contenido",
 	},
 	"/mediateka/listak": {
 		eu: "/mediateka/listak",
-		es: "/es/mediateka/listas",
+		es: "/es/mediateca/listas",
 	},
 };
 

@@ -10,7 +10,6 @@ interface Props {
 }
 
 const { translatedUrls, lang: mainLang, extraClass, acordeon } = Astro.props;
-console.log(availableLanguageTags);
 const links = availableLanguageTags
 	.map((lang) => {
 		const isCurrentLanguage = lang == (mainLang || languageTag());

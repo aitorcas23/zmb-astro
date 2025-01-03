@@ -4,13 +4,12 @@ import BaseLayout from "./BaseLayout.astro";
 interface Props {
 	title: string;
 	translatedUrls: { [key: string]: string };
-	lang?: string;
 }
 
-const { title, translatedUrls, lang } = Astro.props;
+const { title, translatedUrls } = Astro.props;
 ---
 
-<BaseLayout title={title} translatedUrls={translatedUrls} lang={lang}>
+<BaseLayout title={title} translatedUrls={translatedUrls}>
 	<main class="container mx-auto min-h-screen">
 		<slot name="no-padding" />
 		<div class="p-5">

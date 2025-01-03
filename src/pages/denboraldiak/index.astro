@@ -1,25 +1,32 @@
 ---
-import { getSeasons } from "@utils/apiCalls/seasons";
-import ContentLayout from "@layouts/ContentLayout.astro";
-import Title from "@components/Title.astro";
-import CardEffect from "@components/CardEffect.astro";
 import BookMark from "@components/BookMark.astro";
+import CardEffect from "@components/CardEffect.astro";
 import Zmb from "@components/icons/Zmb.astro";
 import SeasonDisplay from "@components/SeasonDisplay.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import { languageTag, availableLanguageTags } from "@paraglide/runtime";
+import { getSeasons } from "@utils/apiCalls/seasons";
 import { getAlt, getImage } from "@utils/mediaProcessors";
+import * as m from "@paraglide/messages";
+import { localizePathname } from "@utils/linking";
 
-changeLanguage("eu");
+const seasons = await getSeasons(languageTag());
 
-const seasons = await getSeasons(i18next.language);
+let translatedUrls: { [locale: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/denboraldiak", locale);
+}
 ---
 
-<ContentLayout title={t("seasons:title")}>
-	<Title extraClass={"mb-16"}>{t("seasons:title")}</Title>
+<ContentLayout title={m.seasons_title()} {translatedUrls}>
+	<Title extraClass={"mb-16"}>{m.seasons_title()}</Title>
 	<div class="mt-16 flex flex-col gap-4 md:gap-12">
 		{
 			seasons.map((season, i) => (
 				<CardEffect
-					href={`${localizePath(Astro.url.pathname)}/${season.id}/${season.slug}`}
+					href={`${localizePathname("/denboraldiak", languageTag())}/${season.id}/${season.slug}`}
 					extraClass="relative"
 				>
 					<BookMark color="fill-zmb" extraClass="md:w-[5%] md:right-[3%]">

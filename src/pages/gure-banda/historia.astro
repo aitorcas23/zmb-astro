@@ -1,13 +1,20 @@
 ---
-import { getBandHistory } from "@utils/apiCalls/history";
 import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { getBandHistory } from "@utils/apiCalls/history";
+import { localizePathname } from "@utils/linking";
 
-changeLanguage("eu");
+const bandHistory = await getBandHistory(languageTag());
 
-const bandHistory = await getBandHistory(i18next.language);
+let translatedUrls: { [locale: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/gure-banda/historia", locale);
+}
 ---
 
-<ContentLayout title={t("ourBand:history.title")}>
+<ContentLayout title={m.ourBand_history_title()} {translatedUrls}>
 	{
 		bandHistory && bandHistory.content_html ? (
 			<span
@@ -15,7 +22,9 @@ const bandHistory = await getBandHistory(i18next.language);
 				set:html={bandHistory.content_html}
 			/>
 		) : (
-			<h2 class="text-center text-4xl font-bold">{t("ourBand:history.notAvailable")}</h2>
+			<h2 class="text-center text-4xl font-bold">
+				{m.ourBand_history_notAvailable("ourBand:history.notAvailable")}
+			</h2>
 		)
 	}
 </ContentLayout>

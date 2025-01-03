@@ -4,14 +4,21 @@ import { getMediaEntries } from "@utils/apiCalls/mediaEntries";
 import Title from "@components/Title.astro";
 import MediaCard from "@components/MediaCard.astro";
 import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
 
-changeLanguage("eu");
+const entries = await getMediaEntries(languageTag());
 
-const entries = await getMediaEntries(i18next.language);
+let translatedUrls: { [locale: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/", locale);
+}
 ---
 
-<ContentLayout title={t("media:content.title")}>
-	<Title extraClass={"mb-16"}>{t("media:content.title")}</Title>
+<ContentLayout title={m.media_content_title()} {translatedUrls}>
+	<Title extraClass={"mb-16"}>{m.media_content_title()}</Title>
 	<div class="flex flex-wrap justify-center gap-4">
 		{
 			entries.map((entry) => (
@@ -20,7 +27,7 @@ const entries = await getMediaEntries(i18next.language);
 					description={entry.description ?? undefined}
 					image={getMediaEntryThumbnail("s", entry)}
 					alt={getMediaEntryAlt(entry)}
-					link={`${localizePath("/mediateka/edukia")}/${entry.id}/${entry.slug}`}
+					link={`${localizePathname("/mediateka/edukia", languageTag())}/${entry.id}/${entry.slug}`}
 				/>
 			))
 		}

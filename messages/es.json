@@ -1,23 +1,53 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"homeTitle": "Zornotzako Musika Banda",
-	"homeCarrouselRead": "Leer",
-	"homeCarrouselMore": "Más información",
-	"homeCarrouselSee": "Ver contenido",
-	"homeConcerts": "Próximos conciertos",
-	"homeNews": "Últimas noticias",
-	"homeMedia": "Últimos contenidos multimedia",
 
-	"uiNavHome": "Inicio",
-	"uiNavOurbandLabel": "Nuestra banda",
-	"uiNavOurbandHistory": "Historia",
-	"uiNavOurbandMembers": "Miembros",
-	"uiNavNews": "Noticias",
-	"uiNavSeason": "Temporadas",
-	"uiNavLanguage": "Idioma",
-	"uiNavMedia": "Mediateca",
-	"uiHrlinkMore": "Ver más...",
-	"ui404notFound": "La página no se ha encontrado",
-	"ui404title": "No encontrado",
-	"ui404backhome": "Volver al inicio"
+	"home_title": "Zornotzako Musika Banda",
+	"home_carrousel_read": "Leer",
+	"home_carrousel_more": "Más información",
+	"home_carrousel_see": "Ver contenido",
+	"home_concerts": "Próximos conciertos",
+	"home_news": "Últimas noticias",
+	"home_media": "Últimos contenidos multimedia",
+
+	"media_title": "Mediateca",
+	"media_contentLink": "Últimos agregados",
+	"media_content_title": "Contenido mediateca",
+	"media_content_more": "Más de la lista {lista}",
+	"media_lists_title": "Listas mediateca",
+	"media_lists_seeContent": "Ver contenido de la lista...",
+
+	"musicians_title": "Músicos",
+
+	"news_title": "Noticias",
+
+	"ourBand_title": "Nuestra banda",
+	"ourBand_members_title": "Miembros",
+	"ourBand_members_musicians": "Músicos de la banda",
+	"ourBand_history_title": "Historia de la banda",
+	"ourBand_history_read": "Leer historia de la banda",
+	"ourBand_history_notAvailable": "Esta página todavía no está disponible",
+
+	"pieces_title": "Obras musicales",
+
+	"seasons_title": "Temporadas",
+	"seasons_concerts_index": "Conciertos",
+	"seasons_concerts_buyTickets": "Comprar entradas",
+	"seasons_concerts_program": "Programa",
+	"seasons_concerts_extras": "Estras que participan en este concierto:",
+
+	"ui_nav_home": "Inicio",
+	"ui_nav_ourBand_label": "Nuestra banda",
+	"ui_nav_ourBand_history": "Historia",
+	"ui_nav_ourBand_members": "Miembros",
+	"ui_nav_news": "Noticias",
+	"ui_nav_season": "Temporadas",
+	"ui_nav_language": "Idioma",
+	"ui_nav_media": "Mediateca",
+	"ui_hrlink_more": "Ver más...",
+	"ui_404_notFound": "La página no se ha encontrado",
+	"ui_404_title": "No encontrado",
+	"ui_404_backHome": "Volver al inicio",
+
+	"berriak": "noticias",
+	"denboraldiak": "temporadas"
 }

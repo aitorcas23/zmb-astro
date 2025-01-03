@@ -8,8 +8,8 @@
 			"@utils/*": ["src/utils/*"],
 			"@styles/*": ["src/styles/*"],
 			"@types/*": ["src/types/*"],
-			"@/*": ["src/*"],
-			"@paraglide/*": ["src/paraglide/*"]
+			"@paraglide/*": ["src/paraglide/*"],
+			"@/*": ["src/*"]
 		}
 	}
 }

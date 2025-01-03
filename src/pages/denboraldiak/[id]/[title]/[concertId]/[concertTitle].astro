@@ -1,15 +1,16 @@
 ---
+import ProgramPiece from "@components/ProgramPiece.astro";
+import Subtitle from "@components/Subtitle.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { getConcertById } from "@utils/apiCalls/concerts";
+import { getSeasonById } from "@utils/apiCalls/seasons";
 import { notANumberError, notFoundError, notProvidedError } from "@utils/errorLogs";
 import { notFoundResponse } from "@utils/httpResponses";
-import { getSeasonById } from "@utils/apiCalls/seasons";
-import { getConcertById } from "@utils/apiCalls/concerts";
-import ContentLayout from "@layouts/ContentLayout.astro";
-import Title from "@components/Title.astro";
-import Subtitle from "@components/Subtitle.astro";
+import { localizePathname } from "@utils/linking";
 import { getAlt, getImage } from "@utils/mediaProcessors";
-import ProgramPiece from "@components/ProgramPiece.astro";
-
-changeLanguage("eu");
 
 const { title, id, concertId, concertTitle } = Astro.params;
 if (
@@ -37,7 +38,7 @@ if (isNaN(intId)) {
 	notANumberError("id");
 	return notFoundResponse();
 }
-const season = await getSeasonById(intId, i18next.language, 0);
+const season = await getSeasonById(intId, languageTag(), 0);
 if (!season) {
 	notFoundError("season", { prop: "id", value: id });
 	return notFoundResponse();
@@ -60,7 +61,7 @@ if (!season.concerts || !season.concerts.includes(intConcertId)) {
 	);
 	return notFoundResponse();
 }
-const concert = await getConcertById(intConcertId, i18next.language, 2);
+const concert = await getConcertById(intConcertId, languageTag(), 2);
 if (!concert) {
 	notFoundError(
 		"concert",
@@ -83,19 +84,19 @@ if (concert.slug !== concertTitle) {
 let locales: {
 	[key: string]: string;
 } = {};
-for (const locale of i18next.languages) {
-	if (locale === i18next.language) continue;
+for (const locale of availableLanguageTags) {
+	if (locale === languageTag()) continue;
 	const translatedSeason = await getSeasonById(intId, locale, 0);
 	const translatedConcert = await getConcertById(intConcertId, locale, 0);
 	if (translatedSeason && translatedConcert) {
 		locales[locale] =
-			`${localizePath("denboraldiak", locale)}/${id}/${translatedSeason.slug}/${concertId}/${translatedConcert.slug}`;
+			`${localizePathname("/denboraldiak", locale)}/${id}/${translatedSeason.slug}/${concertId}/${translatedConcert.slug}`;
 	}
 }
 let concertDateString: string | undefined;
 if (concert.date) {
 	const concertDate = new Date(concert.date);
-	concertDateString = concertDate.toLocaleDateString(i18next.language, {
+	concertDateString = concertDate.toLocaleDateString(languageTag(), {
 		year: "numeric",
 		month: "2-digit",
 		day: "2-digit",
@@ -145,7 +146,7 @@ const subtitle = subtitleElements.join(" - ");
 								href={concert.ticketLink}
 								class="transition-color rounded-lg border-2 border-zmb px-4 py-2 text-base font-medium text-zmb duration-150 ease-out hover:bg-zmb hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-700 lg:text-xl"
 							>
-								{t("seasons:concerts.buyTickets")}
+								{m.seasons_concerts_buyTickets()}
 							</a>
 						</p>
 					)}
@@ -156,7 +157,7 @@ const subtitle = subtitleElements.join(" - ");
 			concert.pieces && concert.pieces.length > 0 && (
 				<div class="flex-grow-[2] basis-0">
 					<h2 class="mb-10 text-center text-3xl font-bold lg:mb-8">
-						{t("seasons:concerts.program")}
+						{m.seasons_concerts_program()}
 					</h2>
 					<ul>
 						{concert.pieces.map((piece) => {
@@ -165,7 +166,7 @@ const subtitle = subtitleElements.join(" - ");
 								<li class="mt-8 list-none lg:mt-4">
 									{piece.media ? (
 										<a
-											href={`${localizePath("/mediateka/edukia")}/${typeof piece.media === "number" ? piece.media : piece.media.id} /${
+											href={`${localizePathname("/mediateka/edukia", languageTag())}/${typeof piece.media === "number" ? piece.media : piece.media.id} /${
 												typeof piece.media === "number" ? "not-found" : piece.media.slug
 											}`}
 											class="no-underline transition-colors duration-150 ease-out hover:[&_*]:text-zmb"

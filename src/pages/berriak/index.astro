@@ -1,17 +1,26 @@
 ---
-import { getNews } from "@utils/apiCalls/news";
-import ContentLayout from "@layouts/ContentLayout.astro";
-import Title from "@components/Title.astro";
 import NewsCard from "@components/NewsCard.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime";
+import { getNews } from "@utils/apiCalls/news";
+import { localizePathname } from "@utils/linking";
 import { getAlt, getImage } from "@utils/mediaProcessors";
 
-changeLanguage("eu");
+console.log(languageTag());
+const news = await getNews(languageTag());
+console.log(news);
 
-const news = await getNews(i18next.language);
+let translatedUrls: { [locale: string]: string } = {};
+for (const locale of availableLanguageTags) {
+	if (locale == languageTag()) continue;
+	translatedUrls[locale] = localizePathname("/berriak", locale);
+}
 ---
 
-<ContentLayout title={t("news:title")}>
-	<Title>{t("news:title")}</Title>
+<ContentLayout title={m.news_title()} {translatedUrls}>
+	<Title>{m.news_title()}</Title>
 	<div class="mt-16 flex flex-wrap justify-center gap-4">
 		{
 			news.map((n) => (
@@ -21,7 +30,7 @@ const news = await getNews(i18next.language);
 					date={new Date(n.createdAt)}
 					image={getImage("m", n.image)}
 					alt={getAlt(n.image)}
-					link={`${localizePath("berriak")}/${n.id}/${n.slug}`}
+					link={`${localizePathname("/berriak", languageTag())}/${n.id}/${n.slug}`}
 				/>
 			))
 		}

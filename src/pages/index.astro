@@ -1,20 +1,19 @@
 ---
-import * as m from "@paraglide/messages.js";
+import Carousel from "@components/Carousel.svelte";
+import ConcertCard from "@components/ConcertCard.astro";
+import HrLink from "@components/HrLink.astro";
+import MediaCard from "@components/MediaCard.astro";
+import NewsCard from "@components/NewsCard.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
-import { getNews } from "@utils/apiCalls/news";
+import * as m from "@paraglide/messages.js";
+import { availableLanguageTags, languageTag } from "@paraglide/runtime.js";
 import { getNextConcerts } from "@utils/apiCalls/concerts";
 import { getMediaEntries } from "@utils/apiCalls/mediaEntries";
-import Carousel from "@components/Carousel.svelte";
-import NewsCard from "@components/NewsCard.astro";
-import HrLink from "@components/HrLink.astro";
-import ConcertCard from "@components/ConcertCard.astro";
-import { getImage, getAlt } from "@utils/mediaProcessors";
-import { getMediaEntryThumbnail, getMediaEntryAlt } from "@utils/mediaEntryProcessors";
+import { getNews } from "@utils/apiCalls/news";
 import { getSeasonByConcertId, type Season } from "@utils/apiCalls/seasons";
-import MediaCard from "@components/MediaCard.astro";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { languageTag, availableLanguageTags } from "@paraglide/runtime.js";
-import { localizePathname } from "@/linking";
+import { localizePathname } from "@utils/linking";
+import { getMediaEntryAlt, getMediaEntryThumbnail } from "@utils/mediaEntryProcessors";
+import { getAlt, getImage } from "@utils/mediaProcessors";
 
 let slides: {
 	title: string;
@@ -39,8 +38,8 @@ if (concerts.length > 0) {
 		title: nextConcert.title,
 		image: getImage("m", nextConcert.image) ?? "/images/Logo_large_MusikaBanda_black.png",
 		alt: getAlt(nextConcert.image) ?? nextConcert.title,
-		link: `${getRelativeLocaleUrl(languageTag() || "eu", "denboraldiak")}/${concertSeasonRelation[nextConcert.id]?.id}/${concertSeasonRelation[nextConcert.id]?.slug}/${nextConcert.id}/${nextConcert.slug}`,
-		linkText: m.homeCarrouselMore(),
+		link: `${localizePathname("/denboraldiak", languageTag())}/${concertSeasonRelation[nextConcert.id]?.id}/${concertSeasonRelation[nextConcert.id]?.slug}/${nextConcert.id}/${nextConcert.slug}`,
+		linkText: m.home_carrousel_more(),
 		description: nextConcert.description ?? undefined,
 	});
 }
@@ -52,8 +51,8 @@ if (news.length > 0) {
 		title: firstNews.title,
 		image: getImage("m", firstNews.image) ?? "/images/Logo_large_MusikaBanda_black.png",
 		alt: getAlt(firstNews.image) ?? firstNews.title,
-		link: `${getRelativeLocaleUrl(languageTag() || "eu", "/berriak")}/${firstNews.id}/${firstNews.slug}`,
-		linkText: m.homeCarrouselRead(),
+		link: `${localizePathname("/berriak", languageTag())}/${firstNews.id}/${firstNews.slug}`,
+		linkText: m.home_carrousel_read(),
 		description: firstNews.description ?? undefined,
 	});
 }
@@ -65,21 +64,20 @@ if (mediaEntries.length > 0) {
 		title: firstEntry.title,
 		image: getMediaEntryThumbnail("m", firstEntry) ?? "/images/Logo_large_MusikaBanda_black.png",
 		alt: getMediaEntryAlt(firstEntry),
-		link: `${getRelativeLocaleUrl(languageTag() || "eu", "mediateka/edukia")}/${firstEntry.id}/${firstEntry.slug}`,
-		linkText: m.homeCarrouselSee(),
+		link: `${localizePathname("/mediateka/edukia", languageTag())}/${firstEntry.id}/${firstEntry.slug}`,
+		linkText: m.home_carrousel_see(),
 		description: firstEntry.description ?? undefined,
 	});
 }
 // Translations
 let translatedUrls: { [locale: string]: string } = {};
-console.log(availableLanguageTags);
 for (const locale of availableLanguageTags) {
 	if (locale == languageTag()) continue;
 	translatedUrls[locale] = localizePathname("/", locale);
 }
 ---
 
-<ContentLayout title={m.homeTitle()} {translatedUrls}>
+<ContentLayout title={m.home_title()} {translatedUrls}>
 	{
 		slides.length > 0 && (
 			<div slot="no-padding">
@@ -92,9 +90,7 @@ for (const locale of availableLanguageTags) {
 		// Concerts
 		concerts.length > 0 && (
 			<>
-				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">
-					{m.homeConcerts("home:concerts")}
-				</h2>
+				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">{m.home_concerts()}</h2>{" "}
 				<div class="flex flex-wrap justify-center gap-4">
 					{concerts.map((concert) => (
 						<ConcertCard
@@ -103,14 +99,14 @@ for (const locale of availableLanguageTags) {
 							date={concert.date ? new Date(concert.date) : undefined}
 							image={getImage("s", concert.image)}
 							alt={getAlt(concert.image) ?? concert.title}
-							link={`${getRelativeLocaleUrl(languageTag(), "/denboraldiak")}/${concertSeasonRelation[concert.id]?.id}/${
+							link={`${localizePathname("/denboraldiak", languageTag())}/${concertSeasonRelation[concert.id]?.id}/${
 								concertSeasonRelation[concert.id]?.slug
 							}/${concert.id}/${concert.slug}`}
 							small
 						/>
 					))}
 				</div>
-				<HrLink href={getRelativeLocaleUrl(languageTag(), "denboraldiak")} />
+				<HrLink href={localizePathname("/denboraldiak", languageTag())} />
 			</>
 		)
 	}
@@ -119,7 +115,7 @@ for (const locale of availableLanguageTags) {
 		// News
 		news.length > 0 && (
 			<>
-				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">{m.homeNews()}</h2>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">{m.home_news()}</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{news.map((n) => (
 						<NewsCard
@@ -128,11 +124,11 @@ for (const locale of availableLanguageTags) {
 							date={new Date(n.createdAt)}
 							image={getImage("s", n.image)}
 							alt={getAlt(n.image)}
-							link={`${getRelativeLocaleUrl(languageTag(), "berriak")}/${n.id}/${n.slug}`}
+							link={`${localizePathname("/berriak", languageTag())}/${n.id}/${n.slug}`}
 						/>
 					))}
 				</div>
-				<HrLink href={getRelativeLocaleUrl(languageTag(), "berriak")} />
+				<HrLink href={localizePathname("/berriak", languageTag())} />
 			</>
 		)
 	}
@@ -141,19 +137,19 @@ for (const locale of availableLanguageTags) {
 		// Mediateca
 		mediaEntries.length > 0 && (
 			<>
-				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">{m.homeMedia()}</h2>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">{m.home_media()}</h2>
 				<div class="flex flex-wrap justify-center gap-4">
-					{mediaEntries.map((m) => (
+					{mediaEntries.map((me) => (
 						<MediaCard
-							title={m.title}
-							description={m.description ?? undefined}
-							image={getMediaEntryThumbnail("s", m)}
-							alt={getMediaEntryAlt(m)}
-							link={`${getRelativeLocaleUrl(languageTag(), "mediateka/edukia")}/${m.id}/${m.slug}`}
+							title={me.title}
+							description={me.description ?? undefined}
+							image={getMediaEntryThumbnail("s", me)}
+							alt={getMediaEntryAlt(me)}
+							link={`${localizePathname("/mediateka/edukia", languageTag())}/${me.id}/${me.slug}`}
 						/>
 					))}
 				</div>
-				<HrLink href={getRelativeLocaleUrl(languageTag(), "/mediateka")} />
+				<HrLink href={localizePathname("/mediateka", languageTag())} />
 			</>
 		)
 	}

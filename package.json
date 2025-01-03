@@ -17,6 +17,7 @@
 		"@astrojs/vercel": "8.0.1",
 		"@inlang/paraglide-astro": "^0.3.0",
 		"astro": "5.0.9",
+		"astro-i18n-route-gen": "^0.1.1",
 		"dayjs": "^1.11.13",
 		"embla-carousel-autoplay": "^8.3.0",
 		"esbuild": "^0.24.0",
