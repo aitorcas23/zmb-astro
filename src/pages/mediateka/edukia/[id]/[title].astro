@@ -87,7 +87,7 @@ for (const locale of availableLanguageTags) {
 		listsEntries.map((list) => (
 			<>
 				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">
-					{m.media_content_more(list.title)}
+					{m.media_content_more({ lista: list.title })}
 				</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{list.media &&
