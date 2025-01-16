@@ -1,4 +1,8 @@
 ---
+import { Image} from "astro:assets"
+import ZMBLogo from "@/content/images/Logo_MusikaBanda.png";
+import { getImage } from "@utils/content/images";
+
 interface Props {
 	image?: string;
 	alt?: string;
@@ -16,16 +20,15 @@ const { image, alt, title, imagePos } = Astro.props;
 			{ "md:order-2": imagePos === "right" },
 		]}
 	>
-		<img
+		<Image
 			class:list={[
 				"aspect-video h-full rounded-t-lg object-cover",
 				{ "md:rounded-l-none md:rounded-r-lg": imagePos === "right" || undefined },
 				{ "md:rounded-l-lg md:rounded-r-none": imagePos === "left" },
 			]}
-			src={image ?? "/images/Logo_medium_MusikaBanda_black.png"}
-			alt={alt}
-			loading="lazy"
-			decoding="async"
+			src={image ? getImage(image) : ZMBLogo}
+			alt={alt ?? title}
+			width={700}
 		/>
 	</div>
 	<div class:list={["flex-grow basis-0 md:my-auto", { "md:text-right": imagePos === "right" }]}>

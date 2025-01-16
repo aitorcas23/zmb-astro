@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import Carousel from "@components/Carousel.svelte";
+import Carousel from "@components/Carousel.astro";
 import ConcertCard from "@components/ConcertCard.astro";
 import HrLink from "@components/HrLink.astro";
 import MediaCard from "@components/MediaCard.astro";
@@ -109,7 +109,7 @@ for (const tag of availableLanguageTags) {
 	{
 		slides.length > 0 && (
 			<div slot="no-padding">
-				<Carousel slides={slides} client:load />
+				<Carousel slides={slides} />
 			</div>
 		)
 	}

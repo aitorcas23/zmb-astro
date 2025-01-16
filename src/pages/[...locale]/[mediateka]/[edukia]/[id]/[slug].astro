@@ -10,6 +10,8 @@ import * as m from "@paraglide/messages";
 import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries";
 import { idToNumber } from "@utils/content/global";
 import { getMediaListsByEntryId } from "@utils/content/mediaLists";
+import { getImage } from "@utils/content/images";
+import {Image} from "astro:assets"
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
@@ -82,7 +84,14 @@ for (const tag of availableLanguageTags) {
 	<div class="my-12">
 		{
 			media_type == "image" ? (
-				<img src={image} alt={image_description ?? title} loading="lazy" decoding="async" />
+				image && (
+					<Image
+						src={getImage(image)}
+						alt={image_description ?? title}
+						widths={[600, 900, 1300]}
+						sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 1300px`}
+					/>
+				)
 			) : media_type == "youtube" && youtube_id ? (
 				<YouTubeVideo id={youtube_id} title={title} />
 			) : (

@@ -12,6 +12,8 @@ import { getConcertById } from "@utils/content/concerts";
 import { idToNumber } from "@utils/content/global";
 import { getPieceById } from "@utils/content/pieces";
 import { getMediaEntryById } from "@utils/content/mediaEntries";
+import {Image} from "astro:assets"
+import { getImage } from "@utils/content/images";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
@@ -92,12 +94,12 @@ const subtitle = subtitleElements.join(" - ");
 		{
 			concert.data.image && (
 				<div class="flex-grow-[3] basis-0">
-					<img
-						class="mx-auto object-contain"
-						src={concert.data.image}
+					<Image
+						src={getImage(concert.data.image)}
 						alt={concert.data.image_description ?? concert.data.title}
-						loading="lazy"
-						decoding="async"
+						class="mx-auto object-contain"
+						widths={[600, 900]}
+						sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 600px`}
 					/>
 				</div>
 			)

@@ -10,6 +10,8 @@ import { getSeasonById, getSeasons } from "@utils/content/seasons";
 import { localizePathname } from "@utils/linking";
 import type { GetStaticPaths } from "astro";
 import { getConcertById } from "@utils/content/concerts";
+import { Image } from "astro:assets"
+import { getImage } from "@utils/content/images";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
@@ -64,12 +66,11 @@ for (const tag of availableLanguageTags) {
 	<div class="mt-5 flex flex-col gap-8 md:flex-row">
 		{
 			image && (
-				<img
-					class="mx-auto flex-shrink flex-grow basis-0 md:w-1/2"
-					src={image}
+				<Image
+					src={getImage(image)}
 					alt={image_description ?? title}
-					loading="lazy"
-					decoding="async"
+					width={620}
+					class="mx-auto flex-shrink flex-grow basis-0 md:w-1/2"
 				/>
 			)
 		}

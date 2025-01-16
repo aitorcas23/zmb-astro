@@ -3,7 +3,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 /** @type {import('tailwindcss').Config} */
 const config = {
 	darkMode: "selector",
-	content: ["./src/**/*.{html,js,svelte,ts,astro}", "./node_modules/flowbite/**/*.js"],
+	content: ["./src/**/*.{html,js,ts,astro}", "./node_modules/flowbite/**/*.js"],
 	safelist: ["dark"],
 	plugins: [require("flowbite"), require("flowbite-typography")],
 	theme: {

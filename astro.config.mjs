@@ -2,8 +2,6 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 
-import svelte from "@astrojs/svelte";
-
 import paraglide from "@inlang/paraglide-astro";
 
 import i18nRouteGen from "astro-i18n-route-gen";
@@ -21,7 +19,6 @@ export default defineConfig({
 		tailwind({
 			applyBaseStyles: false,
 		}),
-		svelte(),
 		paraglide({
 			project: "./project.inlang",
 			outdir: "./src/paraglide",
