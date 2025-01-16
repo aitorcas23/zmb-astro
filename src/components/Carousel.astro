@@ -94,7 +94,7 @@ const { slides } = Astro.props;
 </section>
 
 <script>
-	import EmblaCarousel from "embla-carousel";
+	import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from "embla-carousel";
 	import Autoplay from "embla-carousel-autoplay";
 
 	const addTogglePrevNextBtnsActive = (
@@ -149,10 +149,10 @@ const { slides } = Astro.props;
 
 	const OPTIONS: EmblaOptionsType = { loop: true };
 
-	const emblaNode = <HTMLElement>document.querySelector(".embla");
-	const viewportNode = <HTMLElement>emblaNode.querySelector(".embla__viewport");
-	const prevBtnNode = <HTMLElement>emblaNode.querySelector(".embla__button--prev");
-	const nextBtnNode = <HTMLElement>emblaNode.querySelector(".embla__button--next");
+	const emblaNode = document.querySelector(".embla") as HTMLElement;
+	const viewportNode = emblaNode.querySelector(".embla__viewport") as HTMLElement;
+	const prevBtnNode = emblaNode.querySelector(".embla__button--prev") as HTMLElement;
+	const nextBtnNode = emblaNode.querySelector(".embla__button--next") as HTMLElement;
 
 	const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
 
