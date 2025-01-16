@@ -1,0 +1,50 @@
+---
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+
+export const getStaticPaths = (() => {
+	return availableLanguageTags.map((locale) => {
+		return {
+			params: {
+				locale: locale === sourceLanguageTag ? undefined : locale,
+				gure_banda: m.gure_banda({}, { languageTag: locale }),
+				historia: m.historia({}, { languageTag: locale }),
+			},
+			props: { locale },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+
+const bandHistory = (await getCollection(`${locale}BandHistory`)).pop();
+
+let translatedUrls: { [locale: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag == locale) continue;
+	translatedUrls[tag] = localizePathname("/gure-banda/historia", tag);
+}
+---
+
+<ContentLayout
+	title={m.ourBand_history_title({}, { languageTag: locale })}
+	{translatedUrls}
+	{locale}
+>
+	{
+		bandHistory && bandHistory.rendered ? (
+			<span
+				class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+				set:html={bandHistory.rendered.html}
+			/>
+		) : (
+			<h2 class="text-center text-4xl font-bold">
+				{m.ourBand_history_notAvailable({}, { languageTag: locale })}
+			</h2>
+		)
+	}
+</ContentLayout>

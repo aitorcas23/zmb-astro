@@ -1,0 +1,206 @@
+---
+import type { GetStaticPaths } from "astro";
+import Carousel from "@components/Carousel.svelte";
+import ConcertCard from "@components/ConcertCard.astro";
+import HrLink from "@components/HrLink.astro";
+import MediaCard from "@components/MediaCard.astro";
+import NewsCard from "@components/NewsCard.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages.js";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime.js";
+import { localizePathname } from "@utils/linking";
+import { getNews } from "@utils/content/news";
+import { getNextConcerts } from "@utils/content/concerts";
+import { getSeasonByConcertId } from "@utils/content/seasons";
+import { getMediaEntries } from "@utils/content/mediaEntries";
+import { idToNumber } from "@utils/content/global";
+
+export const getStaticPaths = (() => {
+	return availableLanguageTags.map((locale) => {
+		if (locale === sourceLanguageTag) {
+			return { params: { locale: undefined }, props: { locale } };
+		} else {
+			return { params: { locale }, props: { locale } };
+		}
+	});
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+
+let slides: {
+	title: string;
+	image: string;
+	alt: string;
+	link: string;
+	linkText: string;
+	description?: string;
+	localImage?: boolean;
+}[] = [];
+// Concerts
+const concerts = await getNextConcerts(locale, 3);
+const seasons = await Promise.all(
+	concerts.map((c) => getSeasonByConcertId(c.id.split("/")[1], locale)),
+);
+slide: {
+	if (concerts.length <= 0) break slide;
+	const nextConcert = concerts[0];
+	if (!nextConcert.data.title || !nextConcert.data.slug) break slide;
+
+	const nextSeason = seasons[0];
+	if (!nextSeason) break slide;
+	const seasonId = nextSeason.id;
+	const seasonSlug = nextSeason.data.slug;
+
+	slides.push({
+		title: nextConcert.data.title,
+		image: nextConcert.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
+		alt: nextConcert.data.image_description ?? nextConcert.data.title,
+		link: `${localizePathname("/denboraldiak", locale)}/${idToNumber(seasonId)}/${seasonSlug}/${idToNumber(nextConcert.id)}/${nextConcert.data.slug}`,
+		linkText: m.home_carrousel_more({}, { languageTag: locale }),
+		description: nextConcert.data.description,
+		localImage: true,
+	});
+}
+// News
+const news = await getNews(locale, 3);
+slide: {
+	if (news.length <= 0) break slide;
+	const firstNews = news[0];
+	slides.push({
+		title: firstNews.data.title,
+		image: firstNews.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
+		alt: firstNews.data.image_description ?? firstNews.data.title,
+		link: `${localizePathname("/berriak", locale)}/${idToNumber(firstNews.id)}/${firstNews.data.slug}`,
+		linkText: m.home_carrousel_read({}, { languageTag: locale }),
+		description: firstNews.data.description,
+		localImage: true,
+	});
+}
+// Mediateca
+const mediaEntries = await getMediaEntries(locale, 3);
+slide: {
+	if (mediaEntries.length <= 0) break slide;
+	const firstEntry = mediaEntries[0];
+	slides.push({
+		title: firstEntry.data.title,
+		image:
+			firstEntry.data.media_type === "youtube"
+				? `https://img.youtube.com/vi/${firstEntry.data.youtube_id}/maxresdefault.jpg`
+				: (firstEntry.data.image ?? "/src/content/images/Logo_MusikaBanda.png"),
+		alt:
+			firstEntry.data.media_type === "youtube"
+				? firstEntry.data.title
+				: (firstEntry.data.image_description ?? firstEntry.data.title),
+		link: `${localizePathname("/mediateka/edukia", locale)}/${idToNumber(firstEntry.id)}/${firstEntry.data.slug}`,
+		linkText: m.home_carrousel_see({}, { languageTag: locale }),
+		description: firstEntry.data.description,
+		localImage: firstEntry.data.media_type === "image",
+	});
+}
+// Translations
+let translatedUrls: { [locale: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag == locale) continue;
+	translatedUrls[tag] = localizePathname("/", tag);
+}
+---
+
+<ContentLayout title={m.home_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+	{
+		slides.length > 0 && (
+			<div slot="no-padding">
+				<Carousel slides={slides} client:load />
+			</div>
+		)
+	}
+
+	{
+		// Concerts
+		concerts.length > 0 && (
+			<>
+				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">
+					{m.home_concerts({}, { languageTag: locale })}
+				</h2>{" "}
+				<div class="flex flex-wrap justify-center gap-4">
+					{concerts.map((concert, i) => {
+						const season = seasons[i];
+						if (season) {
+							return (
+								<ConcertCard
+									title={concert.data.title}
+									description={concert.data.description}
+									date={concert.data.date}
+									image={concert.data.image}
+									alt={concert.data.image_description ?? concert.data.title}
+									link={`${localizePathname("/denboraldiak", locale)}/${idToNumber(season.id)}/${
+										season.data.slug
+									}/${idToNumber(concert.id)}/${concert.data.slug}`}
+									small
+									{locale}
+								/>
+							);
+						}
+					})}
+				</div>
+				<HrLink href={localizePathname("/denboraldiak", locale)} {locale} />
+			</>
+		)
+	}
+
+	{
+		// News
+		news.length > 0 && (
+			<>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
+					{m.home_news({}, { languageTag: locale })}
+				</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{news.map((n) => (
+						<NewsCard
+							title={n.data.title}
+							description={n.data.description}
+							date={n.data.date_created}
+							image={n.data.image}
+							alt={n.data.image_description ?? n.data.title}
+							link={`${localizePathname("/berriak", locale)}/${idToNumber(n.id)}/${n.data.slug}`}
+							{locale}
+						/>
+					))}
+				</div>
+				<HrLink href={localizePathname("/berriak", locale)} {locale} />
+			</>
+		)
+	}
+
+	{
+		// Mediateca
+		mediaEntries.length > 0 && (
+			<>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
+					{m.home_media({}, { languageTag: locale })}
+				</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{mediaEntries.map((me) => (
+						<MediaCard
+							title={me.data.title}
+							description={me.data.description}
+							image={
+								me.data.media_type == "youtube"
+									? `https://img.youtube.com/vi/${me.data.youtube_id}/hqdefault.jpg`
+									: me.data.image
+							}
+							alt={
+								me.data.media_type == "youtube"
+									? me.data.title
+									: (me.data.image_description ?? me.data.title)
+							}
+							link={`${localizePathname("/mediateka/edukia", locale)}/${idToNumber(me.id)}/${me.data.slug}`}
+							localImage={me.data.media_type == "image"}
+						/>
+					))}
+				</div>
+				<HrLink href={localizePathname("/mediateka", locale)} {locale} />
+			</>
+		)
+	}
+</ContentLayout>

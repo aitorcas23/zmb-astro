@@ -2,8 +2,6 @@
 import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 
-import vercel from "@astrojs/vercel/serverless";
-
 import svelte from "@astrojs/svelte";
 
 import paraglide from "@inlang/paraglide-astro";
@@ -29,6 +27,7 @@ export default defineConfig({
 			outdir: "./src/paraglide",
 		}),
 		i18nRouteGen({
+			enabled: false,
 			routes: {
 				"index.astro": {},
 				berriak: {
@@ -38,7 +37,7 @@ export default defineConfig({
 						"[id]": {
 							children: {
 								"index.astro": {},
-								"[title].astro": {},
+								"[slug].astro": {},
 							},
 						},
 					},
@@ -50,13 +49,13 @@ export default defineConfig({
 						"[id]": {
 							children: {
 								"index.astro": {},
-								"[title]": {
+								"[slug]": {
 									children: {
 										"index.astro": {},
 										"[concertId]": {
 											children: {
 												"index.astro": {},
-												"[concertTitle].astro": {},
+												"[concertSlug].astro": {},
 											},
 										},
 									},
@@ -85,7 +84,7 @@ export default defineConfig({
 								"[id]": {
 									children: {
 										"index.astro": {},
-										"[title].astro": {},
+										"[slug].astro": {},
 									},
 								},
 							},
@@ -97,7 +96,7 @@ export default defineConfig({
 								"[id]": {
 									children: {
 										"index.astro": {},
-										"[title].astro": {},
+										"[slug].astro": {},
 									},
 								},
 							},
@@ -107,6 +106,4 @@ export default defineConfig({
 			},
 		}),
 	],
-	output: "server",
-	adapter: vercel(),
 });

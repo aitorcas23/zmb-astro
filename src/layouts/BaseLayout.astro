@@ -2,17 +2,18 @@
 import "@styles/app.css";
 import Nav from "@components/Nav.astro";
 import Footer from "@components/Footer.astro";
-import { languageTag } from "@paraglide/runtime.js";
+import type { AvailableLanguageTag } from "@paraglide/runtime";
 
 interface Props {
 	title: string;
 	translatedUrls: { [key: string]: string };
+	locale: AvailableLanguageTag;
 }
 
-const { title, translatedUrls } = Astro.props;
+const { locale, title, translatedUrls } = Astro.props;
 ---
 
-<html lang={languageTag()} class="light">
+<html lang={locale} class="light">
 	<head>
 		<meta charset="utf-8" />
 		<link
@@ -32,9 +33,9 @@ const { title, translatedUrls } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="bg-zmb-base text-gray-900">
-		<Nav translatedUrls={translatedUrls} />
+		<Nav {translatedUrls} {locale} />
 		<slot />
-		<Footer />
+		<Footer {locale} />
 		<script>
 			import "flowbite";
 		</script>

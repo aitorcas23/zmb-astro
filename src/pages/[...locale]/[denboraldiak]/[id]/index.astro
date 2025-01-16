@@ -1,0 +1,33 @@
+---
+import type { GetStaticPaths } from "astro";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { getSeasons } from "@utils/content/seasons";
+import { idToNumber } from "@utils/content/global";
+import * as t from "@paraglide/messages";
+import { localizePathname } from "@utils/linking";
+
+export const getStaticPaths = (async () => {
+	const paths = await Promise.all(
+		availableLanguageTags.map(async (locale) => {
+			const seasons = await getSeasons(locale);
+			return seasons.map((season) => ({
+				params: {
+					locale: locale === sourceLanguageTag ? undefined : locale,
+					denboraldiak: t.denboraldiak({}, { languageTag: locale }),
+					id: idToNumber(season.id),
+				},
+				props: { locale, slug: season.id },
+			}));
+		}),
+	);
+	return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { slug, locale } = Astro.props;
+---
+
+<meta
+	http-equiv="refresh"
+	content={`0;url=/${localizePathname("/denboraldiak", locale)}/${id}/${slug}`}
+/>

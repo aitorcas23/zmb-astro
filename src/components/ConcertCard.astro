@@ -1,8 +1,11 @@
 ---
-import { languageTag } from "@paraglide/runtime";
+import { type AvailableLanguageTag } from "@paraglide/runtime";
 import BookMark from "./BookMark.astro";
 import CardEffect from "./CardEffect.astro";
 import Music from "./icons/Music.astro";
+import { Image } from "astro:assets";
+import ZMBLogo from "@/content/images/Logo_MusikaBanda.png";
+import { getImage } from "@utils/content/images";
 
 interface Props {
 	title: string;
@@ -13,9 +16,10 @@ interface Props {
 	link: string;
 	past?: boolean;
 	small?: boolean;
+	locale: AvailableLanguageTag;
 }
 
-const { title, date, description, image, alt, link, past, small } = Astro.props;
+const { locale, title, date, description, image, alt, link, past, small = false } = Astro.props;
 const width = small ? "max-w-sm" : "max-w-lg";
 ---
 
@@ -23,12 +27,11 @@ const width = small ? "max-w-sm" : "max-w-lg";
 	<BookMark color="fill-zmb">
 		<Music />
 	</BookMark>
-	<img
-		src={image || "/images/Logo_large_MusikaBanda_black.png"}
+	<Image
+		src={image ? getImage(image) : ZMBLogo}
 		alt={alt || title}
 		class="aspect-video w-full rounded-t-lg object-cover"
-		loading="lazy"
-		decoding="async"
+		width={small ? 416 : 544}
 	/>
 	<div class="p-4">
 		<h5 class:list={["font-bold text-gray-900", { "text-xl": small }, { "text-2xl": !small }]}>
@@ -37,13 +40,13 @@ const width = small ? "max-w-sm" : "max-w-lg";
 		{
 			date && (
 				<p class:list={[{ "text-base": small }, { "text-lg": !small }, { "text-red-700": past }]}>
-					{date.toLocaleString(languageTag(), {
+					{date.toLocaleString(locale, {
 						year: "numeric",
 						month: "2-digit",
 						day: "2-digit",
 						hour: "2-digit",
 						minute: "2-digit",
-						timeZone: "Europe/Madrid",
+						timeZone: "UTC",
 					})}
 				</p>
 			)

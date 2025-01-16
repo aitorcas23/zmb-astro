@@ -1,18 +1,17 @@
 ---
-import { notNull } from "@utils/filters";
-import { availableLanguageTags, languageTag } from "@paraglide/runtime.js";
+import { availableLanguageTags } from "@paraglide/runtime.js";
 
 interface Props {
 	translatedUrls: { [key: string]: string };
-	lang?: string;
+	locale: string;
 	extraClass?: string;
 	acordeon?: boolean;
 }
 
-const { translatedUrls, lang: mainLang, extraClass, acordeon } = Astro.props;
+const { translatedUrls, locale, acordeon } = Astro.props;
 const links = availableLanguageTags
 	.map((lang) => {
-		const isCurrentLanguage = lang == (mainLang || languageTag());
+		const isCurrentLanguage = lang == locale;
 		if (!isCurrentLanguage) {
 			const linkText = lang.toUpperCase();
 			return {
@@ -21,7 +20,7 @@ const links = availableLanguageTags
 			};
 		}
 	})
-	.filter(notNull);
+	.filter((f) => f !== undefined);
 
 const firstLang = links[0];
 ---
@@ -32,7 +31,7 @@ const firstLang = links[0];
 			class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
 			href={firstLang.href}
 		>
-			{languageTag().toUpperCase()}
+			{locale.toUpperCase()}
 		</a>
 	) : (
 		<>
@@ -41,7 +40,7 @@ const firstLang = links[0];
 				class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
 				href={firstLang.href}
 			>
-				{languageTag().toUpperCase()}
+				{locale.toUpperCase()}
 			</a>
 		</>
 	)

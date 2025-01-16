@@ -1,7 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import BookMark from "./BookMark.astro";
 import CardEffect from "./CardEffect.astro";
 import Media from "./icons/Media.astro";
+import { getImage } from "@utils/content/images";
+import ZMBLogo from "@/content/images/Logo_MusikaBanda.png";
 
 interface Props {
 	title: string;
@@ -9,22 +12,43 @@ interface Props {
 	image?: string;
 	alt?: string;
 	link: string;
+	localImage?: boolean;
 }
 
-const { title, description, image, alt, link } = Astro.props;
+const { title, description, image: imagePath, alt, link, localImage = false } = Astro.props;
 ---
 
 <CardEffect href={link} extraClass={"relative max-w-sm"}>
 	<BookMark color="fill-green-700">
 		<Media />
 	</BookMark>
-	<img
-		src={image || "/images/Logo_medium_MusikaBanda_black.png"}
-		alt={alt || title}
-		class="aspect-video rounded-t-lg object-cover"
-		loading="lazy"
-		decoding="async"
-	/>
+	{
+		imagePath ? (
+			localImage ? (
+				<Image
+					src={getImage(imagePath)}
+					alt={alt ?? title}
+					class="aspect-video rounded-t-lg object-cover"
+					width={416}
+				/>
+			) : (
+				<Image
+					src={imagePath}
+					alt={alt ?? title}
+					class="aspect-video rounded-t-lg object-cover"
+					width={416}
+					height={236}
+				/>
+			)
+		) : (
+			<Image
+				src={ZMBLogo}
+				alt={alt ?? title}
+				class="aspect-video rounded-t-lg object-cover"
+				width={416}
+			/>
+		)
+	}
 	<div class="p-4">
 		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">{title}</h5>
 

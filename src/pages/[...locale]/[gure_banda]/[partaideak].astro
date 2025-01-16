@@ -1,0 +1,57 @@
+---
+import MusicianCard from "@components/MusicianCard.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { getMusicians } from "@utils/content/musicians";
+import { localizePathname } from "@utils/linking";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (() => {
+	return availableLanguageTags.map((locale) => {
+		return {
+			params: {
+				locale: locale === sourceLanguageTag ? undefined : locale,
+				gure_banda: m.gure_banda({}, { languageTag: locale }),
+				partaideak: m.partaideak({}, { languageTag: locale }),
+			},
+			props: { locale },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+
+const musicians = await getMusicians(locale);
+
+let translatedUrls: { [locale: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag == locale) continue;
+	translatedUrls[tag] = localizePathname("/gure-banda/partaideak", tag);
+}
+---
+
+<ContentLayout
+	title={m.ourBand_members_title({}, { languageTag: locale })}
+	{translatedUrls}
+	{locale}
+>
+	<Title>{m.ourBand_members_musicians({}, { languageTag: locale })}</Title>
+	<div class="mt-16 flex flex-wrap justify-center gap-4">
+		{
+			musicians.length > 0 &&
+				musicians.map((musician) => {
+					const { name, instrument, image, image_description } = musician.data;
+					return (
+						<MusicianCard
+							name={name}
+							text={instrument ?? ""}
+							image={image}
+							alt={image_description ?? name}
+						/>
+					);
+				})
+		}
+	</div>
+</ContentLayout>

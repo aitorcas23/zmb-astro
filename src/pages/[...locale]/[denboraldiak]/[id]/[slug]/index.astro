@@ -1,0 +1,113 @@
+---
+import ConcertCard from "@components/ConcertCard.astro";
+import Subtitle from "@components/Subtitle.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { idToNumber } from "@utils/content/global";
+import { getSeasonById, getSeasons } from "@utils/content/seasons";
+import { localizePathname } from "@utils/linking";
+import type { GetStaticPaths } from "astro";
+import { getConcertById } from "@utils/content/concerts";
+
+export const getStaticPaths = (async () => {
+	const paths = await Promise.all(
+		availableLanguageTags.map(async (locale) => {
+			const seasons = await getSeasons(locale);
+			return seasons.map((season) => ({
+				params: {
+					locale: locale === sourceLanguageTag ? undefined : locale,
+					denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+					id: idToNumber(season.id),
+					slug: season.data.slug,
+				},
+				props: { locale, id: season.id, content: season.rendered, ...season.data },
+			}));
+		}),
+	);
+	return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { slug, id } = Astro.params;
+const {
+	locale,
+	title,
+	id: idString,
+	year,
+	image,
+	image_description,
+	content,
+	concerts: concertIds,
+} = Astro.props;
+
+const concerts = (await Promise.all(concertIds.map((m) => getConcertById(m, locale)))).filter(
+	(f) => f !== undefined,
+);
+
+let translatedUrls: {
+	[key: string]: string;
+} = {};
+for (const tag of availableLanguageTags) {
+	if (tag === locale) continue;
+	const translatedSeason = await getSeasonById(idString.split("/")[1], tag);
+	if (translatedSeason) {
+		translatedUrls[tag] =
+			`${localizePathname("/denboraldiak", tag)}/${id}/${translatedSeason.data.slug}`;
+	}
+}
+---
+
+<ContentLayout title={title ?? "noTitle"} {translatedUrls} {locale}>
+	<Title>{title}</Title>
+	{year !== undefined && <Subtitle>{year}</Subtitle>}
+	<div class="mt-5 flex flex-col gap-8 md:flex-row">
+		{
+			image && (
+				<img
+					class="mx-auto flex-shrink flex-grow basis-0 md:w-1/2"
+					src={image}
+					alt={image_description ?? title}
+					loading="lazy"
+					decoding="async"
+				/>
+			)
+		}
+		{
+			content && (
+				<span
+					class:list={[
+						"format format-base mx-auto lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900",
+						{ "mt-16": image },
+					]}
+					set:html={content.html}
+				/>
+			)
+		}
+	</div>
+	{
+		concerts.length > 0 && (
+			<>
+				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
+					{m.seasons_concerts_index({}, { languageTag: locale })}
+				</h2>
+				<div class="mt-8 flex flex-wrap justify-center gap-4">
+					{concerts.map((concert) => {
+						return (
+							<ConcertCard
+								title={concert.data.title}
+								date={concert.data.date ?? new Date()}
+								description={concert.data.description}
+								image={concert.data.image}
+								alt={concert.data.image_description ?? concert.data.title}
+								link={`${localizePathname("/denboraldiak", locale)}/${id}/${slug}/${idToNumber(concert.id)}/${concert.data.slug}`}
+								past={concert.data.date ? new Date(concert.data.date) < new Date() : undefined}
+								locale={locale}
+							/>
+						);
+					})}
+				</div>
+			</>
+		)
+	}
+</ContentLayout>

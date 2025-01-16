@@ -1,0 +1,60 @@
+---
+import ContentLayout from "@layouts/ContentLayout.astro";
+import Title from "@components/Title.astro";
+import MediaCard from "@components/MediaCard.astro";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
+import { getMediaEntries } from "@utils/content/mediaEntries";
+import { idToNumber } from "@utils/content/global";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (() => {
+	return availableLanguageTags.map((locale) => {
+		return {
+			params: {
+				locale: locale === sourceLanguageTag ? undefined : locale,
+				mediateka: m.mediateka({}, { languageTag: locale }),
+				edukia: m.edukia({}, { languageTag: locale }),
+			},
+			props: { locale },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+
+const entries = await getMediaEntries(locale);
+
+let translatedUrls: { [locale: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag == locale) continue;
+	translatedUrls[tag] = localizePathname("/mediateka/edukia", tag);
+}
+---
+
+<ContentLayout title={m.media_content_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+	<Title extraClass={"mb-16"}>{m.media_content_title({}, { languageTag: locale })}</Title>
+	<div class="flex flex-wrap justify-center gap-4">
+		{
+			entries.map((entry) => {
+				const { title, description, media_type, youtube_id, image, image_description, slug } =
+					entry.data;
+				return (
+					<MediaCard
+						title={title}
+						description={description}
+						image={
+							media_type == "youtube"
+								? `https://img.youtube.com/vi/${youtube_id}/sddefault.jpg`
+								: image
+						}
+						alt={media_type == "youtube" ? title : (image_description ?? title)}
+						link={`${localizePathname("/mediateka/edukia", locale)}/${idToNumber(entry.id)}/${slug}`}
+						localImage={media_type == "image"}
+					/>
+				);
+			})
+		}
+	</div>
+</ContentLayout>

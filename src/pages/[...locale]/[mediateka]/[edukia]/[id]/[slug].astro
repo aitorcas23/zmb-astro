@@ -1,0 +1,128 @@
+---
+import type { GetStaticPaths } from "astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import YouTubeVideo from "@components/YouTubeVideo.astro";
+import MediaCard from "@components/MediaCard.astro";
+import HrLink from "@components/HrLink.astro";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
+import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries";
+import { idToNumber } from "@utils/content/global";
+import { getMediaListsByEntryId } from "@utils/content/mediaLists";
+
+export const getStaticPaths = (async () => {
+	const paths = await Promise.all(
+		availableLanguageTags.map(async (locale) => {
+			const entries = await getMediaEntries(locale);
+			return entries.map((entry) => ({
+				params: {
+					locale: locale === sourceLanguageTag ? undefined : locale,
+					mediateka: m.mediateka({}, { languageTag: locale }),
+					edukia: m.edukia({}, { languageTag: locale }),
+					id: idToNumber(entry.id),
+					slug: entry.data.slug,
+				},
+				props: { locale, id: entry.id, ...entry.data },
+			}));
+		}),
+	);
+	return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const {
+	locale,
+	id: idString,
+	title,
+	description,
+	media_type,
+	youtube_id,
+	image,
+	image_description,
+} = Astro.props;
+
+const lists = await getMediaListsByEntryId(idString.split("/")[1], locale);
+const listEntries = await Promise.all(
+	lists.map(async (list) =>
+		(
+			await Promise.all(
+				list.data.media_entries.map(async (entryId) => await getMediaEntryById(entryId, locale)),
+			)
+		).filter((f) => f !== undefined),
+	),
+);
+
+let translatedUrls: {
+	[key: string]: string;
+} = {};
+for (const tag of availableLanguageTags) {
+	if (tag === locale) continue;
+	const translatedEntry = await getMediaEntryById(idString.split("/")[1], tag);
+	if (translatedEntry) {
+		translatedUrls[tag] =
+			`${localizePathname("/mediateka/edukia", tag)}/${id}/${translatedEntry.data.slug}`;
+	}
+}
+---
+
+<ContentLayout {title} {translatedUrls} {locale}>
+	<h1
+		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
+	>
+		{title}
+	</h1>
+	{
+		description && (
+			<div class="mt-4">
+				<p class="text-center">{description}</p>
+			</div>
+		)
+	}
+	<div class="my-12">
+		{
+			media_type == "image" ? (
+				<img src={image} alt={image_description ?? title} loading="lazy" decoding="async" />
+			) : media_type == "youtube" && youtube_id ? (
+				<YouTubeVideo id={youtube_id} title={title} />
+			) : (
+				<p>Empty for the moment</p>
+			)
+		}
+	</div>
+	{
+		lists.map((list, i) => (
+			<>
+				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">
+					{m.media_content_more({ lista: list.data.title })}
+				</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{listEntries[i].slice(0, 3).map((entry) => {
+						const { title, description, media_type, youtube_id, image, image_description, slug } =
+							entry.data;
+						return (
+							<MediaCard
+								title={title}
+								description={description}
+								image={
+									media_type === "youtube"
+										? `https://img.youtube.com/vi/${youtube_id}/sddefault.jpg`
+										: image
+								}
+								alt={media_type === "youtube" ? title : (image_description ?? title)}
+								link={`${localizePathname("/mediateka/edukia", locale)}/${idToNumber(entry.id)}/${slug}`}
+								localImage={media_type == "image"}
+							/>
+						);
+					})}
+				</div>
+				<HrLink
+					href={`${localizePathname("/mediateka/listak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
+					{locale}
+				>
+					{m.media_lists_seeContent({}, { languageTag: locale })}
+				</HrLink>
+			</>
+		))
+	}
+</ContentLayout>

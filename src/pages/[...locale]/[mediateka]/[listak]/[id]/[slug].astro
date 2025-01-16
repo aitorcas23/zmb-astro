@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths } from "astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import MediaCard from "@components/MediaCard.astro";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import * as m from "@paraglide/messages";
+import { getMediaLists, getMediaListById } from "@utils/content/mediaLists";
+import { idToNumber } from "@utils/content/global";
+import { getMediaEntryById } from "@utils/content/mediaEntries";
+
+export const getStaticPaths = (async () => {
+	const paths = await Promise.all(
+		availableLanguageTags.map(async (locale) => {
+			const lists = await getMediaLists(locale);
+			return lists.map((list) => ({
+				params: {
+					locale: locale === sourceLanguageTag ? undefined : locale,
+					mediateka: m.mediateka({}, { languageTag: locale }),
+					listak: m.listak({}, { languageTag: locale }),
+					id: idToNumber(list.id),
+					slug: list.data.slug,
+				},
+				props: { locale, id: list.id, ...list.data },
+			}));
+		}),
+	);
+	return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { locale, id: idString, title, media_entries } = Astro.props;
+
+const listEntries = (
+	await Promise.all(media_entries.map(async (entryId) => await getMediaEntryById(entryId, locale)))
+).filter((f) => f !== undefined);
+
+let translatedUrls: {
+	[key: string]: string;
+} = {};
+for (const tag of availableLanguageTags) {
+	if (tag === locale) continue;
+	const translatedList = await getMediaListById(idString.split("/")[1], tag);
+	if (translatedList) {
+		translatedUrls[tag] =
+			`${localizePathname("/mediateka/listak", tag)}/${id}/${translatedList.data.slug}`;
+	}
+}
+---
+
+<ContentLayout title={m.media_lists_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+	<h1
+		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
+	>
+		{title}
+	</h1>
+	<div class="mt-16 flex flex-wrap justify-center gap-4">
+		{
+			listEntries.map((entry) => {
+				const { title, description, media_type, youtube_id, image, image_description, slug } =
+					entry.data;
+				return (
+					<MediaCard
+						title={title}
+						description={description}
+						image={
+							media_type == "youtube"
+								? `https://img.youtube.com/vi/${youtube_id}/sddefault.jpg`
+								: image
+						}
+						alt={media_type === "youtube" ? title : (image_description ?? title)}
+						link={`${localizePathname("/mediateka/edukia", locale)}/${idToNumber(entry.id)}/${slug}`}
+						localImage={media_type == "image"}
+					/>
+				);
+			})
+		}
+	</div>
+</ContentLayout>

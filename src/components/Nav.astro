@@ -1,17 +1,19 @@
 ---
 import LanguageSelector from "./LanguageSelector.astro";
 import LinkDropdown from "./LinkDropdown.astro";
-// import Home from "../reusable/icons/Home.astro";
 import { localizePathname } from "@utils/linking";
 import * as m from "@paraglide/messages.js";
 import Drawer from "./Drawer.astro";
 import DrawerHamburger from "./DrawerHamburger.astro";
-import { languageTag } from "@paraglide/runtime";
+import { type AvailableLanguageTag } from "@paraglide/runtime";
+import ZMBLogo from "@/content/images/Logo_MusikaBanda.png";
+import { Image } from "astro:assets";
 
 interface Props {
 	translatedUrls: { [key: string]: string };
+	locale: AvailableLanguageTag;
 }
-const { translatedUrls } = Astro.props;
+const { translatedUrls, locale } = Astro.props;
 
 interface Link {
 	text: string;
@@ -28,34 +30,34 @@ type NavElements = Array<Link | Dropdown>;
 
 const navElements: NavElements = [
 	{
-		text: m.ui_nav_home(),
-		href: localizePathname("/", languageTag()),
+		text: m.ui_nav_home({}, { languageTag: locale }),
+		href: localizePathname("/", locale),
 	},
 	{
-		text: m.ui_nav_ourBand_label(),
+		text: m.ui_nav_ourBand_label({}, { languageTag: locale }),
 		id: "ourBand",
 		links: [
 			{
-				text: m.ui_nav_ourBand_history(),
-				href: localizePathname("/gure-banda/historia", languageTag()),
+				text: m.ui_nav_ourBand_history({}, { languageTag: locale }),
+				href: localizePathname("/gure-banda/historia", locale),
 			},
 			{
-				text: m.ui_nav_ourBand_members(),
-				href: localizePathname("/gure-banda/partaideak", languageTag()),
+				text: m.ui_nav_ourBand_members({}, { languageTag: locale }),
+				href: localizePathname("/gure-banda/partaideak", locale),
 			},
 		],
 	},
 	{
-		text: m.ui_nav_news(),
-		href: localizePathname("/berriak", languageTag()),
+		text: m.ui_nav_news({}, { languageTag: locale }),
+		href: localizePathname("/berriak", locale),
 	},
 	{
-		text: m.ui_nav_season(),
-		href: localizePathname("/denboraldiak", languageTag()),
+		text: m.ui_nav_season({}, { languageTag: locale }),
+		href: localizePathname("/denboraldiak", locale),
 	},
 	{
-		text: m.ui_nav_media(),
-		href: localizePathname("/mediateka", languageTag()),
+		text: m.ui_nav_media({}, { languageTag: locale }),
+		href: localizePathname("/mediateka", locale),
 	},
 ];
 ---
@@ -65,14 +67,8 @@ const navElements: NavElements = [
 		class="sticky top-0 z-10 flex items-center justify-between bg-white bg-opacity-95 px-4 py-0 shadow-xl sm:px-10"
 	>
 		<div class="flex-shrink-0">
-			<a href={localizePathname("/", languageTag())}>
-				<img
-					src="/images/Logo_small_MusikaBanda_black.png"
-					alt="Logo zornotzako musica banda"
-					class="h-20"
-					loading="lazy"
-					decoding="async"
-				/>
+			<a href={localizePathname("/", locale)}>
+				<Image src={ZMBLogo} alt="Logo zornotzako musica banda" height={80} />
 			</a>
 		</div>
 
@@ -106,7 +102,7 @@ const navElements: NavElements = [
 
 			<LanguageSelector
 				translatedUrls={translatedUrls}
-				lang={languageTag()}
+				{locale}
 				extraClass="transition-colors ease-out duration-150"
 			/>
 		</div>
@@ -118,7 +114,7 @@ const navElements: NavElements = [
 		<li>
 			<LanguageSelector
 				translatedUrls={translatedUrls}
-				lang={languageTag()}
+				{locale}
 				extraClass="transition-colors ease-out duration-150"
 				acordeon
 			/>

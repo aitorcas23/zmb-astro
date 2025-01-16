@@ -1,11 +1,13 @@
 ---
 import * as m from "@paraglide/messages";
+import type { AvailableLanguageTag } from "@paraglide/runtime";
 interface Props {
 	extraClass?: string | { [key: string]: any };
 	href: string;
+	locale: AvailableLanguageTag;
 }
 
-const { extraClass, href } = Astro.props;
+const { locale, extraClass, href } = Astro.props;
 ---
 
 <div class="relative mt-4 flex items-center py-5">
@@ -14,7 +16,7 @@ const { extraClass, href } = Astro.props;
 		class:list={["mx-4 flex-shrink text-sm hover:underline md:text-base lg:text-lg", extraClass]}
 		href={href}
 	>
-		<slot>{m.ui_hrlink_more()}</slot>
+		<slot>{m.ui_hrlink_more({}, { languageTag: locale })}</slot>
 	</a>
 	<div class="flex-grow border-t border-gray-900"></div>
 </div>

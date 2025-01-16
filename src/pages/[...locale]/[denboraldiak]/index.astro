@@ -1,0 +1,66 @@
+---
+import BookMark from "@components/BookMark.astro";
+import CardEffect from "@components/CardEffect.astro";
+import Zmb from "@components/icons/Zmb.astro";
+import SeasonDisplay from "@components/SeasonDisplay.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import * as m from "@paraglide/messages";
+import { localizePathname } from "@utils/linking";
+import { getSeasons } from "@utils/content/seasons";
+import { idToNumber } from "@utils/content/global";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (() => {
+	return availableLanguageTags.map((locale) => {
+		return {
+			params: {
+				locale: locale === sourceLanguageTag ? undefined : locale,
+				denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+			},
+			props: { locale: locale },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+
+const seasons = await getSeasons(locale);
+
+let translatedUrls: { [locale: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag == locale) continue;
+	translatedUrls[tag] = localizePathname("/denboraldiak", tag);
+}
+---
+
+<ContentLayout title={m.seasons_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+	<Title extraClass={"mb-16"}>{m.seasons_title({}, { languageTag: locale })}</Title>
+	<div class="mt-16 flex flex-col gap-4 md:gap-12">
+		{
+			seasons.map((season, i) => {
+				const { slug, title, image, image_description, description, year } = season.data;
+				return (
+					<CardEffect
+						href={`${localizePathname("/denboraldiak", locale)}/${idToNumber(season.id)}/${slug}`}
+						extraClass="relative"
+					>
+						<BookMark color="fill-zmb" extraClass="md:w-[5%] md:right-[3%]">
+							<Zmb />
+						</BookMark>
+						<SeasonDisplay
+							title={title}
+							image={image}
+							alt={image_description}
+							imagePos={i % 2 === 1 ? "right" : "left"}
+						>
+							<h4 class="mb-4 lg:text-lg">({year})</h4>
+							<p>{description}</p>
+						</SeasonDisplay>
+					</CardEffect>
+				);
+			})
+		}
+	</div>
+</ContentLayout>

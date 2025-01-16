@@ -1,0 +1,173 @@
+---
+import type { GetStaticPaths } from "astro";
+import ProgramPiece from "@components/ProgramPiece.astro";
+import Subtitle from "@components/Subtitle.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import { getSeasonById, getSeasons } from "@utils/content/seasons";
+import { getConcertById } from "@utils/content/concerts";
+import { idToNumber } from "@utils/content/global";
+import { getPieceById } from "@utils/content/pieces";
+import { getMediaEntryById } from "@utils/content/mediaEntries";
+
+export const getStaticPaths = (async () => {
+	const paths = await Promise.all(
+		availableLanguageTags.map(async (locale) => {
+			const seasons = await getSeasons(locale);
+			return (
+				await Promise.all(
+					seasons.map(async (season) =>
+						(
+							await Promise.all(
+								season.data.concerts.map(async (concertId) => {
+									const concert = await getConcertById(concertId, locale);
+									if (concert) {
+										return {
+											params: {
+												locale: locale === sourceLanguageTag ? undefined : locale,
+												denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+												id: idToNumber(season.id),
+												slug: season.data.slug,
+												concertId: idToNumber(concert.id),
+												concertSlug: concert.data.slug,
+											},
+											props: { locale, season: { ...season }, concert: { ...concert } },
+										};
+									}
+								}),
+							)
+						).filter((f) => f !== undefined),
+					),
+				)
+			).flat();
+		}),
+	);
+	return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { id: seasonId, concertId } = Astro.params;
+const { locale, season, concert } = Astro.props;
+
+let translatedUrls: {
+	[key: string]: string;
+} = {};
+for (const tag of availableLanguageTags) {
+	if (tag === locale) continue;
+	const translatedSeason = await getSeasonById(season.id.split("/")[1], tag);
+	const translatedConcert = await getConcertById(concert.id.split("/")[1], tag);
+	if (translatedSeason && translatedConcert) {
+		translatedUrls[tag] =
+			`${localizePathname("/denboraldiak", tag)}/${seasonId}/${translatedSeason.data.slug}/${concertId}/${translatedConcert.data.slug}`;
+	}
+}
+let concertDateString: string | undefined;
+if (concert.data.date) {
+	concertDateString = concert.data.date.toLocaleDateString(locale, {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+		hour: "2-digit",
+		minute: "2-digit",
+		timeZone: "UTC",
+	});
+}
+const isPastDate = concert.data.date ? concert.data.date < new Date() : false;
+let subtitleElements = [];
+if (concertDateString) {
+	subtitleElements.push(concertDateString);
+}
+if (concert.data.place) {
+	subtitleElements.push(concert.data.place);
+}
+const subtitle = subtitleElements.join(" - ");
+---
+
+<ContentLayout title={concert.data.title} {translatedUrls} {locale}>
+	<Title>{concert.data.title}</Title>
+	{subtitle && <Subtitle>{subtitle}</Subtitle>}
+	<div class="mt-5 flex flex-col gap-8 lg:flex-row">
+		{
+			concert.data.image && (
+				<div class="flex-grow-[3] basis-0">
+					<img
+						class="mx-auto object-contain"
+						src={concert.data.image}
+						alt={concert.data.image_description ?? concert.data.title}
+						loading="lazy"
+						decoding="async"
+					/>
+				</div>
+			)
+		}
+		{
+			concert.rendered && (
+				<div class="flex-grow-[3] basis-0">
+					<span
+						class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+						set:html={concert.rendered.html}
+					/>
+					{!isPastDate && concert.data.ticket_purchase_link && (
+						<p class="mb-4 mt-8 text-center lg:mb-0">
+							<a
+								href={concert.data.ticket_purchase_link}
+								class="transition-color rounded-lg border-2 border-zmb px-4 py-2 text-base font-medium text-zmb duration-150 ease-out hover:bg-zmb hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-700 lg:text-xl"
+							>
+								{m.seasons_concerts_buyTickets({}, { languageTag: locale })}
+							</a>
+						</p>
+					)}
+				</div>
+			)
+		}
+		{
+			concert.data.pieces.length > 0 && (
+				<div class="flex-grow-[2] basis-0">
+					<h2 class="mb-10 text-center text-3xl font-bold lg:mb-8">
+						{m.seasons_concerts_program({}, { languageTag: locale })}
+					</h2>
+					<ul>
+						{concert.data.pieces.map(async (pieceId) => {
+							const piece = await getPieceById(pieceId, locale);
+							if (piece) {
+								const mediaEntry = piece.data.media_entry
+									? await getMediaEntryById(piece.data.media_entry, locale)
+									: undefined;
+								return (
+									<li class="mt-8 list-none lg:mt-4">
+										{mediaEntry ? (
+											<a
+												href={`${m.denboraldiak({}, { languageTag: locale })}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`}
+												class="no-underline transition-colors duration-150 ease-out hover:[&_*]:text-zmb"
+											>
+												<ProgramPiece
+													piece={{
+														author: piece.data.author,
+														arranger: piece.data.arranger,
+														title: piece.data.title,
+														content_html: piece.rendered?.html,
+													}}
+												/>
+											</a>
+										) : (
+											<ProgramPiece
+												piece={{
+													author: piece.data.author,
+													arranger: piece.data.arranger,
+													title: piece.data.title,
+													content_html: piece.rendered?.html,
+												}}
+											/>
+										)}
+									</li>
+								);
+							}
+						})}
+					</ul>
+				</div>
+			)
+		}
+	</div>
+</ContentLayout>

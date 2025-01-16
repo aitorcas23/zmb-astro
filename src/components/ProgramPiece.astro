@@ -1,10 +1,12 @@
 ---
+import type { RenderedContent } from "astro:content";
+
 interface Props {
 	piece: {
 		author?: string | null;
 		arranger?: string | null;
 		title?: string | null;
-		content_html?: string | null;
+		content_html?: RenderedContent | string | null;
 		[key: string]: any;
 	};
 }

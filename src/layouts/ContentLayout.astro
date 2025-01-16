@@ -1,15 +1,17 @@
 ---
+import type { AvailableLanguageTag } from "@paraglide/runtime";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
 	title: string;
 	translatedUrls: { [key: string]: string };
+	locale: AvailableLanguageTag;
 }
 
-const { title, translatedUrls } = Astro.props;
+const { locale, title, translatedUrls } = Astro.props;
 ---
 
-<BaseLayout title={title} translatedUrls={translatedUrls}>
+<BaseLayout title={title} translatedUrls={translatedUrls} {locale}>
 	<main class="container mx-auto min-h-screen">
 		<slot name="no-padding" />
 		<div class="p-5">

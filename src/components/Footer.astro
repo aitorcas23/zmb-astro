@@ -1,11 +1,16 @@
 ---
-import { languageTag } from "@paraglide/runtime";
+import type { AvailableLanguageTag } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
+
+interface Props {
+	locale: AvailableLanguageTag;
+}
+const { locale } = Astro.props;
 ---
 
 <footer class="footer mt-8 flex bg-white p-10 shadow-[0_2px_25px_-5px_rgba(0,0,0,0.3)]">
 	<span class="flex-grow text-sm text-gray-900 sm:text-center"
-		>© 2023 <a href={localizePathname("/", languageTag())} class="hover:underline"
+		>© 2023 <a href={localizePathname("/", locale)} class="hover:underline"
 			>Zornotzako Musika Banda</a
 		>. All Rights Reserved.
 	</span>

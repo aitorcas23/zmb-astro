@@ -1,0 +1,129 @@
+---
+import HrLink from "@components/HrLink.astro";
+import MediaCard from "@components/MediaCard.astro";
+import Title from "@components/Title.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import * as m from "@paraglide/messages";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { idToNumber } from "@utils/content/global";
+import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries";
+import { getMediaLists } from "@utils/content/mediaLists";
+import { localizePathname } from "@utils/linking";
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (() => {
+	return availableLanguageTags.map((locale) => {
+		return {
+			params: {
+				locale: locale === sourceLanguageTag ? undefined : locale,
+				mediateka: m.mediateka({}, { languageTag: locale }),
+			},
+			props: { locale },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+
+const entries = await getMediaEntries(locale, 3);
+const lists = await getMediaLists(locale, 3);
+const listEntries = await Promise.all(
+	lists.map(async (list) =>
+		(await Promise.all(list.data.media_entries.map((id) => getMediaEntryById(id, locale)))).filter(
+			(f) => f !== undefined,
+		),
+	),
+);
+
+let translatedUrls: { [locale: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag == locale) continue;
+	translatedUrls[tag] = localizePathname("/mediateka", tag);
+}
+---
+
+<ContentLayout title={m.media_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+	<Title>{m.media_title({}, { languageTag: locale })}</Title>
+	{
+		entries.length > 0 && (
+			<>
+				<h2 class="my-8 text-center text-3xl font-bold lg:text-4xl">
+					{m.media_contentLink({}, { languageTag: locale })}
+				</h2>
+				<div class="flex flex-wrap justify-center gap-4">
+					{entries.map((entry) => {
+						const { title, description, media_type, youtube_id, image, image_description, slug } =
+							entry.data;
+						return (
+							<MediaCard
+								title={title}
+								description={description}
+								image={
+									media_type === "youtube"
+										? `https://img.youtube.com/vi/${youtube_id}/sddefault.jpg`
+										: image
+								}
+								alt={media_type === "youtube" ? title : (image_description ?? title)}
+								link={`${localizePathname("/mediateka/edukia", locale)}/${idToNumber(entry.id)}/${slug}`}
+								localImage={media_type == "image"}
+							/>
+						);
+					})}
+				</div>
+				<HrLink href={localizePathname("/mediateka/edukia", locale)} {locale} />
+			</>
+		)
+	}
+	{
+		lists.length > 0 && (
+			<>
+				<div class="mb-8 mt-16 flex w-full justify-center">
+					<a
+						class="text-center text-4xl font-bold uppercase transition-colors duration-150 hover:text-zmb hover:underline lg:text-5xl"
+						href={localizePathname("/mediateka/listak", locale)}
+					>
+						{m.media_lists_title({}, { languageTag: locale })}
+					</a>
+				</div>
+				{lists.map((list, i) => (
+					<>
+						<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">{list.data.title}</h2>
+						<div class="flex flex-wrap justify-center gap-4">
+							{listEntries[i].slice(0, 3).map((entry) => {
+								const {
+									title,
+									description,
+									media_type,
+									youtube_id,
+									image,
+									image_description,
+									slug,
+								} = entry.data;
+								return (
+									<MediaCard
+										title={title}
+										description={description}
+										image={
+											media_type === "youtube"
+												? `https://img.youtube.com/vi/${youtube_id}/sddefault.jpg`
+												: image
+										}
+										alt={media_type === "youtube" ? title : (image_description ?? title)}
+										link={`${localizePathname("/mediateka/edukia", locale)}/${idToNumber(entry.id)}/${slug}`}
+										localImage={media_type === "image"}
+									/>
+								);
+							})}
+						</div>
+						<HrLink
+							href={`${localizePathname("/mediateka/listak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
+							{locale}
+						>
+							{m.media_lists_seeContent({}, { languageTag: locale })}
+						</HrLink>
+					</>
+				))}
+			</>
+		)
+	}
+</ContentLayout>

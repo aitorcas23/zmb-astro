@@ -1,0 +1,69 @@
+---
+import type { GetStaticPaths } from "astro";
+import Subtitle from "@components/Subtitle.astro";
+import ContentLayout from "@layouts/ContentLayout.astro";
+import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { localizePathname } from "@utils/linking";
+import { getNews } from "@utils/content/news";
+import { idToNumber } from "@utils/content/global";
+import { getEntry } from "astro:content";
+import * as m from "@paraglide/messages";
+
+export const getStaticPaths = (async () => {
+	const paths = await Promise.all(
+		availableLanguageTags.map(async (locale) => {
+			const news = await getNews(locale);
+			return news.map((n) => ({
+				params: {
+					locale: locale === sourceLanguageTag ? undefined : locale,
+					berriak: m.berriak({}, { languageTag: locale }),
+					id: idToNumber(n.id),
+					slug: n.data.slug,
+				},
+				props: { locale, id: n.id, content: n.rendered, ...n.data },
+			}));
+		}),
+	);
+	return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { locale, id: idString, title, author, image, image_description, content } = Astro.props;
+
+let translatedUrls: { [key: string]: string } = {};
+for (const tag of availableLanguageTags) {
+	if (tag === locale) continue;
+	const translatedNews = await getEntry("news", `${tag}/${idString.split("/")[1]}`);
+	if (translatedNews) {
+		translatedUrls[tag] = `${localizePathname("/berriak", tag)}/${id}/${translatedNews.data.slug}`;
+	}
+}
+---
+
+<ContentLayout title={title} {translatedUrls} {locale}>
+	<h1
+		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
+	>
+		{title}
+	</h1>
+	{author && <Subtitle>{author}</Subtitle>}
+	{
+		image && (
+			<img
+				class="mx-auto my-8"
+				src={image}
+				alt={image_description ?? title}
+				loading="lazy"
+				decoding="async"
+			/>
+		)
+	}
+	{
+		content && (
+			<span
+				class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+				set:html={content.html}
+			/>
+		)
+	}
+</ContentLayout>

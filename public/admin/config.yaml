@@ -1,0 +1,194 @@
+media_folder: src/content/images
+local_backend: true
+publish_mode: editorial_workflow
+
+collections:
+  - label: "Seasons"
+    name: "seasons"
+    folder: "/src/content/seasons"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Title", name: "title", widget: "string", i18n: "translate"}
+      - {label: "Slug", name: "slug", widget: "string", i18n: "translate", pattern: ["^[a-z0-9]+(?:(?:-)+[a-z0-9]+)*$", "The text must be a slug"]}
+      - {label: "Description", name: "description", widget: "text", i18n: "translate", required: false}
+      - {label: "Content", name: "body", widget: "markdown", i18n: "translate", required: false}
+      - {label: "Year", name: "year", widget: "string", i18n: "duplicate", required: false, hint: "Example: 2024-2025"}
+      - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
+      - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
+      - label: "Concerts"
+        name: "concerts"
+        widget: "relation"
+        collection: "concerts"
+        i18n: "duplicate"
+        required: false
+        value_field: "{{slug}}"
+        search_fields: ["title"]
+        display_fields: ["title", "date"]
+        multiple: true
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "Concerts"
+    name: "concerts"
+    folder: "/src/content/concerts"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Title", name: "title", widget: "string", i18n: "translate"}
+      - {label: "Slug", name: "slug", widget: "string", i18n: "translate", pattern: ["^[a-z0-9]+(?:(?:-)+[a-z0-9]+)*$", "The text must be a slug"]}
+      - {label: "Description", name: "description", widget: "text", i18n: "translate", required: false}
+      - {label: "Content", name: "body", widget: "markdown", i18n: "translate", required: false}
+      - {label: "Date", name: "date", widget: "datetime", picker_utc: true, i18n: "duplicate", required: false}
+      - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
+      - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
+      - {label: "Place", name: "place", widget: "string", i18n: "translate", required: false}
+      - {label: "Place URL", name: "place_url", widget: "string", i18n: "duplicate", required: false}
+      - {label: "Ticket Purchase Link", name: "ticket_purchase_link", widget: "string", i18n: "translate", required: false}
+      - label: "Pieces"
+        name: "pieces"
+        widget: "relation"
+        collection: "pieces"
+        i18n: "duplicate"
+        required: false
+        value_field: "{{slug}}"
+        search_fields: ["title", "author", "arranger"]
+        display_fields: ["title", "author", "arranger"]
+        multiple: true
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "Pieces"
+    name: "pieces"
+    folder: "/src/content/pieces"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Title", name: "title", widget: "string", i18n: "duplicate"}
+      - {label: "Author", name: "author", widget: "string", i18n: "duplicate", required: false}
+      - {label: "Arranger", name: "arranger", widget: "string", i18n: "duplicate", required: false}
+      - {label: "Content", name: "body", widget: "markdown", i18n: "translate", required: false}
+      - label: "Media Entry"
+        name: "media_entry"
+        widtet: "relation"
+        collection: "media_entries"
+        i18n: "duplicate"
+        required: false
+        value_field: "{{slug}}"
+        search_fields: ["title"]
+        display_fields: ["title", "media_type"]
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "News"
+    name: "news"
+    folder: "/src/content/news"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Title", name: "title", widget: "string", i18n: "translate"}
+      - {label: "Slug", name: "slug", widget: "string", i18n: "translate", pattern: ["^[a-z0-9]+(?:(?:-)+[a-z0-9]+)*$", "The text must be a slug"]}
+      - {label: "Author", name: "author", widget: "string", i18n: "duplicate", required: false}
+      - {label: "Description", name: "description", widget: "text", i18n: "translate", required: false}
+      - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
+      - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
+      - {label: "Content", name: "body", widget: "markdown", i18n: "translate", required: false}
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "Musicians"
+    name: "musicians"
+    folder: "/src/content/musicians"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    identifier_field: "name"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Name", name: "name", widget: "string", i18n: "duplicate"}
+      - {label: "Instrument", name: "instrument", widget: "string", i18n: "translate", required: false}
+      - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
+      - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "Media Entries"
+    name: "media_entries"
+    folder: "/src/content/media_entries"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Title", name: "title", widget: "string", i18n: "translate"}
+      - {label: "Slug", name: "slug", widget: "string", i18n: "translate", pattern: ["^[a-z0-9]+(?:(?:-)+[a-z0-9]+)*$", "The text must be a slug"]}
+      - {label: "Description", name: "description", widget: "text", i18n: "translate", required: false}
+      - {label: "Media Type", name: "media_type", widget: "select", i18n: "duplicate", options: ["youtube", "image"]}
+      - widget: "object"
+        label: "If Media Type is youtube"
+        name: "youtube_id"
+        required: false
+        collapsed: true
+        fields:
+          - {label: "YouTube ID", name: "youtube_id", widtet: "string", i18n: "duplicate", required: false, hint: 'The value of "v" in "youtube.com/watch?v=dQw4w9WgXcQ"'}
+      - widget: "object"
+        label: "If Media Type is Image"
+        name: "image"
+        required: false
+        collapsed: true
+        fields:
+          - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
+          - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "Media Lists"
+    name: "media_lists"
+    folder: "/src/content/media_lists"
+    create: true
+    i18n: true
+    slug: "{{id}}"
+    fields:
+      - {label: "id", name: "id", widget: "hidden", default: "id"}
+      - {label: "Title", name: "title", widget: "string", i18n: "translate"}
+      - {label: "Slug", name: "slug", widget: "string", i18n: "translate", pattern: ["^[a-z0-9]+(?:(?:-)+[a-z0-9]+)*$", "The text must be a slug"]}
+      - {label: "Description", name: "description", widget: "text", i18n: "translate", required: false}
+      - label: "Media Entries"
+        name: "media_entries"
+        widget: "relation"
+        collection: "media_entries"
+        i18n: "duplicate"
+        required: false
+        value_field: "{{slug}}"
+        search_fields: ["title"]
+        display_fields: ["title", "media_type"]
+        multiple: true
+      - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+
+  - label: "Pages"
+    name: "pages"
+    files:
+      - label: "Band History ES"
+        name: "band_history_es"
+        file: "/src/content/pages/band_history.es.md"
+        fields:
+          - {label: "Content", "name": "content", widget: "markdown", required: false}
+      - label: "Band History EU"
+        name: "band_history_eu"
+        file: "/src/content/pages/band_history.eu.md"
+        fields:
+          - {label: "Content", "name": "content", widget: "markdown", required: false}
+
+backend:
+  name: github
+  repo: aitorcas23/decap-cms-test
+  branch: master
+  base_url: https://decap-proxy.aitorcas23.workers.dev
+  auth_endpoint: auth
+
+i18n:
+  structure: multiple_folders
+  locales: [eu, es]
+  default_locale: eu
