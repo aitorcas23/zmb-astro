@@ -2,7 +2,7 @@
 title: Haize doinuen artean
 slug: haize-doinuen-artean
 date: 2024-03-02T20:00:00.000Z
-image: /src/content/images/haize-doinuen-artean.webp
+image: /src/content/images/haize-doinuen-artean.jpg
 image_description: Portada del concierto Haize Doinuen Artean
 place: Zornotza Aretoa
 pieces:
