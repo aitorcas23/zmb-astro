@@ -4,6 +4,7 @@ title: Carmina Burana
 slug: carmina-burana
 description: Zornotzako Musika Banda + Bilboko Koral Elkartea + Abes Kimu Korala
 date: 2024-07-21T22:00:00.000Z
+done: true
 image: /src/content/images/carmina-burana.png
 image_description: Carmina Burana kontzertuko azala
 place: Zubiondo Parkea

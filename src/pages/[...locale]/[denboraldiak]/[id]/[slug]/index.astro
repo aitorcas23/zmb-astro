@@ -102,7 +102,7 @@ for (const tag of availableLanguageTags) {
 								image={concert.data.image}
 								alt={concert.data.image_description ?? concert.data.title}
 								link={`${localizePathname("/denboraldiak", locale)}/${id}/${slug}/${idToNumber(concert.id)}/${concert.data.slug}`}
-								past={concert.data.date ? new Date(concert.data.date) < new Date() : undefined}
+								done={concert.data.done}
 								locale={locale}
 							/>
 						);

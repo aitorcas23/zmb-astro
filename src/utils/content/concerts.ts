@@ -5,7 +5,7 @@ import { sourceLanguageTag } from "@paraglide/runtime";
 async function getNextConcerts(locale: string, limit?: number) {
 	return await getCollection(
 		"concerts",
-		({ id, data }) => id.startsWith(locale) && data.date && data.date >= new Date(),
+		({ id, data }) => id.startsWith(locale) && !data.done,
 	)
 		.then(async (c) => await Promise.all(c.map((m) => setDefaultTitleSlug(m, sourceLanguageTag))))
 		.then((c) => c.filter((f) => f !== undefined))

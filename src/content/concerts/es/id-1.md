@@ -2,6 +2,7 @@
 title: Bitartean... Folk
 slug: bitartean-folk
 date: 2023-12-23T20:00:00.000Z
+done: true
 image: /src/content/images/bitartean-folk.jpg
 image_description: Portada del concierto Bitartean Folk
 place: Zornotza Aretoa

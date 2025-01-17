@@ -3,6 +3,7 @@ title: Recuerdos Navideños
 slug: recuerdos-navidenos
 description: "Invitados: Brioletak, Xuxurlariak, Coral Zornotza, Abes Kimu abesbatzak."
 date: 2024-12-21T20:00:00.000Z
+done: true
 place: Zornotza Aretoa
 ticket_purchase_link: https://sarrerakzornotzaaretoa.com/es/bravo/gabon/
 pieces:

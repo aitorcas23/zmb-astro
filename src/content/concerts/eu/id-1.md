@@ -4,6 +4,7 @@ title: Bitartean... Folk
 slug: bitartean-folk
 description: Zornotzako Musika Banda + BITARTEAN FOLK
 date: 2023-12-23T20:00:00.000Z
+done: true
 image: /src/content/images/bitartean-folk.jpg
 image_description: Bitartean Folk kontzertuaren azala
 place: Zornotza Aretoa

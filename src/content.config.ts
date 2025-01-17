@@ -34,6 +34,7 @@ const concerts = defineCollection({
 		slug: z.string().optional(),
 		description: z.string().optional(),
 		date: z.date().optional(),
+		done: z.boolean().optional().default(false),
 		image: z.string().optional(),
 		image_description: z.string().optional(),
 		place: z.string().optional(),

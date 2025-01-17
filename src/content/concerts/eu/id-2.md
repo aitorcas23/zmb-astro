@@ -4,6 +4,7 @@ title: Haize doinuen artean
 slug: haize-doinuen-artean
 description: "Bakarlari gonbidatua: Luis González Garrido (saxofoia)"
 date: 2024-03-02T20:00:00.000Z
+done: true
 image: /src/content/images/haize-doinuen-artean.jpg
 image_description: Haize Doinuen Artean kontzertuko azala
 place: Zornotza Aretoa

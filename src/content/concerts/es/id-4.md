@@ -2,6 +2,7 @@
 title: Carmina Burana
 slug: carmina-burana
 date: 2024-07-21T22:00:00.000Z
+done: true
 image: /src/content/images/carmina-burana.png
 image_description: Portada del concierto Carmina Burana
 place: Parque Zubiondo

@@ -14,12 +14,12 @@ interface Props {
 	image?: string;
 	alt?: string;
 	link: string;
-	past?: boolean;
+	done?: boolean;
 	small?: boolean;
 	locale: AvailableLanguageTag;
 }
 
-const { locale, title, date, description, image, alt, link, past, small = false } = Astro.props;
+const { locale, title, date, description, image, alt, link, done, small = false } = Astro.props;
 const width = small ? "max-w-sm" : "max-w-lg";
 ---
 
@@ -39,7 +39,7 @@ const width = small ? "max-w-sm" : "max-w-lg";
 		</h5>
 		{
 			date && (
-				<p class:list={[{ "text-base": small }, { "text-lg": !small }, { "text-red-700": past }]}>
+				<p class:list={[{ "text-base": small }, { "text-lg": !small }, { "text-red-700": done }]}>
 					{date.toLocaleString(locale, {
 						year: "numeric",
 						month: "2-digit",

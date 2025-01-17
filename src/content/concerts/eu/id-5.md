@@ -4,6 +4,7 @@ title: Antzinako Oroitzapenak
 slug: antzinako-oroitzapenak
 description: "Gonbidatuak: Nemesio Bikandiren familia, bandakide ohiak."
 date: 2024-11-09T20:00:00.000Z
+done: true
 image: /src/content/images/1954nemesiobikandi.jpg
 image_description: Antzinako Oroitzapenak kontzertuko azala
 place: Zornotza Aretoa

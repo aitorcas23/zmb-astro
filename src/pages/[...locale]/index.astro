@@ -130,6 +130,7 @@ for (const tag of availableLanguageTags) {
 									title={concert.data.title}
 									description={concert.data.description}
 									date={concert.data.date}
+									done={concert.data.done}
 									image={concert.data.image}
 									alt={concert.data.image_description ?? concert.data.title}
 									link={`${localizePathname("/denboraldiak", locale)}/${idToNumber(season.id)}/${
@@ -204,3 +205,6 @@ for (const tag of availableLanguageTags) {
 		)
 	}
 </ContentLayout>
+
+<script>
+</script>

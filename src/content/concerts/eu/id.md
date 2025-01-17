@@ -4,6 +4,7 @@ title: "Iparragirre: 200 urte tarteko"
 slug: iparragirre-200-urte-tarteko
 description: Zornotzako Musika Banda + Gontzal Mendibil + Zornotzako Abesbatzak
 date: 2023-10-23T20:00:00.000Z
+done: true
 image: /src/content/images/iparragirre-200-urte-tarteko.jpg
 image_description: Iparragirre kontzertuaren azala
 place: Zelaietako Frontoian

@@ -2,6 +2,7 @@
 title: Bitartean... Rock Eztanda!
 slug: bitartean-rock-eztanda
 date: 2024-05-04T20:00:00.000Z
+done: true
 image: /src/content/images/bitartean...-rock-eztanda-.jpg
 image_description: Portada del concierto Bitartean Rock Eztanda
 place: Zornotza Aretoa

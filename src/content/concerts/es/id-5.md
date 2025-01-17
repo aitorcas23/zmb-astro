@@ -3,6 +3,7 @@ title: Recuerdos de ayer
 slug: recuerdos-de-ayer
 description: "Invitados: familia de Nemesio Bikandi, antiguos miembros de la banda."
 date: 2024-11-09T20:00:00.000Z
+done: true
 image: /src/content/images/1954nemesiobikandi.jpg
 image_description: Portada del concierto Antzinako Oroitzapenak
 place: Zornotza Aretoa

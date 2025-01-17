@@ -2,6 +2,7 @@
 title: "Iparragirre: 200 urte tarteko"
 slug: iparragirre-200-urte-tarteko
 date: 2023-10-23T20:00:00.000Z
+done: true
 image: /src/content/images/iparragirre-200-urte-tarteko.jpg
 image_description: Portada del concierto de Iparragirre
 place: Frontón de Zelaieta
