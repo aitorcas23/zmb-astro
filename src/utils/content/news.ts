@@ -1,4 +1,4 @@
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { setDefaultTitleSlug } from "./global";
 import { sourceLanguageTag } from "@paraglide/runtime";
 
@@ -10,4 +10,10 @@ async function getNews(locale: string, limit?: number) {
 		.then((n) => (limit === undefined ? n : n.slice(0, limit)));
 }
 
-export { getNews };
+async function getNewsById(id: string, locale: string) {
+	const news = await getEntry("news", `${locale}/${id}`);
+	if (!news) return undefined;
+	return await setDefaultTitleSlug(news, sourceLanguageTag);
+}
+
+export { getNews, getNewsById };

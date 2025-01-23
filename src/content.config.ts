@@ -139,6 +139,18 @@ const euBandHistory = defineCollection({
 	}),
 });
 
+const carousel = defineCollection({
+	loader: glob({
+		pattern: "carousel.md",
+		base: "./src/content/pages",
+	}),
+	schema: z.object({
+		concerts: z.array(z.string()).optional().default([]),
+		news: z.array(z.string()).optional().default([]),
+		media_entries: z.array(z.string()).optional().default([]),
+	}),
+});
+
 export const collections = {
 	seasons,
 	concerts,
@@ -149,4 +161,5 @@ export const collections = {
 	mediaLists,
 	esBandHistory,
 	euBandHistory,
+	carousel,
 };

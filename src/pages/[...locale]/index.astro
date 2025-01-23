@@ -9,11 +9,12 @@ import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages.js";
 import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime.js";
 import { localizePathname } from "@utils/linking";
-import { getNews } from "@utils/content/news";
-import { getNextConcerts } from "@utils/content/concerts";
+import { getNews, getNewsById } from "@utils/content/news";
+import { getConcertById, getNextConcerts } from "@utils/content/concerts";
 import { getSeasonByConcertId } from "@utils/content/seasons";
-import { getMediaEntries } from "@utils/content/mediaEntries";
+import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries";
 import { idToNumber } from "@utils/content/global";
+import { getCollection } from "astro:content";
 
 export const getStaticPaths = (() => {
 	return availableLanguageTags.map((locale) => {
@@ -27,6 +28,16 @@ export const getStaticPaths = (() => {
 
 const { locale } = Astro.props;
 
+// Concerts
+const concerts = await getNextConcerts(locale, 3);
+const seasons = await Promise.all(
+	concerts.map((c) => getSeasonByConcertId(c.id.split("/")[1], locale)),
+);
+// News
+const news = await getNews(locale, 3);
+// Mediateca
+const mediaEntries = await getMediaEntries(locale, 3);
+// Carousel
 let slides: {
 	title: string;
 	image: string;
@@ -36,66 +47,56 @@ let slides: {
 	description?: string;
 	localImage?: boolean;
 }[] = [];
-// Concerts
-const concerts = await getNextConcerts(locale, 3);
-const seasons = await Promise.all(
-	concerts.map((c) => getSeasonByConcertId(c.id.split("/")[1], locale)),
-);
-slide: {
-	if (concerts.length <= 0) break slide;
-	const nextConcert = concerts[0];
-	if (!nextConcert.data.title || !nextConcert.data.slug) break slide;
-
-	const nextSeason = seasons[0];
-	if (!nextSeason) break slide;
-	const seasonId = nextSeason.id;
-	const seasonSlug = nextSeason.data.slug;
-
-	slides.push({
-		title: nextConcert.data.title,
-		image: nextConcert.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
-		alt: nextConcert.data.image_description ?? nextConcert.data.title,
-		link: `${localizePathname("/denboraldiak", locale)}/${idToNumber(seasonId)}/${seasonSlug}/${idToNumber(nextConcert.id)}/${nextConcert.data.slug}`,
-		linkText: m.home_carrousel_more({}, { languageTag: locale }),
-		description: nextConcert.data.description,
-		localImage: true,
-	});
-}
-// News
-const news = await getNews(locale, 3);
-slide: {
-	if (news.length <= 0) break slide;
-	const firstNews = news[0];
-	slides.push({
-		title: firstNews.data.title,
-		image: firstNews.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
-		alt: firstNews.data.image_description ?? firstNews.data.title,
-		link: `${localizePathname("/berriak", locale)}/${idToNumber(firstNews.id)}/${firstNews.data.slug}`,
-		linkText: m.home_carrousel_read({}, { languageTag: locale }),
-		description: firstNews.data.description,
-		localImage: true,
-	});
-}
-// Mediateca
-const mediaEntries = await getMediaEntries(locale, 3);
-slide: {
-	if (mediaEntries.length <= 0) break slide;
-	const firstEntry = mediaEntries[0];
-	slides.push({
-		title: firstEntry.data.title,
-		image:
-			firstEntry.data.media_type === "youtube"
-				? `https://img.youtube.com/vi/${firstEntry.data.youtube_id}/maxresdefault.jpg`
-				: (firstEntry.data.image ?? "/src/content/images/Logo_MusikaBanda.png"),
-		alt:
-			firstEntry.data.media_type === "youtube"
-				? firstEntry.data.title
-				: (firstEntry.data.image_description ?? firstEntry.data.title),
-		link: `${localizePathname("/mediateka/edukia", locale)}/${idToNumber(firstEntry.id)}/${firstEntry.data.slug}`,
-		linkText: m.home_carrousel_see({}, { languageTag: locale }),
-		description: firstEntry.data.description,
-		localImage: firstEntry.data.media_type === "image",
-	});
+const carousel = (await getCollection("carousel")).pop();
+console.log(carousel);
+if (carousel) {
+	for (const concertId of carousel.data.concerts) {
+		const concert = await getConcertById(concertId, locale);
+		if (!concert) continue;
+		const season = await getSeasonByConcertId(concertId, locale);
+		if (!season) continue;
+		slides.push({
+			title: concert.data.title,
+			image: concert.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
+			alt: concert.data.image_description ?? concert.data.title,
+			link: `${localizePathname("/denboraldiak", locale)}/${idToNumber(season.id)}/${season.data.slug}/${idToNumber(concert.id)}/${concert.data.slug}`,
+			linkText: m.home_carrousel_more({}, { languageTag: locale }),
+			description: concert.data.description,
+			localImage: true,
+		});
+	}
+	for (const newsId of carousel.data.news) {
+		const news = await getNewsById(newsId, locale);
+		if (!news) return;
+		slides.push({
+			title: news.data.title,
+			image: news.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
+			alt: news.data.image_description ?? news.data.title,
+			link: `${localizePathname("/berriak", locale)}/${idToNumber(news.id)}/${news.data.slug}`,
+			linkText: m.home_carrousel_read({}, { languageTag: locale }),
+			description: news.data.description,
+			localImage: true,
+		});
+	}
+	for (const mediaEntryId of carousel.data.media_entries) {
+		const mediaEntry = await getMediaEntryById(mediaEntryId, locale);
+		if (!mediaEntry) return;
+		slides.push({
+			title: mediaEntry.data.title,
+			image:
+				mediaEntry.data.media_type === "youtube"
+					? `https://img.youtube.com/vi/${mediaEntry.data.youtube_id}/maxresdefault.jpg`
+					: (mediaEntry.data.image ?? "/src/content/images/Logo_MusikaBanda.png"),
+			alt:
+				mediaEntry.data.media_type === "youtube"
+					? mediaEntry.data.title
+					: (mediaEntry.data.image_description ?? mediaEntry.data.title),
+			link: `${localizePathname("/mediateka/edukia", locale)}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`,
+			linkText: m.home_carrousel_see({}, { languageTag: locale }),
+			description: mediaEntry.data.description,
+			localImage: mediaEntry.data.media_type === "image",
+		});
+	}
 }
 // Translations
 let translatedUrls: { [locale: string]: string } = {};

@@ -181,6 +181,37 @@ collections:
         file: "/src/content/pages/band_history.eu.md"
         fields:
           - {label: "Content", "name": "content", widget: "markdown", required: false}
+      - label: "Carousel"
+        name: "carousel"
+        file: "/src/content/pages/carousel.md"
+        fields:
+          - label: "Concerts"
+            name: "concerts"
+            widget: "relation"
+            collection: "concerts"
+            required: false
+            value_field: "{{slug}}"
+            search_fields: ["title"]
+            display_fields: ["title", "date"]
+            multiple: true
+          - label: "News"
+            name: "news"
+            widget: "relation"
+            collection: "news"
+            required: false
+            value_field: "{{slug}}"
+            search_fields: ["title", "author"]
+            display_fields: ["title", "author", "date"]
+            multiple: true
+          - label: "Media Entries"
+            name: "media_entries"
+            widget: "relation"
+            collection: "media_entries"
+            required: false
+            value_field: "{{slug}}"
+            search_fields: ["title"]
+            display_fields: ["title", "media_type"]
+            multiple: true
 
 backend:
   name: github
