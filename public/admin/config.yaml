@@ -223,7 +223,7 @@ collections:
 backend:
   name: github
   repo: aitorcas23/decap-cms-test
-  branch: master
+  branch: migrate-to-decap
   base_url: https://decap-proxy.aitorcas23.workers.dev
   auth_endpoint: auth
 
