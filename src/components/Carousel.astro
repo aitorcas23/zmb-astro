@@ -154,7 +154,7 @@ const { slides } = Astro.props;
 	const prevBtnNode = emblaNode.querySelector(".embla__button--prev") as HTMLElement;
 	const nextBtnNode = emblaNode.querySelector(".embla__button--next") as HTMLElement;
 
-	const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay()]);
+	const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay({ delay: 6000 })]);
 
 	const onNavButtonClick = (emblaApi: EmblaCarouselType): void => {
 		const autoplay = emblaApi?.plugins()?.autoplay;
