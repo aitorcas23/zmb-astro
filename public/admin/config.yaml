@@ -29,6 +29,7 @@ collections:
         display_fields: ["title", "date"]
         multiple: true
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: [ "year", "title" ]
 
   - label: "Concerts"
     name: "concerts"
@@ -60,6 +61,7 @@ collections:
         display_fields: ["title", "author", "arranger"]
         multiple: true
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: [ "date", "title" ]
 
   - label: "Pieces"
     name: "pieces"
@@ -83,6 +85,7 @@ collections:
         search_fields: ["title"]
         display_fields: ["title", "media_type"]
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: ["date_created", "title", "author"]
 
   - label: "News"
     name: "news"
@@ -100,6 +103,7 @@ collections:
       - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
       - {label: "Content", name: "body", widget: "markdown", i18n: "translate", required: false}
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: ["date_created", "title"]
 
   - label: "Musicians"
     name: "musicians"
@@ -115,6 +119,7 @@ collections:
       - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
       - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: ["name", "instrument"]
 
   - label: "Media Entries"
     name: "media_entries"
@@ -144,6 +149,7 @@ collections:
           - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
           - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: ["date_created", "title"]
 
   - label: "Media Lists"
     name: "media_lists"
@@ -167,6 +173,7 @@ collections:
         display_fields: ["title", "media_type"]
         multiple: true
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
+    sortable_fields: ["date_created", "title"]
 
   - label: "Pages"
     name: "pages"
