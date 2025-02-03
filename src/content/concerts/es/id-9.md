@@ -5,6 +5,7 @@ description: "Invitados: Udazken txistulari eta gaiteroak. Triki Piu Pand.
   Etxanoko erraldoiak. Udabarri Dantza Taldea."
 date: 2025-06-14T20:00:00.000Z
 place: Zornotza Aretoa
+ticket_purchase_link: https://sarrerakzornotzaaretoa.com/es/actua/jai-giroa-gogoan-zmb/
 date_created: 2025-01-15T13:39:00.000Z
 ---
 **Invitados: Udazken txistulari eta gaiteroak. Triki Piu Pand. Etxanoko erraldoiak. Udabarri Dantza Taldea.**

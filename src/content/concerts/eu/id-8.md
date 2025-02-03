@@ -5,6 +5,7 @@ slug: oroitzapenak-bertsotan
 description: "Gonbidatuak: Zornotzako Etabar Bertso Eskola. Soinutxikie."
 date: 2025-05-10T20:00:00.000Z
 place: Zornotza Aretoa
+ticket_purchase_link: https://sarrerakzornotzaaretoa.com/actua/oroitzapenak-bertsotan-zmb/
 date_created: 2025-01-15T13:37:00.000Z
 ---
 **Gonbidatuak: Zornotzako Etabar Bertso Eskola. Soinutxikie.**
