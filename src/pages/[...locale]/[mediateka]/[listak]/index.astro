@@ -17,7 +17,7 @@ export const getStaticPaths = (() => {
 			params: {
 				locale: locale === sourceLanguageTag ? undefined : locale,
 				mediateka: m.mediateka({}, { languageTag: locale }),
-				listak: m.listak({}, { languageTag: locale }),
+				listak: m.zerrendak({}, { languageTag: locale }),
 			},
 			props: { locale },
 		};
@@ -40,7 +40,7 @@ const listEntries = await Promise.all(
 let translatedUrls: { [locale: string]: string } = {};
 for (const tag of availableLanguageTags) {
 	if (tag == locale) continue;
-	translatedUrls[tag] = localizePathname("/mediateka/listak", tag);
+	translatedUrls[tag] = localizePathname("/mediateka/zerrendak", tag);
 }
 ---
 
@@ -51,7 +51,7 @@ for (const tag of availableLanguageTags) {
 			<>
 				<h2 class="my-8 text-center text-3xl font-bold lg:text-4xl">{list.data.title}</h2>
 				<div class="flex flex-wrap justify-center gap-4">
-					{listEntries[i].slice(0, 3).map((entry) => {
+					{listEntries[i].slice(0, 4).map((entry) => {
 						const { title, description, media_type, youtube_id, image, image_description, slug } =
 							entry.data;
 						return (
@@ -71,7 +71,7 @@ for (const tag of availableLanguageTags) {
 					})}
 				</div>
 				<HrLink
-					href={`${localizePathname("/mediateka/listak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
+					href={`${localizePathname("/mediateka/zerrendak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
 					{locale}
 				>
 					{m.media_lists_seeContent({}, { languageTag: locale })}

@@ -11,7 +11,7 @@ import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries"
 import { idToNumber } from "@utils/content/global";
 import { getMediaListsByEntryId } from "@utils/content/mediaLists";
 import { getImage } from "@utils/content/images";
-import {Image} from "astro:assets"
+import { Image } from "astro:assets";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
@@ -106,7 +106,7 @@ for (const tag of availableLanguageTags) {
 					{m.media_content_more({ lista: list.data.title })}
 				</h2>
 				<div class="flex flex-wrap justify-center gap-4">
-					{listEntries[i].slice(0, 3).map((entry) => {
+					{listEntries[i].slice(0, 4).map((entry) => {
 						const { title, description, media_type, youtube_id, image, image_description, slug } =
 							entry.data;
 						return (
@@ -126,7 +126,7 @@ for (const tag of availableLanguageTags) {
 					})}
 				</div>
 				<HrLink
-					href={`${localizePathname("/mediateka/listak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
+					href={`${localizePathname("/mediateka/zerrendak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
 					{locale}
 				>
 					{m.media_lists_seeContent({}, { languageTag: locale })}

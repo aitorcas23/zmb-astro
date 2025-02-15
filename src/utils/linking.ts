@@ -31,8 +31,8 @@ const pathnames: Record<AbsolutePathname, Record<AvailableLanguageTag, AbsoluteP
 		eu: "/mediateka/edukia",
 		es: "/es/mediateca/contenido",
 	},
-	"/mediateka/listak": {
-		eu: "/mediateka/listak",
+	"/mediateka/zerrendak": {
+		eu: "/mediateka/zerrendak",
 		es: "/es/mediateca/listas",
 	},
 };

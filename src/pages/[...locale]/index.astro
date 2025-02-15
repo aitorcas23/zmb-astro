@@ -12,9 +12,10 @@ import { localizePathname } from "@utils/linking";
 import { getNews, getNewsById } from "@utils/content/news";
 import { getConcertById, getNextConcerts } from "@utils/content/concerts";
 import { getSeasonByConcertId } from "@utils/content/seasons";
-import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries";
+import { getMediaEntryById } from "@utils/content/mediaEntries";
 import { idToNumber } from "@utils/content/global";
 import { getCollection } from "astro:content";
+import { getMediaLists } from "@utils/content/mediaLists";
 
 export const getStaticPaths = (() => {
 	return availableLanguageTags.map((locale) => {
@@ -29,14 +30,19 @@ export const getStaticPaths = (() => {
 const { locale } = Astro.props;
 
 // Concerts
-const concerts = await getNextConcerts(locale, 3);
+const concerts = await getNextConcerts(locale, 4);
 const seasons = await Promise.all(
 	concerts.map((c) => getSeasonByConcertId(c.id.split("/")[1], locale)),
 );
 // News
-const news = await getNews(locale, 3);
+const news = await getNews(locale, 4);
 // Mediateca
-const mediaEntries = await getMediaEntries(locale, 3);
+const mediaList = await getMediaLists(locale, 1);
+let mediaEntries = await Promise.all(
+	mediaList[0].data.media_entries.map(async (entryId) => await getMediaEntryById(entryId, locale)),
+)
+	.then((res) => res.filter((entry) => entry !== undefined))
+	.then((res) => res.slice(0, 4));
 // Carousel
 let slides: {
 	title: string;
@@ -48,7 +54,6 @@ let slides: {
 	localImage?: boolean;
 }[] = [];
 const carousel = (await getCollection("carousel")).pop();
-console.log(carousel);
 if (carousel) {
 	for (const concertId of carousel.data.concerts) {
 		const concert = await getConcertById(concertId, locale);
@@ -137,7 +142,6 @@ for (const tag of availableLanguageTags) {
 									link={`${localizePathname("/denboraldiak", locale)}/${idToNumber(season.id)}/${
 										season.data.slug
 									}/${idToNumber(concert.id)}/${concert.data.slug}`}
-									small
 									{locale}
 								/>
 							);
@@ -201,7 +205,7 @@ for (const tag of availableLanguageTags) {
 						/>
 					))}
 				</div>
-				<HrLink href={localizePathname("/mediateka", locale)} {locale} />
+				<HrLink href={localizePathname("/mediateka/zerrendak", locale)} {locale} />
 			</>
 		)
 	}

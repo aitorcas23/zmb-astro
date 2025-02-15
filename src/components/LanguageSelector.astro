@@ -31,7 +31,7 @@ const firstLang = links[0];
 			class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
 			href={firstLang.href}
 		>
-			{locale.toUpperCase()}
+			{firstLang.text.toUpperCase()}
 		</a>
 	) : (
 		<>
@@ -40,7 +40,7 @@ const firstLang = links[0];
 				class="p-2 transition-colors duration-150 ease-out hover:text-zmb hover:underline"
 				href={firstLang.href}
 			>
-				{locale.toUpperCase()}
+				{firstLang.text.toUpperCase()}
 			</a>
 		</>
 	)

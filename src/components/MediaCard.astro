@@ -18,7 +18,7 @@ interface Props {
 const { title, description, image: imagePath, alt, link, localImage = false } = Astro.props;
 ---
 
-<CardEffect href={link} extraClass={"relative max-w-sm"}>
+<CardEffect href={link} extraClass={"relative max-w-[18rem]"}>
 	<BookMark color="fill-green-700">
 		<Media />
 	</BookMark>
@@ -29,15 +29,15 @@ const { title, description, image: imagePath, alt, link, localImage = false } = 
 					src={getImage(imagePath)}
 					alt={alt ?? title}
 					class="aspect-video rounded-t-lg object-cover"
-					width={416}
+					width={360}
 				/>
 			) : (
 				<Image
 					src={imagePath}
 					alt={alt ?? title}
 					class="aspect-video rounded-t-lg object-cover"
-					width={416}
-					height={236}
+					width={360}
+					height={202}
 				/>
 			)
 		) : (
@@ -45,7 +45,7 @@ const { title, description, image: imagePath, alt, link, localImage = false } = 
 				src={ZMBLogo}
 				alt={alt ?? title}
 				class="aspect-video rounded-t-lg object-cover"
-				width={416}
+				width={360}
 			/>
 		)
 	}

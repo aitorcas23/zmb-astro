@@ -14,7 +14,7 @@ export const getStaticPaths = (async () => {
 				params: {
 					locale: locale === sourceLanguageTag ? undefined : locale,
 					mediateka: m.mediateka({}, { languageTag: locale }),
-					listak: m.listak({}, { languageTag: locale }),
+					listak: m.zerrendak({}, { languageTag: locale }),
 					id: idToNumber(list.id),
 				},
 				props: { locale, slug: list.data.slug },
@@ -30,5 +30,5 @@ const { locale, slug } = Astro.props;
 
 <meta
 	http-equiv="refresh"
-	content={`0;url=${localizePathname("/mediateka/listak", locale)}/${id}/${slug}`}
+	content={`0;url=${localizePathname("/mediateka/zerrendak", locale)}/${id}/${slug}`}
 />

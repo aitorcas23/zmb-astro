@@ -80,7 +80,7 @@ for (const tag of availableLanguageTags) {
 				<div class="mb-8 mt-16 flex w-full justify-center">
 					<a
 						class="text-center text-4xl font-bold uppercase transition-colors duration-150 hover:text-zmb hover:underline lg:text-5xl"
-						href={localizePathname("/mediateka/listak", locale)}
+						href={localizePathname("/mediateka/zerrendak", locale)}
 					>
 						{m.media_lists_title({}, { languageTag: locale })}
 					</a>
@@ -116,7 +116,7 @@ for (const tag of availableLanguageTags) {
 							})}
 						</div>
 						<HrLink
-							href={`${localizePathname("/mediateka/listak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
+							href={`${localizePathname("/mediateka/zerrendak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
 							{locale}
 						>
 							{m.media_lists_seeContent({}, { languageTag: locale })}

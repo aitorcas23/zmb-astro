@@ -11,10 +11,10 @@
 
 	"media_title": "Mediateca",
 	"media_contentLink": "Últimos agregados",
-	"media_content_title": "Contenido mediateca",
+	"media_content_title": "Contenido de la mediateca",
 	"media_content_more": "Más de la lista {lista}",
-	"media_lists_title": "Listas mediateca",
-	"media_lists_seeContent": "Ver contenido de la lista...",
+	"media_lists_title": "Listas de la mediateca",
+	"media_lists_seeContent": "Ver contenido de esta lista...",
 
 	"musicians_title": "Músicos",
 
@@ -51,7 +51,7 @@
 	"berriak": "noticias",
 	"denboraldiak": "temporadas",
 	"mediateka": "mediateca",
-	"listak": "listas",
+	"zerrendak": "listas",
 	"edukia": "contenido",
 	"gure_banda": "nuestra-banda",
 	"partaideak": "miembros",

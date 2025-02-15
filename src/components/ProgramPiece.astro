@@ -12,20 +12,22 @@ interface Props {
 }
 
 const { piece } = Astro.props;
+let authorArranger = "";
+if (piece.author && piece.arranger) {
+	authorArranger = `${piece.author} | ${piece.arranger}`;
+} else if (piece.author) {
+	authorArranger = piece.author;
+} else if (piece.arranger) {
+	authorArranger = piece.arranger;
+}
 ---
 
 {
-	piece.author && piece.arranger ? (
+	(
 		<div class="text-center text-lg">
-			<p class="font-bold">
-				{piece.author} | arr. {piece.arranger}
-			</p>
+			<p class="font-bold">{authorArranger}</p>
 			<p class="font-normal italic">{piece.title}</p>
 		</div>
-	) : (
-		<p class="text-center text-lg">
-			<span class="font-bold">{piece.author}</span> - <span class="italic">{piece.title}</span>
-		</p>
 	)
 }
 {

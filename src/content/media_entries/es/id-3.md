@@ -1,8 +1,8 @@
 ---
-date_created: 2024-11-01 16:11:35
-description: Vizcaytik Bizkaira, del concierto "Jo beza bandak!"
-media_type: youtube
-slug: vizcaytik-bizkaira
 title: Vizcaytik Bizkaira
+slug: vizcaytik-bizkaira
+description: R. M. de Azkue
+media_type: youtube
 youtube_id: nqni2vEaiZQ
+date_created: 2024-11-01 16:11:35
 ---

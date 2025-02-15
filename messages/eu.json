@@ -11,10 +11,10 @@
 
 	"media_title": "Mediateka",
 	"media_contentLink": "Azken erantsiak",
-	"media_content_title": "Mediateka edukia",
-	"media_content_more": "{lista} listako gehiago",
-	"media_lists_title": "Mediateka listak",
-	"media_lists_seeContent": "Ikusi listaren edukiak...",
+	"media_content_title": "Mediatekako edukia",
+	"media_content_more": "{lista} zerrandako gehiago",
+	"media_lists_title": "Mediatekako zerrendak",
+	"media_lists_seeContent": "Ikusi zerrenda honen edukiak...",
 
 	"musicians_title": "Musikariak",
 
@@ -51,7 +51,7 @@
 	"berriak": "berriak",
 	"denboraldiak": "denboraldiak",
 	"mediateka": "mediateka",
-	"listak": "listak",
+	"zerrendak": "zerrendak",
 	"edukia": "edukia",
 	"gure_banda": "gure-banda",
 	"partaideak": "partaideak",

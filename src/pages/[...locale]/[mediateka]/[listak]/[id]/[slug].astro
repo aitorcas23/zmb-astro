@@ -17,7 +17,7 @@ export const getStaticPaths = (async () => {
 				params: {
 					locale: locale === sourceLanguageTag ? undefined : locale,
 					mediateka: m.mediateka({}, { languageTag: locale }),
-					listak: m.listak({}, { languageTag: locale }),
+					listak: m.zerrendak({}, { languageTag: locale }),
 					id: idToNumber(list.id),
 					slug: list.data.slug,
 				},
@@ -43,7 +43,7 @@ for (const tag of availableLanguageTags) {
 	const translatedList = await getMediaListById(idString.split("/")[1], tag);
 	if (translatedList) {
 		translatedUrls[tag] =
-			`${localizePathname("/mediateka/listak", tag)}/${id}/${translatedList.data.slug}`;
+			`${localizePathname("/mediateka/zerrendak", tag)}/${id}/${translatedList.data.slug}`;
 	}
 }
 ---
