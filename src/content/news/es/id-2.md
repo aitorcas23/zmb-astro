@@ -1,5 +1,5 @@
 ---
-title: La banda participa en el coloquio sobre mujeres músicas
+title: La Banda participa en el coloquio sobre mujeres músicas
 slug: coloquio-mujeres-musicas
 image: /src/content/images/img_9808.jpeg
 date_created: 2025-03-06T10:39:00.000Z
