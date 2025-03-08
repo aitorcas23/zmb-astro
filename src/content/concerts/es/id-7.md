@@ -4,6 +4,7 @@ slug: recordando-a-la-mujer
 description: "Invitadas: Iera Aurrekoetxea, Miren Olea, Paule Zapirain, Elene
   Gutierrez, Maria Vaquerizo, Jaurne Gaminde, Onditz Ugarte."
 date: 2025-03-08T20:00:00.000Z
+done: true
 image: /src/content/images/emakumeak-oroituz.jpg
 image_description: Portada del concierto Recordando a la Mujer
 place: Zornotza Aretoa

@@ -5,6 +5,7 @@ slug: emakumeak-oroituz
 description: "Gonbidatuak: Iera Aurrekoetxea, Miren Olea, Paule Zapirain, Elene
   Gutierrez, Maria Vaquerizo, Jaurne Gaminde, Onditz Ugarte."
 date: 2025-03-08T20:00:00.000Z
+done: true
 image: /src/content/images/emakumeak-oroituz.jpg
 image_description: Emakumeak Oroituz kontzertuko azala
 place: Zornotza Aretoa
