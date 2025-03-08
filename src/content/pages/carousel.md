@@ -8,7 +8,7 @@ Media Entries:
 concerts:
   - id-7
 news:
-  - id-1
+  - id-2
 media_entries:
   - id-92
 ---
