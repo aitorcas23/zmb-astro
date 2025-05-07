@@ -77,7 +77,7 @@ collections:
       - {label: "Content", name: "body", widget: "markdown", i18n: "translate", required: false}
       - label: "Media Entry"
         name: "media_entry"
-        widtet: "relation"
+        widget: "relation"
         collection: "media_entries"
         i18n: "duplicate"
         required: false
@@ -133,21 +133,9 @@ collections:
       - {label: "Slug", name: "slug", widget: "string", i18n: "translate", pattern: ["^[a-z0-9]+(?:(?:-)+[a-z0-9]+)*$", "The text must be a slug"]}
       - {label: "Description", name: "description", widget: "text", i18n: "translate", required: false}
       - {label: "Media Type", name: "media_type", widget: "select", i18n: "duplicate", options: ["youtube", "image"]}
-      - widget: "object"
-        label: "If Media Type is youtube"
-        name: "youtube_id"
-        required: false
-        collapsed: true
-        fields:
-          - {label: "YouTube ID", name: "youtube_id", widtet: "string", i18n: "duplicate", required: false, hint: 'The value of "v" in "youtube.com/watch?v=dQw4w9WgXcQ"'}
-      - widget: "object"
-        label: "If Media Type is Image"
-        name: "image"
-        required: false
-        collapsed: true
-        fields:
-          - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
-          - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
+      - {label: "YouTube ID", name: "youtube_id", widget: "string", i18n: "duplicate", required: false, hint: 'The value of "v" in "youtube.com/watch?v=dQw4w9WgXcQ"'}
+      - {label: "Image", name: "image", widget: "image", i18n: "duplicate", required: false}
+      - {label: "Imgae description", name: "image_description", widget: "string", i18n: "translate", required: false}
       - {label: "Date Created", name: "date_created", widget: "datetime", picker_utc: true, i18n: "duplicate", default: "{{now}}"}
     sortable_fields: ["date_created", "title"]
 

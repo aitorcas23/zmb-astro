@@ -12,7 +12,7 @@ import { getConcertById } from "@utils/content/concerts";
 import { idToNumber } from "@utils/content/global";
 import { getPieceById } from "@utils/content/pieces";
 import { getMediaEntryById } from "@utils/content/mediaEntries";
-import {Image} from "astro:assets"
+import { Image } from "astro:assets";
 import { getImage } from "@utils/content/images";
 
 export const getStaticPaths = (async () => {
@@ -141,7 +141,7 @@ const subtitle = subtitleElements.join(" - ");
 									<li class="mt-8 list-none lg:mt-4">
 										{mediaEntry ? (
 											<a
-												href={`${m.denboraldiak({}, { languageTag: locale })}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`}
+												href={`/${m.mediateka({}, { languageTag: locale })}/${m.edukia({}, { languageTag: locale })}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`}
 												class="no-underline transition-colors duration-150 ease-out hover:[&_*]:text-zmb"
 											>
 												<ProgramPiece
