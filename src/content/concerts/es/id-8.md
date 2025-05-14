@@ -3,6 +3,7 @@ title: Recuerdos en Verso
 slug: recuerdos-en-verso
 description: "Invitados: Zornotzako Etabar Bertso Eskola. Soinutxikie."
 date: 2025-05-10T20:00:00.000Z
+done: true
 image: /src/content/images/oroitzapenak-bertsotan.jpg
 image_description: Portada del concerto Recuerdos en Verso
 place: Zornotza Aretoa

@@ -4,6 +4,7 @@ title: Oroitzapenak Bertsotan
 slug: oroitzapenak-bertsotan
 description: "Gonbidatuak: Zornotzako Etabar Bertso Eskola. Soinutxikie."
 date: 2025-05-10T20:00:00.000Z
+done: true
 image: /src/content/images/oroitzapenak-bertsotan.jpg
 image_description: Oroitzapenak Bertsotan kontzertuko azala
 place: Zornotza Aretoa
