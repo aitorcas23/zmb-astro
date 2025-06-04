@@ -52,7 +52,7 @@ for (const tag of availableLanguageTags) {
 					const { name, instrument, image, image_description } = musician.data;
 					return (
 						<MusicianCard
-							name={name}
+							name={name ?? ""}
 							text={instrument ?? ""}
 							image={image}
 							alt={image_description ?? name}
