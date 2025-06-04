@@ -7,14 +7,14 @@
 	"home_carrousel_see": "Ver contenido",
 	"home_concerts": "Próximos conciertos",
 	"home_news": "Últimas noticias",
-	"home_media": "Últimos contenidos multimedia",
+	"home_media": "Últimos vídeos",
 
 	"media_title": "Mediateca",
 	"media_contentLink": "Últimos agregados",
 	"media_content_title": "Contenido de la mediateca",
 	"media_content_more": "Más de la lista {lista}",
-	"media_lists_title": "Listas de la mediateca",
-	"media_lists_seeContent": "Ver contenido de esta lista...",
+	"media_lists_title": "Videos de nuestros conciertos",
+	"media_lists_seeContent": "Ver todos los videos de este concierto...",
 
 	"musicians_title": "Músicos",
 

@@ -151,6 +151,16 @@ const carousel = defineCollection({
 	}),
 });
 
+const musiciansOrder = defineCollection({
+	loader: glob({
+		pattern: "musicians_order.md",
+		base: "./src/content/pages",
+	}),
+	schema: z.object({
+		musicians: z.array(z.string()).optional().default([]),
+	}),
+});
+
 export const collections = {
 	seasons,
 	concerts,
@@ -162,4 +172,5 @@ export const collections = {
 	esBandHistory,
 	euBandHistory,
 	carousel,
+	musiciansOrder,
 };

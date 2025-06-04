@@ -207,6 +207,19 @@ collections:
             search_fields: ["title"]
             display_fields: ["title", "media_type"]
             multiple: true
+      - label: "Musicians order"
+        name: "musicians_order"
+        file: "/src/content/pages/musicians_order.md"
+        fields:
+          - label: "Musicians"
+            name: "musicians"
+            widget: "relation"
+            collection: "musicians"
+            required: false
+            value_field: "{{slug}}"
+            search_fields: ["name", "instrument"]
+            display_fields: ["name", "instrument"]
+            multiple: true
 
 backend:
   name: github

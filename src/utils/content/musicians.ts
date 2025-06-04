@@ -1,4 +1,4 @@
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import { setDefaultName } from "./global";
 import { sourceLanguageTag } from "@paraglide/runtime";
 
@@ -10,4 +10,10 @@ async function getMusicians(locale: string, limit?: number) {
 		.then((l) => (limit === undefined ? l : l.slice(0, limit)));
 }
 
-export { getMusicians };
+async function getMusicianById(id: string, locale: string) {
+	const musician = await getEntry("musicians", `${locale}/${id}`);
+	if (!musician) return undefined;
+	return musician;
+}
+
+export { getMusicians, getMusicianById };

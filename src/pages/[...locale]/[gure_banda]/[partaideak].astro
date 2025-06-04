@@ -4,9 +4,10 @@ import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages";
 import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
-import { getMusicians } from "@utils/content/musicians";
+import { getMusicianById } from "@utils/content/musicians";
 import { localizePathname } from "@utils/linking";
 import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 export const getStaticPaths = (() => {
 	return availableLanguageTags.map((locale) => {
@@ -23,7 +24,13 @@ export const getStaticPaths = (() => {
 
 const { locale } = Astro.props;
 
-const musicians = await getMusicians(locale);
+const musiciansOrder = (await getCollection("musiciansOrder")).pop();
+console.log(musiciansOrder);
+const musicians = musiciansOrder
+	? await Promise.all(
+			musiciansOrder.data.musicians.map((musicianId) => getMusicianById(musicianId, locale)),
+		).then((result) => result.filter((m) => m !== undefined))
+	: [];
 
 let translatedUrls: { [locale: string]: string } = {};
 for (const tag of availableLanguageTags) {
