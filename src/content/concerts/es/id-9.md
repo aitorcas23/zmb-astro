@@ -4,6 +4,7 @@ slug: recuerdos-festivos
 description: "Invitados: Udazken txistulari eta gaiteroak. Triki Piu Pand.
   Etxanoko erraldoiak. Udabarri Dantza Taldea."
 date: 2025-06-14T20:00:00.000Z
+done: true
 image: /src/content/images/jai-giroa-gogoan.jpg
 image_description: Portada del concierto Recuerdos Festivos
 place: Zornotza Aretoa
