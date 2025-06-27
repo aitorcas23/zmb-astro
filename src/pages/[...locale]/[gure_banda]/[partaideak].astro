@@ -48,7 +48,7 @@ for (const tag of availableLanguageTags) {
 	<div class="mt-16 flex flex-wrap justify-center gap-4">
 		{
 			musicians.length > 0 &&
-				musicians.map((musician) => {
+				musicians.map((musician, i) => {
 					const { name, instrument, image, image_description } = musician.data;
 					return (
 						<MusicianCard
@@ -56,6 +56,7 @@ for (const tag of availableLanguageTags) {
 							text={instrument ?? ""}
 							image={image}
 							alt={image_description ?? name}
+							id={i}
 						/>
 					);
 				})

@@ -9,22 +9,84 @@ interface Props {
 	text: string;
 	image?: string;
 	alt?: string;
+	id: number;
 }
 
-const { name, text, image, alt } = Astro.props;
+const { name, text, image, alt, id } = Astro.props;
 ---
 
-<CardEffect extraClass="max-w-[16rem]">
+<div
+	class="relative aspect-[2/3] w-[16rem] overflow-hidden rounded-lg bg-white shadow-2xl"
+	id={`card-${id}`}
+>
+	<div id="hover-target" class="absolute z-20 m-8 aspect-square w-3/4 rounded-full"></div>
 	<Image
-		class="aspect-square rounded-full object-cover p-8"
+		class="circle-mask aspect-2/3 absolute left-0 top-0 z-10 object-cover"
 		src={image ? getImage(image) : ZMBLogo}
 		alt={alt || name}
 		width={256}
+		id={`image-${id}`}
 	/>
-	<div class="px-4 pb-4 text-center">
+	<div class="absolute bottom-8 z-0 w-full px-4 pb-4 text-center">
 		<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">
 			{name}
 		</h5>
 		<p class="line-clamp-3">{text}</p>
 	</div>
-</CardEffect>
+</div>
+
+<script is:inline define:vars={{ id }}>
+	let open = false;
+
+	const card = document.getElementById(`card-${id}`);
+	const image = document.getElementById(`image-${id}`);
+	const hoverTarget = document.querySelector(`#card-${id} > #hover-target`);
+
+	if (card) {
+		card.onclick = () => {
+			if (open) {
+				image.classList.remove("mask-expanded");
+				setTimeout(() => {
+					open = false;
+					image.style.transitionDuration = "100ms";
+				}, 50);
+			}
+		};
+	}
+
+	if (hoverTarget) {
+		hoverTarget.onclick = () => {
+			if (!open) {
+				image.style.transitionDuration = "300ms";
+				image.classList.add("mask-expanded");
+				setTimeout(() => {
+					open = true;
+				}, 50);
+			}
+		};
+	}
+</script>
+
+<style>
+	.circle-mask {
+		mask-image: url("/circle.svg");
+		-webkit-mask-image: url("/circle.svg");
+		mask-repeat: no-repeat;
+		-webkit-mask-repeat: no-repeat;
+		mask-position: center;
+		mask-size: 75%;
+		-webkit-mask-size: 75%;
+		transition-duration: 100ms;
+		transition-timing-function: ease-out;
+	}
+
+	.mask-expanded {
+		mask-size: 150%;
+		-webkit-mask-size: 150%;
+	}
+
+	#hover-target:hover + .circle-mask:not(.mask-expanded) {
+		mask-size: 76%; /* End state on hover */
+		-webkit-mask-size: 76%; /* End state on hover */
+	}
+</style>

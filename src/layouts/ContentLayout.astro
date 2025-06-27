@@ -12,7 +12,7 @@ const { locale, title, translatedUrls } = Astro.props;
 ---
 
 <BaseLayout title={title} translatedUrls={translatedUrls} {locale}>
-	<main class="container mx-auto min-h-screen">
+	<main class="container relative mx-auto min-h-screen">
 		<slot name="no-padding" />
 		<div class="p-5">
 			<slot />
