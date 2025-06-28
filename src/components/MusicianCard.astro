@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import CardEffect from "./CardEffect.astro";
 import ZMBLogo from "@/content/images/Logo_MusikaBanda.png";
 import { getImage } from "@utils/content/images";
 
@@ -13,15 +12,31 @@ interface Props {
 }
 
 const { name, text, image, alt, id } = Astro.props;
+
+const defaultMaskSize = "75%";
+const hoverMaskSize = "76%";
+const clickMaskSize = "225%";
+
+const hoverAnimationSpeed = "30ms";
+const clickOpenAnimationSpeed = "250ms";
+const clickCloseAnimationSpeed = "400ms";
+
+// 25% == 2rem   1% == 0.08rem
+const defaultPosition = "2rem";
+const hoverPosition = "1.92rem";
+const clickPosition = "-10rem";
+
+const openTransition = "linear";
+const closeTransition = "cubic-bezier(0.34, 1.56, 0.64, 1)";
 ---
 
 <div
-	class="relative aspect-[2/3] w-[16rem] overflow-hidden rounded-lg bg-white shadow-2xl"
+	class="relative h-[23rem] w-[16rem] overflow-hidden rounded-lg bg-white shadow-2xl"
 	id={`card-${id}`}
 >
 	<div id="hover-target" class="absolute z-20 m-8 aspect-square w-3/4 rounded-full"></div>
 	<Image
-		class="circle-mask aspect-2/3 absolute left-0 top-0 z-10 object-cover"
+		class="circle-mask hover-active absolute left-0 top-0 z-10 object-cover"
 		src={image ? getImage(image) : ZMBLogo}
 		alt={alt || name}
 		width={256}
@@ -35,20 +50,38 @@ const { name, text, image, alt, id } = Astro.props;
 	</div>
 </div>
 
-<script is:inline define:vars={{ id }}>
+<script
+	is:inline
+	define:vars={{
+		id,
+		hoverAnimationSpeed,
+		clickOpenAnimationSpeed,
+		clickCloseAnimationSpeed,
+		closeTransition,
+		openTransition,
+	}}
+>
 	let open = false;
 
 	const card = document.getElementById(`card-${id}`);
 	const image = document.getElementById(`image-${id}`);
 	const hoverTarget = document.querySelector(`#card-${id} > #hover-target`);
+	image.style.transitionDuration = hoverAnimationSpeed;
 
 	if (card) {
 		card.onclick = () => {
 			if (open) {
 				image.classList.remove("mask-expanded");
+				image.style.transitionTimingFunction = closeTransition;
+				image.style.transitionDuration = clickCloseAnimationSpeed;
+				setTimeout(() => {
+					image.style.transitionDuration = hoverAnimationSpeed;
+					image.style.transitionTimingFunction = openTransition;
+					image.classList.add("hover-active");
+					image.style.trasition = hoverAnimationSpeed;
+				}, 400);
 				setTimeout(() => {
 					open = false;
-					image.style.transitionDuration = "100ms";
 				}, 50);
 			}
 		};
@@ -57,7 +90,8 @@ const { name, text, image, alt, id } = Astro.props;
 	if (hoverTarget) {
 		hoverTarget.onclick = () => {
 			if (!open) {
-				image.style.transitionDuration = "300ms";
+				image.style.transitionDuration = clickOpenAnimationSpeed;
+				image.classList.remove("hover-active");
 				image.classList.add("mask-expanded");
 				setTimeout(() => {
 					open = true;
@@ -67,26 +101,39 @@ const { name, text, image, alt, id } = Astro.props;
 	}
 </script>
 
-<style>
+<style
+	define:vars={{
+		defaultMaskSize,
+		hoverMaskSize,
+		clickMaskSize,
+		hoverAnimationSpeed,
+		defaultPosition,
+		hoverPosition,
+		clickPosition,
+		openTransition,
+	}}
+>
 	.circle-mask {
 		mask-image: url("/circle.svg");
 		-webkit-mask-image: url("/circle.svg");
 		mask-repeat: no-repeat;
 		-webkit-mask-repeat: no-repeat;
-		mask-position: center;
-		mask-size: 75%;
-		-webkit-mask-size: 75%;
-		transition-duration: 100ms;
-		transition-timing-function: ease-out;
+		mask-position: center var(--defaultPosition);
+		mask-size: var(--defaultMaskSize);
+		-webkit-mask-size: var(--defaultMaskSize);
+		transition-duration: hoverAnimationSpeed;
+		transition-timing-function: var(--openTransition);
 	}
 
 	.mask-expanded {
-		mask-size: 150%;
-		-webkit-mask-size: 150%;
+		mask-size: var(--clickMaskSize);
+		-webkit-mask-size: var(--clickMaskSize);
+		mask-position: center var(--clickPosition);
 	}
 
-	#hover-target:hover + .circle-mask:not(.mask-expanded) {
-		mask-size: 76%; /* End state on hover */
-		-webkit-mask-size: 76%; /* End state on hover */
+	#hover-target:hover + .hover-active {
+		mask-size: var(--hoverMaskSize);
+		-webkit-mask-size: var(--hoverMaskSize);
+		mask-position: center var(--hoverPosition);
 	}
 </style>
