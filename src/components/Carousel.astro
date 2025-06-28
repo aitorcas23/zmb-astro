@@ -97,83 +97,89 @@ const { slides } = Astro.props;
 	import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from "embla-carousel";
 	import Autoplay from "embla-carousel-autoplay";
 
-	const addTogglePrevNextBtnsActive = (
-		emblaApi: EmblaCarouselType,
-		prevBtn: HTMLElement,
-		nextBtn: HTMLElement,
-	): (() => void) => {
-		const togglePrevNextBtnsState = (): void => {
-			if (emblaApi.canScrollPrev()) prevBtn.removeAttribute("disabled");
-			else prevBtn.setAttribute("disabled", "disabled");
+	document.addEventListener("astro:page-load", () => {
+		const addTogglePrevNextBtnsActive = (
+			emblaApi: EmblaCarouselType,
+			prevBtn: HTMLElement,
+			nextBtn: HTMLElement,
+		): (() => void) => {
+			const togglePrevNextBtnsState = (): void => {
+				if (emblaApi.canScrollPrev()) prevBtn.removeAttribute("disabled");
+				else prevBtn.setAttribute("disabled", "disabled");
 
-			if (emblaApi.canScrollNext()) nextBtn.removeAttribute("disabled");
-			else nextBtn.setAttribute("disabled", "disabled");
+				if (emblaApi.canScrollNext()) nextBtn.removeAttribute("disabled");
+				else nextBtn.setAttribute("disabled", "disabled");
+			};
+
+			emblaApi
+				.on("select", togglePrevNextBtnsState)
+				.on("init", togglePrevNextBtnsState)
+				.on("reInit", togglePrevNextBtnsState);
+
+			return (): void => {
+				prevBtn.removeAttribute("disabled");
+				nextBtn.removeAttribute("disabled");
+			};
 		};
 
-		emblaApi
-			.on("select", togglePrevNextBtnsState)
-			.on("init", togglePrevNextBtnsState)
-			.on("reInit", togglePrevNextBtnsState);
+		const addPrevNextBtnsClickHandlers = (
+			emblaApi: EmblaCarouselType,
+			prevBtn: HTMLElement,
+			nextBtn: HTMLElement,
+			onButtonClick?: (emblaApi: EmblaCarouselType) => void,
+		): (() => void) => {
+			const scrollPrev = (): void => {
+				emblaApi.scrollPrev();
+				if (onButtonClick) onButtonClick(emblaApi);
+			};
+			const scrollNext = (): void => {
+				emblaApi.scrollNext();
+				if (onButtonClick) onButtonClick(emblaApi);
+			};
+			prevBtn.addEventListener("click", scrollPrev, false);
+			nextBtn.addEventListener("click", scrollNext, false);
 
-		return (): void => {
-			prevBtn.removeAttribute("disabled");
-			nextBtn.removeAttribute("disabled");
+			const removeTogglePrevNextBtnsActive = addTogglePrevNextBtnsActive(
+				emblaApi,
+				prevBtn,
+				nextBtn,
+			);
+
+			return (): void => {
+				removeTogglePrevNextBtnsActive();
+				prevBtn.removeEventListener("click", scrollPrev, false);
+				nextBtn.removeEventListener("click", scrollNext, false);
+			};
 		};
-	};
 
-	const addPrevNextBtnsClickHandlers = (
-		emblaApi: EmblaCarouselType,
-		prevBtn: HTMLElement,
-		nextBtn: HTMLElement,
-		onButtonClick?: (emblaApi: EmblaCarouselType) => void,
-	): (() => void) => {
-		const scrollPrev = (): void => {
-			emblaApi.scrollPrev();
-			if (onButtonClick) onButtonClick(emblaApi);
+		const OPTIONS: EmblaOptionsType = { loop: true };
+
+		const emblaNode = document.querySelector(".embla") as HTMLElement;
+		const viewportNode = emblaNode.querySelector(".embla__viewport") as HTMLElement;
+		const prevBtnNode = emblaNode.querySelector(".embla__button--prev") as HTMLElement;
+		const nextBtnNode = emblaNode.querySelector(".embla__button--next") as HTMLElement;
+
+		const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay({ delay: 6000 })]);
+
+		const onNavButtonClick = (emblaApi: EmblaCarouselType): void => {
+			const autoplay = emblaApi?.plugins()?.autoplay;
+			if (!autoplay) return;
+
+			const resetOrStop =
+				autoplay.options.stopOnInteraction === false ? autoplay.reset : autoplay.stop;
+
+			resetOrStop();
 		};
-		const scrollNext = (): void => {
-			emblaApi.scrollNext();
-			if (onButtonClick) onButtonClick(emblaApi);
-		};
-		prevBtn.addEventListener("click", scrollPrev, false);
-		nextBtn.addEventListener("click", scrollNext, false);
 
-		const removeTogglePrevNextBtnsActive = addTogglePrevNextBtnsActive(emblaApi, prevBtn, nextBtn);
+		const removePrevNextBtnsClickHandlers = addPrevNextBtnsClickHandlers(
+			emblaApi,
+			prevBtnNode,
+			nextBtnNode,
+			onNavButtonClick,
+		);
 
-		return (): void => {
-			removeTogglePrevNextBtnsActive();
-			prevBtn.removeEventListener("click", scrollPrev, false);
-			nextBtn.removeEventListener("click", scrollNext, false);
-		};
-	};
-
-	const OPTIONS: EmblaOptionsType = { loop: true };
-
-	const emblaNode = document.querySelector(".embla") as HTMLElement;
-	const viewportNode = emblaNode.querySelector(".embla__viewport") as HTMLElement;
-	const prevBtnNode = emblaNode.querySelector(".embla__button--prev") as HTMLElement;
-	const nextBtnNode = emblaNode.querySelector(".embla__button--next") as HTMLElement;
-
-	const emblaApi = EmblaCarousel(viewportNode, OPTIONS, [Autoplay({ delay: 6000 })]);
-
-	const onNavButtonClick = (emblaApi: EmblaCarouselType): void => {
-		const autoplay = emblaApi?.plugins()?.autoplay;
-		if (!autoplay) return;
-
-		const resetOrStop =
-			autoplay.options.stopOnInteraction === false ? autoplay.reset : autoplay.stop;
-
-		resetOrStop();
-	};
-
-	const removePrevNextBtnsClickHandlers = addPrevNextBtnsClickHandlers(
-		emblaApi,
-		prevBtnNode,
-		nextBtnNode,
-		onNavButtonClick,
-	);
-
-	emblaApi.on("destroy", removePrevNextBtnsClickHandlers);
+		emblaApi.on("destroy", removePrevNextBtnsClickHandlers);
+	});
 </script>
 
 <style>

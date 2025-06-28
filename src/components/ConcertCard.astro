@@ -22,15 +22,16 @@ const { locale, title, date, description, image, alt, link, done } = Astro.props
 ---
 
 <CardEffect href={link} extraClass="max-w-[18rem]">
-	<BookMark color="fill-zmb">
-		<Music />
-	</BookMark>
 	<Image
 		src={image ? getImage(image) : ZMBLogo}
 		alt={alt || title}
 		class="aspect-video w-full rounded-t-lg object-cover"
 		width={360}
+		transition:name="concert-image"
 	/>
+	<BookMark color="fill-zmb">
+		<Music />
+	</BookMark>
 	<div class="p-4">
 		<h5 class="text-xl font-bold text-gray-900">
 			{title}

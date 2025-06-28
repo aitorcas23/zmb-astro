@@ -9,7 +9,7 @@ import { idToNumber } from "@utils/content/global";
 import { getEntry } from "astro:content";
 import * as m from "@paraglide/messages";
 import { getImage } from "@utils/content/images";
-import {Image} from "astro:assets"
+import { Image } from "astro:assets";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
@@ -57,6 +57,7 @@ for (const tag of availableLanguageTags) {
 				class="mx-auto my-8"
 				widths={[600, 900, 1300]}
 				sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 1300px`}
+				transition:name={image}
 			/>
 		)
 	}
