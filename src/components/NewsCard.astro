@@ -1,7 +1,6 @@
 ---
 import { type AvailableLanguageTag } from "@paraglide/runtime";
 import BookMark from "./BookMark.astro";
-import CardEffect from "./CardEffect.astro";
 import News from "./icons/News.astro";
 import { Image } from "astro:assets";
 import { getImage } from "@utils/content/images";
@@ -22,14 +21,21 @@ const image = imagePath
 	: getImage("/src/content/images/Logo_MusicaBanda.png");
 ---
 
-<CardEffect href={link} extraClass="max-w-[18rem] flex flex-col">
+<a
+	href={link}
+	class:list={[
+		"relative flex max-w-[18rem] flex-col rounded-lg bg-white shadow-2xl",
+		{ "ease-out-out transition-transform duration-200 hover:scale-105": link !== undefined },
+	]}
+	id={`link-${link}`}
+>
 	<figure>
 		<Image
 			src={image}
 			alt={alt || title}
 			class="aspect-video rounded-t-lg object-cover"
 			width={360}
-			transition:name={imagePath}
+			id={`image-${link}`}
 		/>
 	</figure>
 	<BookMark color="fill-blue-800">
@@ -53,4 +59,12 @@ const image = imagePath
 			</small>
 		</div>
 	</div>
-</CardEffect>
+</a>
+
+<script is:inline define:vars={{ link }}>
+	const image = document.getElementById(`image-${link}`);
+	const cardLink = document.getElementById(`link-${link}`);
+	cardLink.onclick = () => {
+		image.setAttribute("transition:name", `transition-${link}`);
+	};
+</script>

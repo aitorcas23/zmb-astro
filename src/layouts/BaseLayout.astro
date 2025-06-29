@@ -40,6 +40,15 @@ const { locale, title, translatedUrls } = Astro.props;
 		<script>
 			import "flowbite";
 		</script>
+		<script>
+			document.addEventListener("astro:after-swap", () => {
+				// Importing the Flowbite library
+				import("flowbite").then((flowbite) => {
+					// Initiating Flowbite
+					flowbite.initFlowbite();
+				});
+			});
+		</script>
 	</body>
 </html>
 <ClientRouter />

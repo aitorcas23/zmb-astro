@@ -40,6 +40,7 @@ for (const tag of availableLanguageTags) {
 		translatedUrls[tag] = `${localizePathname("/berriak", tag)}/${id}/${translatedNews.data.slug}`;
 	}
 }
+console.log(Astro.url.pathname);
 ---
 
 <ContentLayout title={title} {translatedUrls} {locale}>
@@ -57,7 +58,7 @@ for (const tag of availableLanguageTags) {
 				class="mx-auto my-8"
 				widths={[600, 900, 1300]}
 				sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 1300px`}
-				transition:name={image}
+				transition:name={`transition-${Astro.url.pathname}`}
 			/>
 		)
 	}
