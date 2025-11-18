@@ -90,40 +90,57 @@ const subtitle = subtitleElements.join(" - ");
 <ContentLayout title={concert.data.title} {translatedUrls} {locale}>
 	<Title>{concert.data.title}</Title>
 	{subtitle && <Subtitle>{subtitle}</Subtitle>}
-	<div class="mt-5 flex flex-col gap-8 lg:flex-row">
-		{
-			concert.data.image && (
-				<div class="flex-grow-[3] basis-0">
-					<Image
-						src={getImage(concert.data.image)}
-						alt={concert.data.image_description ?? concert.data.title}
-						class="mx-auto object-contain"
-						widths={[600, 900]}
-						sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 600px`}
-					/>
-				</div>
-			)
-		}
-		{
-			concert.rendered && (
-				<div class="flex-grow-[3] basis-0">
-					<span
-						class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
-						set:html={concert.rendered.html}
-					/>
-					{!isPastDate && concert.data.ticket_purchase_link && (
-						<p class="mb-4 mt-8 text-center lg:mb-0">
-							<a
-								href={concert.data.ticket_purchase_link}
-								class="transition-color rounded-lg border-2 border-zmb px-4 py-2 text-base font-medium text-zmb duration-150 ease-out hover:bg-zmb hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-700 lg:text-xl"
-							>
-								{m.seasons_concerts_buyTickets({}, { languageTag: locale })}
-							</a>
-						</p>
-					)}
-				</div>
-			)
-		}
+	<div class="mt-8 flex flex-col gap-8 lg:flex-row">
+		<div
+			class:list={[
+				"flex flex-grow-[3] basis-0 flex-col gap-8",
+				{ "lg:flex-row": concert.data.pieces.length <= 0 },
+			]}
+		>
+			{
+				concert.data.image && (
+					<div
+						class:list={[
+							"mx-auto max-w-[100ch]",
+							{ "lg:flex-grow-[3] lg:basis-0": concert.data.pieces.length == 0 },
+						]}
+					>
+						<Image
+							src={getImage(concert.data.image)}
+							alt={concert.data.image_description ?? concert.data.title}
+							class="mx-auto object-contain"
+							widths={[600, 900]}
+							sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 600px`}
+						/>
+					</div>
+				)
+			}
+			{
+				concert.rendered && (
+					<div
+						class:list={[
+							"mx-auto max-w-[80ch] flex-grow-[2]",
+							{ "lg:flex-grow-[2] lg:basis-0": concert.data.pieces.length == 0 },
+						]}
+					>
+						<span
+							class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
+							set:html={concert.rendered.html}
+						/>
+						{!isPastDate && concert.data.ticket_purchase_link && (
+							<p class="mb-4 mt-8 text-center lg:mb-0">
+								<a
+									href={concert.data.ticket_purchase_link}
+									class="transition-color rounded-lg border-2 border-zmb px-4 py-2 text-base font-medium text-zmb duration-150 ease-out hover:bg-zmb hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-700 lg:text-xl"
+								>
+									{m.seasons_concerts_buyTickets({}, { languageTag: locale })}
+								</a>
+							</p>
+						)}
+					</div>
+				)
+			}
+		</div>
 		{
 			concert.data.pieces.length > 0 && (
 				<div class="flex-grow-[2] basis-0">

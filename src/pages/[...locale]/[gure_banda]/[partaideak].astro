@@ -25,7 +25,6 @@ export const getStaticPaths = (() => {
 const { locale } = Astro.props;
 
 const musiciansOrder = (await getCollection("musiciansOrder")).pop();
-console.log(musiciansOrder);
 const musicians = musiciansOrder
 	? await Promise.all(
 			musiciansOrder.data.musicians.map((musicianId) => getMusicianById(musicianId, locale)),

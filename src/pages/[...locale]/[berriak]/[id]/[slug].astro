@@ -9,7 +9,7 @@ import { idToNumber } from "@utils/content/global";
 import { getEntry } from "astro:content";
 import * as m from "@paraglide/messages";
 import { getImage } from "@utils/content/images";
-import {Image} from "astro:assets"
+import { Image } from "astro:assets";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
@@ -44,28 +44,32 @@ for (const tag of availableLanguageTags) {
 
 <ContentLayout title={title} {translatedUrls} {locale}>
 	<h1
-		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
+		class="mb-4 text-balance pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
 	>
 		{title}
 	</h1>
 	{author && <Subtitle>{author}</Subtitle>}
-	{
-		image && (
-			<Image
-				src={getImage(image)}
-				alt={image_description ?? title}
-				class="mx-auto my-8"
-				widths={[600, 900, 1300]}
-				sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 1300px`}
-			/>
-		)
-	}
-	{
-		content && (
-			<span
-				class="format format-base mx-auto mt-16 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900"
-				set:html={content.html}
-			/>
-		)
-	}
+	<div class="mt-8 flex flex-col gap-10 lg:flex-row">
+		{
+			image && (
+				<div class="basis-0 lg:flex-grow-[3]">
+					<Image
+						src={getImage(image)}
+						alt={image_description ?? title}
+						class="mx-auto"
+						widths={[600, 900, 1300]}
+						sizes={`(max-width: 640px) 600px, (max-width: 1024px) 900px, 1300px`}
+					/>
+				</div>
+			)
+		}
+		{
+			content && (
+				<div
+					class="format format-base mx-auto max-w-[80ch] flex-grow-[2] basis-0 lg:format-lg format-h1:text-center format-h1:uppercase format-li:ml-8 format-li:text-gray-900 lg:mt-4"
+					set:html={content.html}
+				/>
+			)
+		}
+	</div>
 </ContentLayout>
