@@ -7,7 +7,7 @@ import { locales, baseLocale } from "@paraglide/runtime";
 import { getMusicianById } from "@utils/content/musicians";
 import { localizePathname } from "@utils/linking";
 import type { GetStaticPaths } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 
 export const getStaticPaths = (() => {
 	return locales.map((locale) => {
