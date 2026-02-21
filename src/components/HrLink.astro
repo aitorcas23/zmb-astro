@@ -16,7 +16,7 @@ const { locale, extraClass, href } = Astro.props;
 		class:list={["mx-4 flex-shrink text-sm hover:underline md:text-base lg:text-lg", extraClass]}
 		href={href}
 	>
-		<slot>{m.ui_hrlink_more({}, { languageTag: locale })}</slot>
+		<slot>{m.ui_hrlink_more({}, { locale: locale })}</slot>
 	</a>
 	<div class="flex-grow border-t border-gray-900"></div>
 </div>
