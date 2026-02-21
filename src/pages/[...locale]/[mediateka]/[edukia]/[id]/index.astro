@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import { getMediaEntries } from "@utils/content/mediaEntries";
 import { idToNumber } from "@utils/content/global";
@@ -8,13 +8,13 @@ import * as m from "@paraglide/messages";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const entries = await getMediaEntries(locale);
 			return entries.map((entry) => ({
 				params: {
-					locale: locale === sourceLanguageTag ? undefined : locale,
-					mediateka: m.mediateka({}, { languageTag: locale }),
-					edukia: m.edukia({}, { languageTag: locale }),
+					locale: locale === baseLocale ? undefined : locale,
+					mediateka: m.mediateka({}, { locale: locale }),
+					edukia: m.edukia({}, { locale: locale }),
 					id: idToNumber(entry.id),
 				},
 				props: { locale, slug: entry.data.slug },

@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import Subtitle from "@components/Subtitle.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import { getNews } from "@utils/content/news";
 import { idToNumber } from "@utils/content/global";
@@ -13,12 +13,12 @@ import { Image } from "astro:assets";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const news = await getNews(locale);
 			return news.map((n) => ({
 				params: {
-					locale: locale === sourceLanguageTag ? undefined : locale,
-					berriak: m.berriak({}, { languageTag: locale }),
+					locale: locale === baseLocale ? undefined : locale,
+					berriak: m.berriak({}, { locale: locale }),
 					id: idToNumber(n.id),
 					slug: n.data.slug,
 				},
@@ -33,7 +33,7 @@ const { id } = Astro.params;
 const { locale, id: idString, title, author, image, image_description, content } = Astro.props;
 
 let translatedUrls: { [key: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag === locale) continue;
 	const translatedNews = await getEntry("news", `${tag}/${idString.split("/")[1]}`);
 	if (translatedNews) {

@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import MediaCard from "@components/MediaCard.astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import * as m from "@paraglide/messages";
 import { getMediaLists, getMediaListById } from "@utils/content/mediaLists";
@@ -11,13 +11,13 @@ import { getMediaEntryById } from "@utils/content/mediaEntries";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const lists = await getMediaLists(locale);
 			return lists.map((list) => ({
 				params: {
-					locale: locale === sourceLanguageTag ? undefined : locale,
-					mediateka: m.mediateka({}, { languageTag: locale }),
-					listak: m.zerrendak({}, { languageTag: locale }),
+					locale: locale === baseLocale ? undefined : locale,
+					mediateka: m.mediateka({}, { locale: locale }),
+					listak: m.zerrendak({}, { locale: locale }),
 					id: idToNumber(list.id),
 					slug: list.data.slug,
 				},
@@ -38,7 +38,7 @@ const listEntries = (
 let translatedUrls: {
 	[key: string]: string;
 } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag === locale) continue;
 	const translatedList = await getMediaListById(idString.split("/")[1], tag);
 	if (translatedList) {
@@ -48,7 +48,7 @@ for (const tag of availableLanguageTags) {
 }
 ---
 
-<ContentLayout title={m.media_lists_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+<ContentLayout title={m.media_lists_title({}, { locale: locale })} {translatedUrls} {locale}>
 	<h1
 		class="pt-3 text-center text-4xl font-extrabold uppercase text-gray-900 md:pt-6 lg:pt-10 lg:text-5xl"
 	>

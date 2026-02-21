@@ -4,7 +4,7 @@ import MediaCard from "@components/MediaCard.astro";
 import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { idToNumber } from "@utils/content/global";
 import { getMediaEntries, getMediaEntryById } from "@utils/content/mediaEntries";
 import { getMediaLists } from "@utils/content/mediaLists";
@@ -12,11 +12,11 @@ import { localizePathname } from "@utils/linking";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
+	return locales.map((locale) => {
 		return {
 			params: {
-				locale: locale === sourceLanguageTag ? undefined : locale,
-				mediateka: m.mediateka({}, { languageTag: locale }),
+				locale: locale === baseLocale ? undefined : locale,
+				mediateka: m.mediateka({}, { locale: locale }),
 			},
 			props: { locale },
 		};
@@ -36,19 +36,19 @@ const listEntries = await Promise.all(
 );
 
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/mediateka", tag);
 }
 ---
 
-<ContentLayout title={m.media_title({}, { languageTag: locale })} {translatedUrls} {locale}>
-	<Title>{m.media_title({}, { languageTag: locale })}</Title>
+<ContentLayout title={m.media_title({}, { locale: locale })} {translatedUrls} {locale}>
+	<Title>{m.media_title({}, { locale: locale })}</Title>
 	{
 		entries.length > 0 && (
 			<>
 				<h2 class="my-8 text-center text-3xl font-bold lg:text-4xl">
-					{m.media_contentLink({}, { languageTag: locale })}
+					{m.media_contentLink({}, { locale: locale })}
 				</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{entries.map((entry) => {
@@ -82,7 +82,7 @@ for (const tag of availableLanguageTags) {
 						class="text-center text-4xl font-bold uppercase transition-colors duration-150 hover:text-zmb hover:underline lg:text-5xl"
 						href={localizePathname("/mediateka/zerrendak", locale)}
 					>
-						{m.media_lists_title({}, { languageTag: locale })}
+						{m.media_lists_title({}, { locale: locale })}
 					</a>
 				</div>
 				{lists.map((list, i) => (
@@ -119,7 +119,7 @@ for (const tag of availableLanguageTags) {
 							href={`${localizePathname("/mediateka/zerrendak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
 							{locale}
 						>
-							{m.media_lists_seeContent({}, { languageTag: locale })}
+							{m.media_lists_seeContent({}, { locale: locale })}
 						</HrLink>
 					</>
 				))}

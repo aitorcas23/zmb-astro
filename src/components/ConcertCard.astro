@@ -1,5 +1,5 @@
 ---
-import { type AvailableLanguageTag } from "@paraglide/runtime";
+import { type Locale } from "@paraglide/runtime";
 import BookMark from "./BookMark.astro";
 import CardEffect from "./CardEffect.astro";
 import Music from "./icons/Music.astro";
@@ -15,7 +15,7 @@ interface Props {
 	alt?: string;
 	link: string;
 	done?: boolean;
-	locale: AvailableLanguageTag;
+	locale: Locale;
 }
 
 const { locale, title, date, description, image, alt, link, done } = Astro.props;

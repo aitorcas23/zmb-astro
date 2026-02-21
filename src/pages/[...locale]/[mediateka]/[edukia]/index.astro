@@ -2,7 +2,7 @@
 import ContentLayout from "@layouts/ContentLayout.astro";
 import Title from "@components/Title.astro";
 import MediaCard from "@components/MediaCard.astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import * as m from "@paraglide/messages";
 import { getMediaEntries } from "@utils/content/mediaEntries";
@@ -10,12 +10,12 @@ import { idToNumber } from "@utils/content/global";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
+	return locales.map((locale) => {
 		return {
 			params: {
-				locale: locale === sourceLanguageTag ? undefined : locale,
-				mediateka: m.mediateka({}, { languageTag: locale }),
-				edukia: m.edukia({}, { languageTag: locale }),
+				locale: locale === baseLocale ? undefined : locale,
+				mediateka: m.mediateka({}, { locale: locale }),
+				edukia: m.edukia({}, { locale: locale }),
 			},
 			props: { locale },
 		};
@@ -27,14 +27,14 @@ const { locale } = Astro.props;
 const entries = await getMediaEntries(locale);
 
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/mediateka/edukia", tag);
 }
 ---
 
-<ContentLayout title={m.media_content_title({}, { languageTag: locale })} {translatedUrls} {locale}>
-	<Title extraClass={"mb-16"}>{m.media_content_title({}, { languageTag: locale })}</Title>
+<ContentLayout title={m.media_content_title({}, { locale: locale })} {translatedUrls} {locale}>
+	<Title extraClass={"mb-16"}>{m.media_content_title({}, { locale: locale })}</Title>
 	<div class="flex flex-wrap justify-center gap-4">
 		{
 			entries.map((entry) => {

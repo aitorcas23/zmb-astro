@@ -1,20 +1,20 @@
 import { getCollection, getEntry } from "astro:content";
 import { setDefaultTitleSlug } from "./global";
-import { sourceLanguageTag } from "@paraglide/runtime";
+import { baseLocale } from "@paraglide/runtime";
 
 async function getSeasonByConcertId(concertId: string, locale: string) {
 	return await getCollection(
 		"seasons",
 		({ id, data }) => id.startsWith(locale) && data.concerts.includes(concertId),
 	)
-		.then(async (s) => await Promise.all(s.map((m) => setDefaultTitleSlug(m, sourceLanguageTag))))
+		.then(async (s) => await Promise.all(s.map((m) => setDefaultTitleSlug(m, baseLocale))))
 		.then((s) => s.filter((f) => f !== undefined))
 		.then((s) => s.pop());
 }
 
 async function getSeasons(locale: string, limit?: number) {
 	return await getCollection("seasons", ({ id }) => id.startsWith(locale))
-		.then(async (s) => await Promise.all(s.map((m) => setDefaultTitleSlug(m, sourceLanguageTag))))
+		.then(async (s) => await Promise.all(s.map((m) => setDefaultTitleSlug(m, baseLocale))))
 		.then((s) => s.filter((f) => f !== undefined))
 		.then((n) =>
 			n.sort((a, b) => {
@@ -29,7 +29,7 @@ async function getSeasons(locale: string, limit?: number) {
 async function getSeasonById(id: string, locale: string) {
 	const season = await getEntry("seasons", `${locale}/${id}`);
 	if (!season) return undefined;
-	return setDefaultTitleSlug(season, sourceLanguageTag);
+	return setDefaultTitleSlug(season, baseLocale);
 }
 
 export { getSeasonByConcertId, getSeasons, getSeasonById };

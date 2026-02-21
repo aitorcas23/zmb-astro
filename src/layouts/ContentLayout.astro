@@ -1,11 +1,11 @@
 ---
-import type { AvailableLanguageTag } from "@paraglide/runtime";
+import type { Locale } from "@paraglide/runtime";
 import BaseLayout from "./BaseLayout.astro";
 
 interface Props {
 	title: string;
 	translatedUrls: { [key: string]: string };
-	locale: AvailableLanguageTag;
+	locale: Locale;
 }
 
 const { locale, title, translatedUrls } = Astro.props;

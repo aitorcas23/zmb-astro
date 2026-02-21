@@ -5,7 +5,7 @@ import Subtitle from "@components/Subtitle.astro";
 import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import { getSeasonById, getSeasons } from "@utils/content/seasons";
 import { getConcertById } from "@utils/content/concerts";
@@ -17,7 +17,7 @@ import { getImage } from "@utils/content/images";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const seasons = await getSeasons(locale);
 			return (
 				await Promise.all(
@@ -29,8 +29,8 @@ export const getStaticPaths = (async () => {
 									if (concert) {
 										return {
 											params: {
-												locale: locale === sourceLanguageTag ? undefined : locale,
-												denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+												locale: locale === baseLocale ? undefined : locale,
+												denboraldiak: m.denboraldiak({}, { locale: locale }),
 												id: idToNumber(season.id),
 												slug: season.data.slug,
 												concertId: idToNumber(concert.id),
@@ -56,7 +56,7 @@ const { locale, season, concert } = Astro.props;
 let translatedUrls: {
 	[key: string]: string;
 } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag === locale) continue;
 	const translatedSeason = await getSeasonById(season.id.split("/")[1], tag);
 	const translatedConcert = await getConcertById(concert.id.split("/")[1], tag);
@@ -133,7 +133,7 @@ const subtitle = subtitleElements.join(" - ");
 									href={concert.data.ticket_purchase_link}
 									class="transition-color rounded-lg border-2 border-zmb px-4 py-2 text-base font-medium text-zmb duration-150 ease-out hover:bg-zmb hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-700 lg:text-xl"
 								>
-									{m.seasons_concerts_buyTickets({}, { languageTag: locale })}
+									{m.seasons_concerts_buyTickets({}, { locale: locale })}
 								</a>
 							</p>
 						)}
@@ -145,7 +145,7 @@ const subtitle = subtitleElements.join(" - ");
 			concert.data.pieces.length > 0 && (
 				<div class="flex-grow-[2] basis-0">
 					<h2 class="mb-10 text-center text-3xl font-bold lg:mb-8">
-						{m.seasons_concerts_program({}, { languageTag: locale })}
+						{m.seasons_concerts_program({}, { locale: locale })}
 					</h2>
 					<ul>
 						{concert.data.pieces.map(async (pieceId) => {
@@ -158,7 +158,7 @@ const subtitle = subtitleElements.join(" - ");
 									<li class="mt-8 list-none lg:mt-4">
 										{mediaEntry ? (
 											<a
-												href={`/${m.mediateka({}, { languageTag: locale })}/${m.edukia({}, { languageTag: locale })}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`}
+												href={`/${m.mediateka({}, { locale: locale })}/${m.edukia({}, { locale: locale })}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`}
 												class="no-underline transition-colors duration-150 ease-out hover:[&_*]:text-zmb"
 											>
 												<ProgramPiece
