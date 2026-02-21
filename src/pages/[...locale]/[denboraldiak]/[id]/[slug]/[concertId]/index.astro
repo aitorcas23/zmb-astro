@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { getSeasons } from "@utils/content/seasons";
 import { getConcertById } from "@utils/content/concerts";
 import { idToNumber } from "@utils/content/global";
@@ -9,7 +9,7 @@ import { localizePathname } from "@utils/linking";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const seasons = await getSeasons(locale);
 			return (
 				await Promise.all(
@@ -21,8 +21,8 @@ export const getStaticPaths = (async () => {
 									if (concert) {
 										return {
 											params: {
-												locale: locale === sourceLanguageTag ? undefined : locale,
-												denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+												locale: locale === baseLocale ? undefined : locale,
+												denboraldiak: m.denboraldiak({}, { locale: locale }),
 												id: idToNumber(season.id),
 												slug: season.data.slug,
 												concertId: idToNumber(concert.id),

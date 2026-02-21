@@ -1,8 +1,8 @@
-import type { AvailableLanguageTag } from "@paraglide/runtime.js";
+import type { Locale } from "@paraglide/runtime.js";
 
 type AbsolutePathname = `/${string}`;
 
-const pathnames: Record<AbsolutePathname, Record<AvailableLanguageTag, AbsolutePathname>> = {
+const pathnames: Record<AbsolutePathname, Record<Locale, AbsolutePathname>> = {
 	"/": {
 		eu: "/",
 		es: "/es",
@@ -38,7 +38,7 @@ const pathnames: Record<AbsolutePathname, Record<AvailableLanguageTag, AbsoluteP
 };
 
 // src/linking.ts
-export function localizePathname(pathname: AbsolutePathname, locale: AvailableLanguageTag) {
+export function localizePathname(pathname: AbsolutePathname, locale: Locale) {
 	if (pathnames[pathname]) {
 		return pathnames[pathname][locale];
 	}

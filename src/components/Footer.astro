@@ -1,9 +1,9 @@
 ---
-import type { AvailableLanguageTag } from "@paraglide/runtime";
+import type { Locale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 
 interface Props {
-	locale: AvailableLanguageTag;
+	locale: Locale;
 }
 const { locale } = Astro.props;
 ---

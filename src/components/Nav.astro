@@ -5,13 +5,13 @@ import { localizePathname } from "@utils/linking";
 import * as m from "@paraglide/messages.js";
 import Drawer from "./Drawer.astro";
 import DrawerHamburger from "./DrawerHamburger.astro";
-import { type AvailableLanguageTag } from "@paraglide/runtime";
+import { type Locale } from "@paraglide/runtime";
 import ZMBLogo from "@/content/images/Logo_MusikaBanda.png";
 import { Image } from "astro:assets";
 
 interface Props {
 	translatedUrls: { [key: string]: string };
-	locale: AvailableLanguageTag;
+	locale: Locale;
 }
 const { translatedUrls, locale } = Astro.props;
 
@@ -30,37 +30,37 @@ type NavElements = Array<Link | Dropdown>;
 
 const navElements: NavElements = [
 	{
-		text: m.ui_nav_home({}, { languageTag: locale }),
+		text: m.ui_nav_home({}, { locale: locale }),
 		href: localizePathname("/", locale),
 	},
 	{
-		text: m.ui_nav_ourBand_label({}, { languageTag: locale }),
+		text: m.ui_nav_ourBand_label({}, { locale: locale }),
 		id: "ourBand",
 		links: [
 			{
-				text: m.ui_nav_ourBand_history({}, { languageTag: locale }),
+				text: m.ui_nav_ourBand_history({}, { locale: locale }),
 				href: localizePathname("/gure-banda/historia", locale),
 			},
 			{
-				text: m.ui_nav_ourBand_members({}, { languageTag: locale }),
+				text: m.ui_nav_ourBand_members({}, { locale: locale }),
 				href: localizePathname("/gure-banda/partaideak", locale),
 			},
 		],
 	},
 	{
-		text: m.ui_nav_news({}, { languageTag: locale }),
+		text: m.ui_nav_news({}, { locale: locale }),
 		href: localizePathname("/berriak", locale),
 	},
 	{
-		text: m.ui_nav_season({}, { languageTag: locale }),
+		text: m.ui_nav_season({}, { locale: locale }),
 		href: localizePathname("/denboraldiak", locale),
 	},
 	{
-		text: m.ui_nav_media({}, { languageTag: locale }),
+		text: m.ui_nav_media({}, { locale: locale }),
 		href: localizePathname("/mediateka/zerrendak", locale),
 	},
 	{
-		text: m.ui_nav_camp({}, { languageTag: locale }),
+		text: m.ui_nav_camp({}, { locale: locale }),
 		href: "https://www.musikaudalekuak.eus",
 	},
 ];

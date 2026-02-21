@@ -1,10 +1,10 @@
 ---
 import * as m from "@paraglide/messages";
-import type { AvailableLanguageTag } from "@paraglide/runtime";
+import type { Locale } from "@paraglide/runtime";
 interface Props {
 	extraClass?: string | { [key: string]: any };
 	href: string;
-	locale: AvailableLanguageTag;
+	locale: Locale;
 }
 
 const { locale, extraClass, href } = Astro.props;

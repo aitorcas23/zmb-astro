@@ -3,19 +3,19 @@ import MusicianCard from "@components/MusicianCard.astro";
 import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { getMusicianById } from "@utils/content/musicians";
 import { localizePathname } from "@utils/linking";
 import type { GetStaticPaths } from "astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
+	return locales.map((locale) => {
 		return {
 			params: {
-				locale: locale === sourceLanguageTag ? undefined : locale,
-				gure_banda: m.gure_banda({}, { languageTag: locale }),
-				partaideak: m.partaideak({}, { languageTag: locale }),
+				locale: locale === baseLocale ? undefined : locale,
+				gure_banda: m.gure_banda({}, { locale: locale }),
+				partaideak: m.partaideak({}, { locale: locale }),
 			},
 			props: { locale },
 		};
@@ -32,18 +32,14 @@ const musicians = musiciansOrder
 	: [];
 
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/gure-banda/partaideak", tag);
 }
 ---
 
-<ContentLayout
-	title={m.ourBand_members_title({}, { languageTag: locale })}
-	{translatedUrls}
-	{locale}
->
-	<Title>{m.ourBand_members_musicians({}, { languageTag: locale })}</Title>
+<ContentLayout title={m.ourBand_members_title({}, { locale: locale })} {translatedUrls} {locale}>
+	<Title>{m.ourBand_members_musicians({}, { locale: locale })}</Title>
 	<div class="mt-16 flex flex-wrap justify-center gap-4">
 		{
 			musicians.length > 0 &&

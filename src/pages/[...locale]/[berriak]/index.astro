@@ -3,18 +3,18 @@ import NewsCard from "@components/NewsCard.astro";
 import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import { getNews } from "@utils/content/news";
 import { idToNumber } from "@utils/content/global";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
+	return locales.map((locale) => {
 		return {
 			params: {
-				locale: locale === sourceLanguageTag ? undefined : locale,
-				berriak: m.berriak({}, { languageTag: locale }),
+				locale: locale === baseLocale ? undefined : locale,
+				berriak: m.berriak({}, { locale: locale }),
 			},
 			props: { locale },
 		};
@@ -26,14 +26,14 @@ const { locale } = Astro.props;
 const news = await getNews(locale);
 
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/berriak", tag);
 }
 ---
 
-<ContentLayout title={m.news_title({}, { languageTag: locale })} {translatedUrls} {locale}>
-	<Title>{m.news_title({}, { languageTag: locale })}</Title>
+<ContentLayout title={m.news_title({}, { locale: locale })} {translatedUrls} {locale}>
+	<Title>{m.news_title({}, { locale: locale })}</Title>
 	<div class="mt-16 flex flex-wrap justify-center gap-4">
 		{
 			news.map((n) => {

@@ -1,13 +1,10 @@
 import { getCollection, getEntry } from "astro:content";
 import { setDefaultTitleSlug } from "./global";
-import { sourceLanguageTag } from "@paraglide/runtime";
+import { baseLocale } from "@paraglide/runtime";
 
 async function getNextConcerts(locale: string, limit?: number) {
-	return await getCollection(
-		"concerts",
-		({ id, data }) => id.startsWith(locale) && !data.done,
-	)
-		.then(async (c) => await Promise.all(c.map((m) => setDefaultTitleSlug(m, sourceLanguageTag))))
+	return await getCollection("concerts", ({ id, data }) => id.startsWith(locale) && !data.done)
+		.then(async (c) => await Promise.all(c.map((m) => setDefaultTitleSlug(m, baseLocale))))
 		.then((c) => c.filter((f) => f !== undefined))
 		.then((c) =>
 			c.sort((a, b) => {
@@ -21,7 +18,7 @@ async function getNextConcerts(locale: string, limit?: number) {
 
 async function getConcerts(locale: string, limit?: number) {
 	return await getCollection("concerts", ({ id }) => id.startsWith(locale))
-		.then(async (c) => await Promise.all(c.map((m) => setDefaultTitleSlug(m, sourceLanguageTag))))
+		.then(async (c) => await Promise.all(c.map((m) => setDefaultTitleSlug(m, baseLocale))))
 		.then((c) => c.filter((f) => f !== undefined))
 		.then((c) => c.sort((a, b) => b.data.date!.valueOf() - a.data.date!.valueOf()))
 		.then((c) => (limit === undefined ? c : c.slice(0, limit)));
@@ -30,7 +27,7 @@ async function getConcerts(locale: string, limit?: number) {
 async function getConcertById(id: string, locale: string) {
 	const concert = await getEntry("concerts", `${locale}/${id}`);
 	if (!concert) return undefined;
-	return await setDefaultTitleSlug(concert, sourceLanguageTag);
+	return await setDefaultTitleSlug(concert, baseLocale);
 }
 
 export { getNextConcerts, getConcerts, getConcertById };

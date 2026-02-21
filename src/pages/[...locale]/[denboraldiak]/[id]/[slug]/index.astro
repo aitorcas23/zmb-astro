@@ -4,23 +4,23 @@ import Subtitle from "@components/Subtitle.astro";
 import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { idToNumber } from "@utils/content/global";
 import { getSeasonById, getSeasons } from "@utils/content/seasons";
 import { localizePathname } from "@utils/linking";
 import type { GetStaticPaths } from "astro";
 import { getConcertById } from "@utils/content/concerts";
-import { Image } from "astro:assets"
+import { Image } from "astro:assets";
 import { getImage } from "@utils/content/images";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const seasons = await getSeasons(locale);
 			return seasons.map((season) => ({
 				params: {
-					locale: locale === sourceLanguageTag ? undefined : locale,
-					denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+					locale: locale === baseLocale ? undefined : locale,
+					denboraldiak: m.denboraldiak({}, { locale: locale }),
 					id: idToNumber(season.id),
 					slug: season.data.slug,
 				},
@@ -50,7 +50,7 @@ const concerts = (await Promise.all(concertIds.map((m) => getConcertById(m, loca
 let translatedUrls: {
 	[key: string]: string;
 } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag === locale) continue;
 	const translatedSeason = await getSeasonById(idString.split("/")[1], tag);
 	if (translatedSeason) {
@@ -90,7 +90,7 @@ for (const tag of availableLanguageTags) {
 		concerts.length > 0 && (
 			<>
 				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
-					{m.seasons_concerts_index({}, { languageTag: locale })}
+					{m.seasons_concerts_index({}, { locale: locale })}
 				</h2>
 				<div class="mt-8 flex flex-wrap justify-center gap-4">
 					{concerts.map((concert) => {

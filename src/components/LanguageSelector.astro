@@ -1,5 +1,5 @@
 ---
-import { availableLanguageTags } from "@paraglide/runtime.js";
+import { locales } from "@paraglide/runtime.js";
 
 interface Props {
 	translatedUrls: { [key: string]: string };
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { translatedUrls, locale, acordeon } = Astro.props;
-const links = availableLanguageTags
+const links = locales
 	.map((lang) => {
 		const isCurrentLanguage = lang == locale;
 		if (!isCurrentLanguage) {

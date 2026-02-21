@@ -5,7 +5,7 @@ import Zmb from "@components/icons/Zmb.astro";
 import SeasonDisplay from "@components/SeasonDisplay.astro";
 import Title from "@components/Title.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import * as m from "@paraglide/messages";
 import { localizePathname } from "@utils/linking";
 import { getSeasons } from "@utils/content/seasons";
@@ -13,11 +13,11 @@ import { idToNumber } from "@utils/content/global";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
+	return locales.map((locale) => {
 		return {
 			params: {
-				locale: locale === sourceLanguageTag ? undefined : locale,
-				denboraldiak: m.denboraldiak({}, { languageTag: locale }),
+				locale: locale === baseLocale ? undefined : locale,
+				denboraldiak: m.denboraldiak({}, { locale: locale }),
 			},
 			props: { locale: locale },
 		};
@@ -29,14 +29,14 @@ const { locale } = Astro.props;
 const seasons = await getSeasons(locale);
 
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/denboraldiak", tag);
 }
 ---
 
-<ContentLayout title={m.seasons_title({}, { languageTag: locale })} {translatedUrls} {locale}>
-	<Title extraClass={"mb-16"}>{m.seasons_title({}, { languageTag: locale })}</Title>
+<ContentLayout title={m.seasons_title({}, { locale: locale })} {translatedUrls} {locale}>
+	<Title extraClass={"mb-16"}>{m.seasons_title({}, { locale: locale })}</Title>
 	<div class="mt-16 flex flex-col gap-4 md:gap-12">
 		{
 			seasons.map((season, i) => {

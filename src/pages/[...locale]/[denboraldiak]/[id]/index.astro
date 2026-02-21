@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { getSeasons } from "@utils/content/seasons";
 import { idToNumber } from "@utils/content/global";
 import * as t from "@paraglide/messages";
@@ -8,12 +8,12 @@ import { localizePathname } from "@utils/linking";
 
 export const getStaticPaths = (async () => {
 	const paths = await Promise.all(
-		availableLanguageTags.map(async (locale) => {
+		locales.map(async (locale) => {
 			const seasons = await getSeasons(locale);
 			return seasons.map((season) => ({
 				params: {
-					locale: locale === sourceLanguageTag ? undefined : locale,
-					denboraldiak: t.denboraldiak({}, { languageTag: locale }),
+					locale: locale === baseLocale ? undefined : locale,
+					denboraldiak: t.denboraldiak({}, { locale: locale }),
 					id: idToNumber(season.id),
 				},
 				props: { locale, slug: season.id },

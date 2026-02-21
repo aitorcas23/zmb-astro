@@ -3,7 +3,7 @@ import ContentLayout from "@layouts/ContentLayout.astro";
 import Title from "@components/Title.astro";
 import MediaCard from "@components/MediaCard.astro";
 import HrLink from "@components/HrLink.astro";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime";
+import { locales, baseLocale } from "@paraglide/runtime";
 import { localizePathname } from "@utils/linking";
 import * as m from "@paraglide/messages";
 import { getMediaLists } from "@utils/content/mediaLists";
@@ -12,12 +12,12 @@ import { idToNumber } from "@utils/content/global";
 import type { GetStaticPaths } from "astro";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
+	return locales.map((locale) => {
 		return {
 			params: {
-				locale: locale === sourceLanguageTag ? undefined : locale,
-				mediateka: m.mediateka({}, { languageTag: locale }),
-				listak: m.zerrendak({}, { languageTag: locale }),
+				locale: locale === baseLocale ? undefined : locale,
+				mediateka: m.mediateka({}, { locale: locale }),
+				listak: m.zerrendak({}, { locale: locale }),
 			},
 			props: { locale },
 		};
@@ -38,14 +38,14 @@ const listEntries = await Promise.all(
 );
 
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/mediateka/zerrendak", tag);
 }
 ---
 
-<ContentLayout title={m.media_lists_title({}, { languageTag: locale })} {translatedUrls} {locale}>
-	<Title>{m.media_lists_title({}, { languageTag: locale })}</Title>
+<ContentLayout title={m.media_lists_title({}, { locale: locale })} {translatedUrls} {locale}>
+	<Title>{m.media_lists_title({}, { locale: locale })}</Title>
 	{
 		lists.map((list, i) => (
 			<>
@@ -74,7 +74,7 @@ for (const tag of availableLanguageTags) {
 					href={`${localizePathname("/mediateka/zerrendak", locale)}/${idToNumber(list.id)}/${list.data.slug}`}
 					{locale}
 				>
-					{m.media_lists_seeContent({}, { languageTag: locale })}
+					{m.media_lists_seeContent({}, { locale: locale })}
 				</HrLink>
 			</>
 		))

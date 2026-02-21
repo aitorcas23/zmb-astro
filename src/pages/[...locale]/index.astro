@@ -7,7 +7,7 @@ import MediaCard from "@components/MediaCard.astro";
 import NewsCard from "@components/NewsCard.astro";
 import ContentLayout from "@layouts/ContentLayout.astro";
 import * as m from "@paraglide/messages.js";
-import { availableLanguageTags, sourceLanguageTag } from "@paraglide/runtime.js";
+import { locales, baseLocale } from "@paraglide/runtime.js";
 import { localizePathname } from "@utils/linking";
 import { getNews, getNewsById } from "@utils/content/news";
 import { getConcertById, getNextConcerts } from "@utils/content/concerts";
@@ -18,8 +18,8 @@ import { getCollection } from "astro:content";
 import { getMediaLists } from "@utils/content/mediaLists";
 
 export const getStaticPaths = (() => {
-	return availableLanguageTags.map((locale) => {
-		if (locale === sourceLanguageTag) {
+	return locales.map((locale) => {
+		if (locale === baseLocale) {
 			return { params: { locale: undefined }, props: { locale } };
 		} else {
 			return { params: { locale }, props: { locale } };
@@ -70,7 +70,7 @@ if (carousel) {
 			image: concert.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
 			alt: concert.data.image_description ?? concert.data.title,
 			link: `${localizePathname("/denboraldiak", locale)}/${idToNumber(season.id)}/${season.data.slug}/${idToNumber(concert.id)}/${concert.data.slug}`,
-			linkText: m.home_carrousel_more({}, { languageTag: locale }),
+			linkText: m.home_carrousel_more({}, { locale: locale }),
 			description: concert.data.description,
 			localImage: true,
 		});
@@ -83,7 +83,7 @@ if (carousel) {
 			image: news.data.image ?? "/src/content/images/Logo_MusikaBanda.png",
 			alt: news.data.image_description ?? news.data.title,
 			link: `${localizePathname("/berriak", locale)}/${idToNumber(news.id)}/${news.data.slug}`,
-			linkText: m.home_carrousel_read({}, { languageTag: locale }),
+			linkText: m.home_carrousel_read({}, { locale: locale }),
 			description: news.data.description,
 			localImage: true,
 		});
@@ -102,7 +102,7 @@ if (carousel) {
 					? mediaEntry.data.title
 					: (mediaEntry.data.image_description ?? mediaEntry.data.title),
 			link: `${localizePathname("/mediateka/edukia", locale)}/${idToNumber(mediaEntry.id)}/${mediaEntry.data.slug}`,
-			linkText: m.home_carrousel_see({}, { languageTag: locale }),
+			linkText: m.home_carrousel_see({}, { locale: locale }),
 			description: mediaEntry.data.description,
 			localImage: mediaEntry.data.media_type === "image",
 		});
@@ -110,13 +110,13 @@ if (carousel) {
 }
 // Translations
 let translatedUrls: { [locale: string]: string } = {};
-for (const tag of availableLanguageTags) {
+for (const tag of locales) {
 	if (tag == locale) continue;
 	translatedUrls[tag] = localizePathname("/", tag);
 }
 ---
 
-<ContentLayout title={m.home_title({}, { languageTag: locale })} {translatedUrls} {locale}>
+<ContentLayout title={m.home_title({}, { locale: locale })} {translatedUrls} {locale}>
 	{
 		slides.length > 0 && (
 			<div slot="no-padding">
@@ -130,7 +130,7 @@ for (const tag of availableLanguageTags) {
 		concerts.length > 0 && (
 			<>
 				<h2 class="mb-8 text-center text-3xl font-bold lg:text-4xl">
-					{m.home_concerts({}, { languageTag: locale })}
+					{m.home_concerts({}, { locale: locale })}
 				</h2>{" "}
 				<div class="flex flex-wrap justify-center gap-4">
 					{concerts.map((concert, i) => {
@@ -163,7 +163,7 @@ for (const tag of availableLanguageTags) {
 		news.length > 0 && (
 			<>
 				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
-					{m.home_news({}, { languageTag: locale })}
+					{m.home_news({}, { locale: locale })}
 				</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{news.map((n) => (
@@ -188,7 +188,7 @@ for (const tag of availableLanguageTags) {
 		mediaEntries.length > 0 && (
 			<>
 				<h2 class="mb-8 mt-12 text-center text-3xl font-bold lg:text-4xl">
-					{m.home_media({}, { languageTag: locale })}
+					{m.home_media({}, { locale: locale })}
 				</h2>
 				<div class="flex flex-wrap justify-center gap-4">
 					{mediaEntries.map((me) => (
