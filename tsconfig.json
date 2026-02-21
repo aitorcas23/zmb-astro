@@ -3,14 +3,31 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@components/*": ["src/components/*"],
-			"@layouts/*": ["src/layouts/*"],
-			"@utils/*": ["src/utils/*"],
-			"@styles/*": ["src/styles/*"],
-			"@types/*": ["src/types/*"],
-			"@paraglide/*": ["src/paraglide/*"],
-			"@/*": ["src/*"]
+			"@components/*": [
+				"src/components/*"
+			],
+			"@layouts/*": [
+				"src/layouts/*"
+			],
+			"@utils/*": [
+				"src/utils/*"
+			],
+			"@styles/*": [
+				"src/styles/*"
+			],
+			"@types/*": [
+				"src/types/*"
+			],
+			"@paraglide/*": [
+				"src/paraglide/*"
+			],
+			"@/*": [
+				"src/*"
+			]
 		},
-		"lib": ["ES2015", "DOM"]
+		"lib": [
+			"ES2021",
+			"DOM"
+		]
 	}
 }
