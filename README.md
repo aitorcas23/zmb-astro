@@ -2,35 +2,27 @@
 [zornotzakomusikabanda.eus](https://zornotzakomusikabanda.eus)
 
 Este proyecto es la página web para Zonrnotzako Musika Banda.
-El proyecto se puede dividir en tres secciones principales: el frontend, el cms y el backend.
+La página está formada por tres partes: Frontend, CMS y Alojamiento.
 
-## Frontend
-El frontend de la página de la banda se encuentra en este repositorio de GitHub.
-El frontend está desarrollado con el framework web de JavaScript **Astro**.
-Astro es un framework enfocado en el desarrollo de páginas web enfocadas en contenido.
-Astro no es un framework reactivo, pero cuenta con la posibilidad de utilizar componentes de otros frameworks como React, Vue o Svelte entre otros.
-Se utiliza **TypeScript** en vez de JavaScript para tener el proyecto tipado y así prevenir posibles errores causados por la flexibilidad y ambigüedad de JavaScript.
+# Frontend
+El frontend está desarrollado con [Astro](https://astro.build/), un meta-framework de JavaScript/TypeScript para enfocado principalmente en páginas estáticas.
+Este es un framework enfocado a la creación de páginas estáticas.
 
-Para los estilos se utiliza la librería **Tailwindcss** con componentes de **Flowbite**.
-En el caso del carrusel de la página de inicio se utiliza un componente de **Svelte** utilizando un componente de **shadcn-svelte**.
+# CMS
+En cuanto al CMS o Content Management System se utiliza [DecapCMS](https://decapcms.org/).
+Este CMS gestiona el contenido utilizando GitHub.
+Todo el contenido de la página está en el propio repositorio de GitHub en archivos Markdown.
+De esta manera DecapCMS no requiere un servidor o una base de datos para la página web.
+La propia página es estática (sin servidor).
+Astro se encarga de coger todo el contenido en Markdown y utilizando la estructura de rutas definida crea toda la página web.
 
-Este frontend está alojado en **Vercel**.
+# Alojamiento
+La página está alojada en [Cloudflare](https://www.cloudflare.com/).
+Está alojada en "Cloudflare Pages", un servicio de alojamiento de páginas estáticas (sin servidor) gratuito.
+La página se construye y se despliega de nuevo cada vez que hay un cambio en repositorio.
 
-## CMS
-Un CMS, o "Content Management System" es un software que permite crear y gestionar contenido de una forma sencilla sin necesidad de conocimientos técnicos.
-En este proyecto se utiliza un "Headless CMS", es decir, un CMS separado del apartado visual.
-Para acceder a la información, el CMS expone un endpoint REST.
-De esta manera hay total libertad a la hora de desarrollar el apartado visual de la página web, utilizando Astro para ese fin.
+<img width="3604" height="1959" alt="image" src="https://github.com/user-attachments/assets/4ed6170d-920f-474e-884b-d8d8136f5bc3" />
 
-El CMS utilizado en el proyecto se llama **Payload CMS**.
-En Payload CMS se utiliza JavaScript o, en el caso de este proyecto, TypeScript, para crear las colecciones del contenido.
-Después, desde la página de administrador de la Zornotzako Musika Banda se puede añadir el contenido pudiendo ver los cambios en la página al momento.
-
-Esta aplicación CMS se aloja en **Koyeb**.
-
-## Backend
-Para el backend se utiliza una herramienta BaaS o "Backend as a Service", con el fin de facilitar el desarrollo del mismo.
-La herramienta utilizada se llama **Supabase**, que ofrece servicios backend de los cuales se utilizan la base de datos **PostgreSQL**, el almacenamiento de archivos estilo S3 y la autenticación de usuarios.
-Estos servicios se utilizan desde el CMS para guardar el contenido de la página y gestionar los usuarios que tienen acceso a esta.
-
-Estos tres servicios se alojan en el propio servicio de alojamiento de Supabase.
+En este diagrama se puede ver cómo en el modelo de DecapCMS no hay ninguna computación cuando un usuario hace una petición.
+Pero al actualizar el contenido se vuelve a computar la página web entera.
+Este modelo solo tiene sentido porque el contenido de la página se actualiza menos de una vez al mes.
